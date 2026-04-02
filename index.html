@@ -285,8 +285,8 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
 <body class="">
 
 <!-- ── CURSORS ── -->
-<div class="cursor" id="cursor" style="left: 1040px; top: 667px;"></div>
-<div class="cursor-ring" id="cursorRing" style="left: 1040px; top: 667px;"></div>
+<div class="cursor" id="cursor" style="left: 1027px; top: 675px; transform: translate(-50%, -50%) scale(1); background: var(--cyan);"></div>
+<div class="cursor-ring" id="cursorRing" style="left: 1027.03px; top: 675.091px; width: 36px; height: 36px;"></div>
 
 <!-- ══════════════════════════════
      PASSWORD MODAL (login)
@@ -300,10 +300,10 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
       <input id="pw-input" type="password" placeholder="••••••••" autocomplete="off" onkeydown="if(event.key==='Enter')submitPw()" class="">
       <span class="pw-eye" id="pw-eye" onclick="toggleEye('pw-input','pw-eye')">👁</span>
     </div>
-    <span class="pw-err" id="pw-err">// 密码错误</span>
+    <span class="pw-err" id="pw-err"></span>
     <button id="pw-submit" onclick="submitPw()">解锁编辑</button>
     <button id="pw-cancel" onclick="closePwModal()">取消</button>
-    <div class="pw-attempts" id="pw-attempts">已失败 <b>1</b>/5 次</div>
+    <div class="pw-attempts" id="pw-attempts"></div>
   </div>
 </div>
 
@@ -381,7 +381,7 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
 
 <!-- ── NAV ── -->
 <nav>
-  <div class="nav-logo" contenteditable="false" spellcheck="false">_<span contenteditable="false" spellcheck="false">DEV</span>.LOG</div>
+  <div class="nav-logo" contenteditable="false" spellcheck="false">希望.熄忘</div>
   <div class="nav-links">
     <a href="#sec-projects">项目</a>
     <a href="#sec-blog">博客</a>
@@ -396,7 +396,7 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
     <span class="glitch-wrap" data-text="HELLO,">HELLO,</span>
     <span class="line2" contenteditable="false" spellcheck="false">WORLD.</span>
   </h1>
-  <p id="hero-sub" class="hero-sub" contenteditable="false" spellcheck="false">独立开发者 · 卡牌游戏制作中<br><span class="hl" contenteditable="false" spellcheck="false">明日方舟</span> 开服老玩家 · 同人创作者<br>代码 / 像素 / 故事</p>
+  <p id="hero-sub" class="hero-sub" contenteditable="false" spellcheck="false">独立开发者 · 卡牌游戏制作中<br>· 同人创作者<br>代码 / 手绘 / 故事</p>
   <div class="hero-btns">
     <a href="#sec-projects" class="btn-primary">查看项目</a>
     <a href="#sec-blog" class="btn-sec">最新文章</a>
@@ -427,22 +427,8 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
       <div class="proj-meta"><span class="tag" contenteditable="false" spellcheck="false">ROGUELIKE</span><span class="tag" contenteditable="false" spellcheck="false">CARD GAME</span><span class="tag" contenteditable="false" spellcheck="false">INDIE</span></div>
       <div class="proj-link-row"><input class="proj-link-input" type="url" placeholder="项目链接 https://..."></div>
     </div>
-    <div class="proj-card">
-      <div class="card-controls"><div class="card-drag-handle">⠿⠿</div><button class="card-delete" onclick="this.closest('.proj-card').remove()">✕</button></div>
-      <div class="proj-tag" contenteditable="false" spellcheck="false">// PROTOTYPE</div>
-      <div class="proj-name" contenteditable="false" spellcheck="false">项目 · 占位</div>
-      <div class="proj-desc" contenteditable="false" spellcheck="false">在这里添加你的下一个游戏项目，或者过去的作品展示。</div>
-      <div class="proj-meta"><span class="tag" contenteditable="false" spellcheck="false">GAME</span><span class="tag" contenteditable="false" spellcheck="false">UNITY</span></div>
-      <div class="proj-link-row"><input class="proj-link-input" type="url" placeholder="项目链接 https://..."></div>
-    </div>
-    <div class="proj-card">
-      <div class="card-controls"><div class="card-drag-handle">⠿⠿</div><button class="card-delete" onclick="this.closest('.proj-card').remove()">✕</button></div>
-      <div class="proj-tag" contenteditable="false" spellcheck="false">// ARCHIVE</div>
-      <div class="proj-name" contenteditable="false" spellcheck="false">项目 · 占位</div>
-      <div class="proj-desc" contenteditable="false" spellcheck="false">Game jam 作品、练习项目或实验性 demo 都可以放这里。</div>
-      <div class="proj-meta"><span class="tag" contenteditable="false" spellcheck="false">JAM</span><span class="tag" contenteditable="false" spellcheck="false">EXPERIMENT</span></div>
-      <div class="proj-link-row"><input class="proj-link-input" type="url" placeholder="项目链接 https://..."></div>
-    </div>
+    
+    
     <button class="add-card-btn" onclick="addProject(this)">＋ 添加项目</button>
   </div>
 </section>
