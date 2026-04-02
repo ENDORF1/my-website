@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>博客 · _DEV.LOG</title>
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+SC:wght@300;400;700&family=Fira+Code:wght@400;500&display=swap');
+:root{--bg:#030810;--dim:#0a1628;--text:#c8e0f0;--muted:#3a5a7a;--cyan:#00f5ff;--magenta:#ff006e;--yellow:#ffe600;--glow-c:0 0 8px #00f5ff88,0 0 24px #00f5ff44;--glow-m:0 0 8px #ff006e88,0 0 24px #ff006e44;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans SC',sans-serif;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,245,255,.015) 2px,rgba(0,245,255,.015) 4px);pointer-events:none;z-index:100;}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,245,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;animation:gridShift 20s linear infinite;}
+@keyframes gridShift{to{transform:translateY(60px);}}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:linear-gradient(180deg,rgba(3,8,16,.95),transparent);border-bottom:1px solid rgba(0,245,255,.1);}
+.nav-logo{font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--cyan);letter-spacing:4px;text-shadow:var(--glow-c);text-decoration:none;}
+.nav-logo span{color:var(--magenta);}
+.nav-links{display:flex;gap:28px;}
+.nav-links a{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:2px;text-transform:uppercase;transition:color .2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--cyan);transition:width .3s;}
+.nav-links a:hover{color:var(--cyan);}
+.nav-links a:hover::after{width:100%;}
+.page-wrap{position:relative;z-index:1;padding:120px 10vw 80px;}
+
+.page-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;}
+.page-heading{font-size:42px;font-weight:700;color:#fff;margin-bottom:48px;}
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;}
+.blog-card{background:#0a1628;border:1px solid rgba(0,245,255,.1);text-decoration:none;display:block;transition:border-color .3s,transform .3s;position:relative;overflow:hidden;}
+.blog-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));transform:scaleX(0);transform-origin:left;transition:transform .4s;}
+.blog-card:hover{border-color:rgba(0,245,255,.4);transform:translateY(-4px);}
+.blog-card:hover::before{transform:scaleX(1);}
+.bc-cover{width:100%;height:180px;object-fit:cover;border-bottom:1px solid rgba(0,245,255,.1);display:block;}
+.bc-cover-ph{width:100%;height:180px;background:rgba(0,245,255,.04);border-bottom:1px solid rgba(0,245,255,.1);}
+.bc-body{padding:20px;}
+.bc-cat{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:3px;display:block;margin-bottom:8px;}
+.bc-title{font-size:18px;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.4;}
+.bc-meta{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;display:flex;gap:10px;flex-wrap:wrap;}
+</style></head><body>
+<nav>
+  <div class="nav-logo">_<span>DEV</span>.LOG</div>
+  <div class="nav-links">
+    <a href="/">首页</a>
+    <a href="/blog/">博客</a>
+    <a href="/works/">项目</a>
+    <a href="/gallery/">创作</a>
+    <a href="/about/">关于</a>
+  </div>
+</nav>
+<div class="page-wrap">
+  <div class="page-title">// BLOG</div>
+  <h1 class="page-heading">技术博客</h1>
+  <div class="blog-grid">
+    <a class="blog-card" href="/blog/无标题.html">
+      <div class="bc-cover-ph"></div>
+      <div class="bc-body">
+        <span class="bc-cat"># 未分类</span>
+        <div class="bc-title">（无标题）</div>
+        <div class="bc-meta">2026-04-02 </div>
+      </div>
+    </a></div>
+</div>
+</body></html>
