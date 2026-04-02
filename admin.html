@@ -1194,8 +1194,7 @@ async function pushPageData(){
 }
 
 async function updateMainIndex(){
-  const html=buildHomeHTML();
-  await ghPut('index.html',html,'update: homepage blog');
+  // homepage is maintained manually - do not overwrite
 }
 
 /* ══════════════════════════════════════
