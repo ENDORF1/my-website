@@ -25,7 +25,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 .page-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;}
 .page-heading{font-size:42px;font-weight:700;color:#fff;margin-bottom:48px;}
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
-.gallery-card{background:#0a1628;border:1px solid rgba(255,0,110,.1);transition:border-color .3s,transform .3s;}
+.gallery-card{background:#0a1628;border:1px solid rgba(255,0,110,.1);transition:border-color .3s,transform .3s;display:block;text-decoration:none;cursor:pointer;}
 .gallery-card:hover{border-color:rgba(255,0,110,.5);transform:translateY(-4px);}
 .gc-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;}
 .gc-img-ph{width:100%;aspect-ratio:3/4;background:rgba(255,0,110,.04);}
@@ -48,13 +48,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
   <div class="page-title">// GALLERY</div>
   <h1 class="page-heading">同人创作</h1>
   <div class="gallery-grid">
-    <div class="gallery-card">
-      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/my-website@main/images/1775145470983-f5bm4.png" alt="">
+    <a class="gallery-card" href="/gallery/eudora.html">
+      <div class="gc-img-ph"></div>
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
         <div class="gc-title">EUDORA</div>
         
       </div>
-    </div></div>
+    </a></div>
 </div>
 </body></html>
