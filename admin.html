@@ -33,6 +33,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .lk-btn:hover::before{transform:translateX(0);}
 @keyframes lkShake{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
 
+/* ── CHANGE PASSWORD MODAL ── */
+#cpw-modal{position:fixed;inset:0;z-index:9003;background:rgba(3,8,16,.94);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;}
+#cpw-modal.show{display:flex;}
+#cpw-box{background:var(--dim);border:1px solid var(--border);padding:40px 48px;width:400px;max-width:92vw;position:relative;}
+#cpw-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));}
 /* ── TOAST ── */
 #toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-20px);z-index:99999;font-family:var(--font-mono);font-size:12px;letter-spacing:2px;padding:12px 28px;border:1px solid;opacity:0;pointer-events:none;transition:all .3s;white-space:nowrap;}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -276,6 +281,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     <div class="tb-spacer"></div>
     <div class="tb-status idle" id="tb-status">// 就绪</div>
     <button class="tb-btn tb-btn-new" onclick="openGhConfig()">⚙ GitHub</button>
+    <button class="tb-btn" style="border-color:rgba(255,0,110,.25);color:rgba(255,0,110,.6);font-size:10px;" onclick="openCpwModal()">🔑 改密码</button>
     <button class="tb-btn tb-btn-pub" onclick="publishCurrent()" id="pub-btn">⬆ 发布</button>
   </div>
 
@@ -398,6 +404,20 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     <div class="gh-field"><label class="gh-label">Personal Access Token</label><input class="gh-input" id="gh-token" type="password" placeholder="ghp_..."></div>
     <button class="gh-save" onclick="saveGhConfig()">保存</button>
     <button class="gh-cancel" onclick="closeGhConfig()">取消</button>
+  </div>
+</div>
+
+<!-- change password modal -->
+<div id="cpw-modal">
+  <div id="cpw-box">
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:16px;">// CHANGE PASSWORD</div>
+    <div style="font-size:20px;font-weight:700;color:#fff;letter-spacing:2px;margin-bottom:24px;">修改后台密码</div>
+    <div class="gh-field"><label class="gh-label">当前密码</label><input class="gh-input" id="cpw-old" type="password" placeholder="当前密码"></div>
+    <div class="gh-field"><label class="gh-label">新密码（至少6位）</label><input class="gh-input" id="cpw-new" type="password" placeholder="新密码"></div>
+    <div class="gh-field"><label class="gh-label">确认新密码</label><input class="gh-input" id="cpw-confirm" type="password" placeholder="再输一次"></div>
+    <span id="cpw-err" style="font-family:var(--font-mono);font-size:10px;color:var(--magenta);letter-spacing:2px;min-height:20px;display:block;margin-bottom:12px;"></span>
+    <button class="gh-save" onclick="submitCpw()">确认修改</button>
+    <button class="gh-cancel" onclick="closeCpwModal()">取消</button>
   </div>
 </div>
 
@@ -1477,6 +1497,34 @@ async function uploadImageToGH(file){
   // Use jsdelivr CDN for faster loading in China
   const rawUrl=`https://cdn.jsdelivr.net/gh/${GH.user}/${GH.repo}@main/${fname}`;
   return rawUrl;
+}
+
+/* ══════════════════════════════════════
+   CHANGE PASSWORD
+══════════════════════════════════════ */
+function openCpwModal(){
+  ['cpw-old','cpw-new','cpw-confirm'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cpw-err').textContent='';
+  document.getElementById('cpw-modal').classList.add('show');
+  setTimeout(()=>document.getElementById('cpw-old').focus(),80);
+}
+function closeCpwModal(){
+  document.getElementById('cpw-modal').classList.remove('show');
+}
+async function submitCpw(){
+  const oldVal=document.getElementById('cpw-old').value;
+  const newVal=document.getElementById('cpw-new').value;
+  const cfmVal=document.getElementById('cpw-confirm').value;
+  const errEl=document.getElementById('cpw-err');
+  errEl.textContent='';
+  if(!oldVal||!newVal||!cfmVal){errEl.textContent='// 请填写所有字段';return;}
+  if(newVal.length<6){errEl.textContent='// 新密码至少需要 6 位';return;}
+  if(newVal!==cfmVal){errEl.textContent='// 两次输入的密码不一致';return;}
+  const oldHash=await sha256(oldVal);
+  if(oldHash!==PW_HASH){errEl.textContent='// 当前密码错误';return;}
+  PW_HASH=await sha256(newVal);
+  closeCpwModal();
+  showToast('ok','密码已修改 · 请重新推送 admin.html 使其永久生效 ✓');
 }
 </script>
 </body>
