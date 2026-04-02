@@ -620,27 +620,41 @@ function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(
 
 function insertImage(){document.getElementById('img-file-input').click();}
 
-function handleInlineImage(input){
+async function handleInlineImage(input){
   const file=input.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const img=`<img src="${e.target.result}" alt="图片" style="max-width:100%"><p><br></p>`;
+  if(!GH.user||!GH.repo||!GH.token){
+    showToast('err','请先配置 GitHub 才能上传图片');
+    input.value=''; return;
+  }
+  showToast('info','上传图片中...');
+  try{
+    const url=await uploadImageToGH(file);
+    const img=`<img src="${url}" alt="图片" style="max-width:100%"><p><br></p>`;
     document.getElementById('editor-content').focus();
     document.execCommand('insertHTML',false,img);
-  };
-  reader.readAsDataURL(file);
+    showToast('ok','图片已插入 ✓');
+  }catch(e){
+    showToast('err','图片上传失败：'+e.message);
+  }
   input.value='';
 }
 
-function handleCoverUpload(input){
+async function handleCoverUpload(input){
   const file=input.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    coverData=e.target.result;
+  if(!GH.user||!GH.repo||!GH.token){
+    showToast('err','请先配置 GitHub 才能上传图片');
+    input.value=''; return;
+  }
+  showToast('info','上传封面中...');
+  try{
+    const url=await uploadImageToGH(file);
+    coverData=url;
     const prev=document.getElementById('cover-preview');
-    prev.src=coverData;prev.style.display='block';
-  };
-  reader.readAsDataURL(file);
+    prev.src=url; prev.style.display='block';
+    showToast('ok','封面上传成功 ✓');
+  }catch(e){
+    showToast('err','封面上传失败：'+e.message);
+  }
   input.value='';
 }
 
@@ -711,15 +725,23 @@ function openCardModal(type,idx){
 
 function closeCardModal(){document.getElementById('card-modal').classList.remove('show');}
 
-function handleCardImg(input){
+async function handleCardImg(input){
   const file=input.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    cardImgData=e.target.result;
+  if(!GH.user||!GH.repo||!GH.token){
+    showToast('err','请先配置 GitHub 才能上传图片');
+    input.value=''; return;
+  }
+  showToast('info','上传图片中...');
+  try{
+    const url=await uploadImageToGH(file);
+    cardImgData=url;
     const prev=document.getElementById('card-img-preview');
-    prev.src=cardImgData;prev.style.display='block';
-  };
-  reader.readAsDataURL(file);input.value='';
+    prev.src=url; prev.style.display='block';
+    showToast('ok','图片上传成功 ✓');
+  }catch(e){
+    showToast('err','图片上传失败：'+e.message);
+  }
+  input.value='';
 }
 
 function saveCard(){
@@ -1142,6 +1164,53 @@ function showToast(type,msg){
   el.textContent=msg;
   if(_toastTimer)clearTimeout(_toastTimer);
   _toastTimer=setTimeout(()=>{el.className='';},3000);
+}
+
+/* ══════════════════════════════════════
+   IMAGE UPLOAD TO GITHUB
+   图片推送到 images/ 文件夹，返回可访问 URL
+══════════════════════════════════════ */
+async function uploadImageToGH(file){
+  // Read file as base64
+  const base64 = await new Promise((res,rej)=>{
+    const reader=new FileReader();
+    reader.onload=e=>res(e.target.result.split(',')[1]); // strip data:...;base64, prefix
+    reader.onerror=rej;
+    reader.readAsDataURL(file);
+  });
+
+  // Build a unique filename
+  const ext=file.name.split('.').pop().toLowerCase()||'jpg';
+  const fname='images/'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'.'+ext;
+  const apiUrl=`https://api.github.com/repos/${GH.user}/${GH.repo}/contents/${fname}`;
+  const headers={
+    'Authorization':`token ${GH.token}`,
+    'Content-Type':'application/json',
+    'Accept':'application/vnd.github.v3+json'
+  };
+
+  const res=await fetch(apiUrl,{
+    method:'PUT',
+    headers,
+    body:JSON.stringify({
+      message:'upload image: '+fname,
+      content:base64
+    })
+  });
+
+  if(!res.ok){
+    const d=await res.json().catch(()=>({}));
+    if(res.status===401) throw new Error('GitHub Token 无效');
+    if(res.status===403) throw new Error('Token 权限不足，请勾选 repo');
+    if(res.status===422) throw new Error('文件已存在');
+    throw new Error(d.message||'HTTP '+res.status);
+  }
+
+  // Return the raw GitHub Pages URL
+  const data=await res.json();
+  // Use jsdelivr CDN for faster loading in China
+  const rawUrl=`https://cdn.jsdelivr.net/gh/${GH.user}/${GH.repo}@main/${fname}`;
+  return rawUrl;
 }
 </script>
 </body>
