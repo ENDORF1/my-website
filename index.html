@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh"><head>
+<html lang="zh">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>_DEV.LOG — 个人主页</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&amp;family=Rajdhani:wght@300;400;600;700&amp;family=Noto+Sans+SC:wght@300;400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#030810;--bg2:#060f1a;--dim:#0a1628;--text:#c8e0f0;--muted:#3a5a7a;--cyan:#00f5ff;--magenta:#ff006e;--yellow:#ffe600;--glow-c:0 0 8px #00f5ff88,0 0 24px #00f5ff44;--glow-m:0 0 8px #ff006e88,0 0 24px #ff006e44;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -11,13 +12,21 @@ html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'Rajdhani','Noto Sans SC',sans-serif;overflow-x:hidden;cursor:none;}
 body.edit-mode{cursor:default;}
 body.edit-mode .cursor,body.edit-mode .cursor-ring{display:none;}
+#pw-overlay.show~.cursor,#pw-overlay.show~.cursor-ring,
+#gh-overlay.show~.cursor,#gh-overlay.show~.cursor-ring,
+#cpw-overlay.show~.cursor,#cpw-overlay.show~.cursor-ring{display:none;}
+#pw-overlay.show,#gh-overlay.show,#cpw-overlay.show{cursor:auto;}
+#pw-box,#gh-box{cursor:auto;}
+#pw-box *,#gh-box *{cursor:auto;}
+button,a,input{cursor:pointer;}
+input[type="text"],input[type="password"],input[type="date"]{cursor:text;}
 body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,245,255,.015) 2px,rgba(0,245,255,.015) 4px);pointer-events:none;z-index:200;}
 body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,245,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;animation:gridShift 20s linear infinite;}
 @keyframes gridShift{from{transform:translateY(0);}to{transform:translateY(60px);}}
 
 /* cursor */
-.cursor{position:fixed;width:12px;height:12px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:9997;transform:translate(-50%,-50%);transition:transform .1s,background .2s;box-shadow:var(--glow-c);mix-blend-mode:screen;}
-.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid var(--cyan);border-radius:50%;pointer-events:none;z-index:9996;transform:translate(-50%,-50%);transition:width .2s,height .2s;opacity:.5;}
+.cursor{position:fixed;width:12px;height:12px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:9990;transform:translate(-50%,-50%);transition:transform .1s,background .2s;box-shadow:var(--glow-c);mix-blend-mode:screen;}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid var(--cyan);border-radius:50%;pointer-events:none;z-index:9989;transform:translate(-50%,-50%);transition:width .2s,height .2s;opacity:.5;}
 
 /* nav */
 nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:linear-gradient(180deg,rgba(3,8,16,.95) 0%,transparent 100%);border-bottom:1px solid rgba(0,245,255,.1);}
@@ -194,7 +203,7 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
 .is-dragging{opacity:.35!important;}
 
 /* ── GITHUB PUSH MODAL ── */
-#gh-overlay{position:fixed;inset:0;z-index:999997;background:rgba(3,8,16,.94);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;}
+#gh-overlay{position:fixed;inset:0;z-index:99999;background:rgba(3,8,16,.94);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;}
 #gh-overlay.show{display:flex;animation:fadeIn .25s ease;}
 #gh-box{background:var(--dim);border:1px solid rgba(0,245,255,.22);padding:44px 52px;width:440px;max-width:92vw;position:relative;box-shadow:0 0 80px rgba(0,245,255,.08),0 32px 80px rgba(0,0,0,.9);}
 #gh-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));}
@@ -228,6 +237,7 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
 #pw-overlay{
   position:fixed;inset:0;z-index:999999;
   background:rgba(3,8,16,.94);backdrop-filter:blur(20px);
+  cursor:auto;
   display:none;align-items:center;justify-content:center;
 }
 #pw-overlay.show{display:flex;animation:fadeIn .25s ease;}
@@ -280,37 +290,45 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
 .pw-locked-notice{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:2px;text-align:center;padding:16px 0;}
 .pw-locked-notice span{color:var(--cyan);}
 @keyframes pwShake{0%,100%{transform:translateX(0);}20%{transform:translateX(-10px);}40%{transform:translateX(10px);}60%{transform:translateX(-6px);}80%{transform:translateX(6px);}}
+
+/* ── CURSOR RESTORE IN MODALS ── */
+#pw-overlay *,#cpw-overlay *,#gh-overlay *{cursor:auto;}
+button,a[href],[onclick]{cursor:pointer !important;}
+input[type="text"],input[type="password"],input[type="date"]{cursor:text !important;}
+/* Hide custom cursor divs when any modal is open */
+body.modal-open .cursor, body.modal-open .cursor-ring{display:none !important;}
+body.modal-open{cursor:auto !important;}
 </style>
 </head>
-<body class="">
+<body>
 
 <!-- ── CURSORS ── -->
-<div class="cursor" id="cursor" style="left: 1055px; top: 670px; transform: translate(-50%, -50%) scale(1); background: var(--cyan);"></div>
-<div class="cursor-ring" id="cursorRing" style="left: 1055px; top: 670px; width: 36px; height: 36px;"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
 <!-- ══════════════════════════════
      PASSWORD MODAL (login)
 ══════════════════════════════ -->
-<div id="pw-overlay" class="">
+<div id="pw-overlay">
   <div id="pw-box">
     <span class="pw-tag">// ACCESS CONTROL</span>
     <div class="pw-title">编辑模式 · 验证</div>
     <div class="pw-sub">该操作需要身份验证。<br>请输入编辑密码以继续。</div>
     <div class="pw-field">
-      <input id="pw-input" type="password" placeholder="••••••••" autocomplete="off" onkeydown="if(event.key==='Enter')submitPw()" class="">
+      <input id="pw-input" type="password" placeholder="••••••••" autocomplete="off" onkeydown="if(event.key==='Enter')submitPw()">
       <span class="pw-eye" id="pw-eye" onclick="toggleEye('pw-input','pw-eye')">👁</span>
     </div>
-    <span class="pw-err" id="pw-err">// 密码错误</span>
+    <span class="pw-err" id="pw-err"></span>
     <button id="pw-submit" onclick="submitPw()">解锁编辑</button>
     <button id="pw-cancel" onclick="closePwModal()">取消</button>
-    <div class="pw-attempts" id="pw-attempts">已失败 <b>1</b>/5 次</div>
+    <div class="pw-attempts" id="pw-attempts"></div>
   </div>
 </div>
 
 <!-- ══════════════════════════════
      CHANGE PASSWORD MODAL
 ══════════════════════════════ -->
-<div id="cpw-overlay" style="position:fixed;inset:0;z-index:999998;background:rgba(3,8,16,.94);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;">
+<div id="cpw-overlay" style="position:fixed;inset:0;z-index:999998;background:rgba(3,8,16,.94);backdrop-filter:blur(20px);cursor:auto;display:none;align-items:center;justify-content:center;">
   <div id="pw-box">
     <span class="pw-tag">// SECURITY SETTINGS</span>
     <div class="pw-title">修改密码</div>
@@ -328,9 +346,9 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
       <span class="pw-eye" onclick="toggleEye('cpw-confirm',this)">👁</span>
     </div>
     <span class="pw-err" id="cpw-err"></span>
-    <span class="pw-ok" id="cpw-ok"></span>
+    <span class="pw-ok"  id="cpw-ok"></span>
     <button id="cpw-submit" onclick="submitChangePw()">确认修改</button>
-    <button id="cpw-cancel" onclick="document.getElementById('cpw-overlay').style.display='none'">取消</button>
+    <button id="cpw-cancel" onclick="document.getElementById('cpw-overlay').style.display='none'; if(!document.querySelector('.show[id$="overlay"]')) document.body.classList.remove('modal-open')">取消</button>
   </div>
 </div>
 
@@ -338,7 +356,7 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
 <button id="edit-toggle" onclick="openPwModal()">🔒 编辑内容</button>
 
 <!-- ── EDIT TOOLBAR ── -->
-<div id="edit-toolbar" style="display: none;">
+<div id="edit-toolbar">
   <span class="tb-label">// 编辑模式</span>
   <div class="tb-sep"></div>
   <span class="tb-hint">⠿ 拖动排序 · 点击文字修改</span>
@@ -352,7 +370,7 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
 <div id="save-toast">// 已保存为 index.html</div>
 
 <!-- ── GITHUB PUSH MODAL ── -->
-<div id="gh-overlay" class="show">
+<div id="gh-overlay">
   <div id="gh-box">
     <span class="gh-tag">// GITHUB DEPLOY</span>
     <div class="gh-title">推送到 GitHub</div>
@@ -373,15 +391,15 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
       <label>PERSONAL ACCESS TOKEN</label>
       <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxx" autocomplete="off">
     </div>
-    <button id="gh-push-btn" onclick="pushToGithub()" disabled="">⬆ 立即推送</button>
+    <button id="gh-push-btn" onclick="pushToGithub()">⬆ 立即推送</button>
     <button id="gh-cancel-btn" onclick="closeGhModal()">取消</button>
-    <div id="gh-log" class="show"><div class="log-spin">⟳ 正在生成网页内容...</div></div>
+    <div id="gh-log"></div>
   </div>
 </div>
 
 <!-- ── NAV ── -->
 <nav>
-  <a class="nav-logo" href="/" contenteditable="false" spellcheck="false"><span contenteditable="false" spellcheck="false">熄忘</span>.希望</a>
+  <a class="nav-logo" href="/">_<span>DEV</span>.LOG</a>
   <div class="nav-links">
     <a href="/blog/">博客</a>
     <a href="/works/">项目</a>
@@ -393,12 +411,12 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
 
 <!-- ── HERO ── -->
 <section id="hero">
-  <div class="hero-tag" contenteditable="false" spellcheck="false">// INDEPENDENT DEVELOPER · GAME MAKER · CREATOR</div>
+  <div class="hero-tag">// INDEPENDENT DEVELOPER · GAME MAKER · CREATOR</div>
   <h1 class="hero-name">
     <span class="glitch-wrap" data-text="HELLO,">HELLO,</span>
-    <span class="line2" contenteditable="false" spellcheck="false">WORLD.</span>
+    <span class="line2">WORLD.</span>
   </h1>
-  <p id="hero-sub" class="hero-sub" contenteditable="false" spellcheck="false">独立开发者 · 卡牌游戏制作中<br>兴趣使然的创作者<br>代码 / 手绘 / 故事</p>
+  <p id="hero-sub" class="hero-sub">独立开发者 · 卡牌游戏制作中<br><span class="hl">明日方舟</span> 开服老玩家 · 同人创作者<br>代码 / 像素 / 故事</p>
   <div class="hero-btns">
     <a href="#sec-projects" class="btn-primary">查看项目</a>
     <a href="#sec-blog" class="btn-sec">最新文章</a>
@@ -417,32 +435,32 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
   </div>
   <div class="sec-header">
     <span class="sec-num">01</span>
-    <h2 class="sec-title" contenteditable="false" spellcheck="false">游戏开发</h2>
+    <h2 class="sec-title">游戏开发</h2>
     <div class="sec-line"></div>
   </div>
   <div class="projects-grid">
     <div class="proj-card">
       <div class="card-controls"><div class="card-drag-handle">⠿⠿</div><button class="card-delete" onclick="this.closest('.proj-card').remove()">✕</button></div>
-      <div class="proj-tag" contenteditable="false" spellcheck="false">// IN PROGRESS</div>
-      <div class="proj-name" contenteditable="false" spellcheck="false">卡牌 DEMO</div>
-      <div class="proj-desc" contenteditable="false" spellcheck="false">受《杀戮尖塔》启发的独立卡牌 Roguelike。探索卡组构建与随机性的平衡边界。</div>
-      <div class="proj-meta"><span class="tag" contenteditable="false" spellcheck="false">ROGUELIKE</span><span class="tag" contenteditable="false" spellcheck="false">CARD GAME</span><span class="tag" contenteditable="false" spellcheck="false">INDIE</span></div>
+      <div class="proj-tag">// IN PROGRESS</div>
+      <div class="proj-name">卡牌 DEMO</div>
+      <div class="proj-desc">受《杀戮尖塔》启发的独立卡牌 Roguelike。探索卡组构建与随机性的平衡边界。</div>
+      <div class="proj-meta"><span class="tag">ROGUELIKE</span><span class="tag">CARD GAME</span><span class="tag">INDIE</span></div>
       <div class="proj-link-row"><input class="proj-link-input" type="url" placeholder="项目链接 https://..."></div>
     </div>
     <div class="proj-card">
       <div class="card-controls"><div class="card-drag-handle">⠿⠿</div><button class="card-delete" onclick="this.closest('.proj-card').remove()">✕</button></div>
-      <div class="proj-tag" contenteditable="false" spellcheck="false">// PROTOTYPE</div>
-      <div class="proj-name" contenteditable="false" spellcheck="false">项目 · 占位</div>
-      <div class="proj-desc" contenteditable="false" spellcheck="false">在这里添加你的下一个游戏项目，或者过去的作品展示。</div>
-      <div class="proj-meta"><span class="tag" contenteditable="false" spellcheck="false">GAME</span><span class="tag" contenteditable="false" spellcheck="false">UNITY</span></div>
+      <div class="proj-tag">// PROTOTYPE</div>
+      <div class="proj-name">项目 · 占位</div>
+      <div class="proj-desc">在这里添加你的下一个游戏项目，或者过去的作品展示。</div>
+      <div class="proj-meta"><span class="tag">GAME</span><span class="tag">UNITY</span></div>
       <div class="proj-link-row"><input class="proj-link-input" type="url" placeholder="项目链接 https://..."></div>
     </div>
     <div class="proj-card">
       <div class="card-controls"><div class="card-drag-handle">⠿⠿</div><button class="card-delete" onclick="this.closest('.proj-card').remove()">✕</button></div>
-      <div class="proj-tag" contenteditable="false" spellcheck="false">// ARCHIVE</div>
-      <div class="proj-name" contenteditable="false" spellcheck="false">项目 · 占位</div>
-      <div class="proj-desc" contenteditable="false" spellcheck="false">Game jam 作品、练习项目或实验性 demo 都可以放这里。</div>
-      <div class="proj-meta"><span class="tag" contenteditable="false" spellcheck="false">JAM</span><span class="tag" contenteditable="false" spellcheck="false">EXPERIMENT</span></div>
+      <div class="proj-tag">// ARCHIVE</div>
+      <div class="proj-name">项目 · 占位</div>
+      <div class="proj-desc">Game jam 作品、练习项目或实验性 demo 都可以放这里。</div>
+      <div class="proj-meta"><span class="tag">JAM</span><span class="tag">EXPERIMENT</span></div>
       <div class="proj-link-row"><input class="proj-link-input" type="url" placeholder="项目链接 https://..."></div>
     </div>
     <button class="add-card-btn" onclick="addProject(this)">＋ 添加项目</button>
@@ -456,14 +474,14 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
   </div>
   <div class="sec-header">
     <span class="sec-num">02</span>
-    <h2 class="sec-title" contenteditable="false" spellcheck="false">技术博客</h2>
+    <h2 class="sec-title">技术博客</h2>
     <div class="sec-line"></div>
   </div>
   <div class="posts-list">
-    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date" contenteditable="false" spellcheck="false">2025.04.01</span><span class="post-cat" contenteditable="false" spellcheck="false">游戏设计</span><span class="post-title" contenteditable="false" spellcheck="false">杀戮尖塔核心玩法拆解：有限资源下的决策美学</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
-    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date" contenteditable="false" spellcheck="false">2025.03.18</span><span class="post-cat" contenteditable="false" spellcheck="false">开发日志</span><span class="post-title" contenteditable="false" spellcheck="false">从零开始做卡牌游戏 #01：战斗系统的第一次迭代</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
-    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date" contenteditable="false" spellcheck="false">2025.03.05</span><span class="post-cat" contenteditable="false" spellcheck="false">数据分析</span><span class="post-title" contenteditable="false" spellcheck="false">用数据视角看二次元游戏留存：以明日方舟为例</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
-    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date" contenteditable="false" spellcheck="false">2025.02.20</span><span class="post-cat" contenteditable="false" spellcheck="false">技术</span><span class="post-title" contenteditable="false" spellcheck="false">Python 数据科学栈在游戏数值设计中的应用实践</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
+    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date">2025.04.01</span><span class="post-cat">游戏设计</span><span class="post-title">杀戮尖塔核心玩法拆解：有限资源下的决策美学</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
+    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date">2025.03.18</span><span class="post-cat">开发日志</span><span class="post-title">从零开始做卡牌游戏 #01：战斗系统的第一次迭代</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
+    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date">2025.03.05</span><span class="post-cat">数据分析</span><span class="post-title">用数据视角看二次元游戏留存：以明日方舟为例</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
+    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date">2025.02.20</span><span class="post-cat">技术</span><span class="post-title">Python 数据科学栈在游戏数值设计中的应用实践</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
   </div>
   <button class="add-post-btn" onclick="addPost(this)">＋ 添加文章</button>
 </section>
@@ -475,14 +493,14 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
   </div>
   <div class="sec-header">
     <span class="sec-num">03</span>
-    <h2 class="sec-title" contenteditable="false" spellcheck="false">同人创作</h2>
+    <h2 class="sec-title">同人创作</h2>
     <div class="sec-line"></div>
   </div>
   <div class="creations-grid">
-    <div class="creation-card"><div class="creation-bg c1"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type" contenteditable="false" spellcheck="false">// ILLUST</div><div class="creation-name" contenteditable="false" spellcheck="false">插画作品</div></div>
-    <div class="creation-card"><div class="creation-bg c2"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type" contenteditable="false" spellcheck="false">// MERCH</div><div class="creation-name" contenteditable="false" spellcheck="false">漫展周边</div></div>
-    <div class="creation-card"><div class="creation-bg c3"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type" contenteditable="false" spellcheck="false">// FANWORK</div><div class="creation-name" contenteditable="false" spellcheck="false">同人创作</div></div>
-    <div class="creation-card"><div class="creation-bg c4"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type" contenteditable="false" spellcheck="false">// OTHER</div><div class="creation-name" contenteditable="false" spellcheck="false">更多作品</div></div>
+    <div class="creation-card"><div class="creation-bg c1"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type">// ILLUST</div><div class="creation-name">插画作品</div></div>
+    <div class="creation-card"><div class="creation-bg c2"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type">// MERCH</div><div class="creation-name">漫展周边</div></div>
+    <div class="creation-card"><div class="creation-bg c3"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type">// FANWORK</div><div class="creation-name">同人创作</div></div>
+    <div class="creation-card"><div class="creation-bg c4"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type">// OTHER</div><div class="creation-name">更多作品</div></div>
     <button class="add-creation-btn" onclick="addCreation(this)">＋</button>
   </div>
 </section>
@@ -490,7 +508,7 @@ body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);back
 </div><!-- /sections-container -->
 
 <footer>
-  <div class="footer-text" contenteditable="false" spellcheck="false">© 2025 · BUILT WITH ♥ &amp; CODE</div>
+  <div class="footer-text">© 2025 · BUILT WITH ♥ & CODE</div>
   <div class="footer-links">
     <div class="social-edit-wrap"><a class="social-label" id="sl-github" href="#">GITHUB</a><input class="social-input" placeholder="GitHub URL" oninput="document.getElementById('sl-github').href=this.value||'#'"></div>
     <div class="social-edit-wrap"><a class="social-label" id="sl-bili" href="#">BILIBILI</a><input class="social-input" placeholder="Bilibili URL" oninput="document.getElementById('sl-bili').href=this.value||'#'"></div>
@@ -519,6 +537,7 @@ async function sha256(str) {
 }
 
 function openPwModal() {
+  document.body.classList.add('modal-open');
   const now = Date.now();
   const overlay = document.getElementById('pw-overlay');
   const errEl   = document.getElementById('pw-err');
@@ -541,6 +560,7 @@ function openPwModal() {
 
 function closePwModal() {
   document.getElementById('pw-overlay').classList.remove('show');
+  if(!document.querySelector('.show[id$="overlay"]')) document.body.classList.remove('modal-open');
 }
 
 async function submitPw() {
@@ -587,6 +607,7 @@ function toggleEye(inputId, eyeEl) {
 
 /* change password */
 function openChangePw() {
+  document.body.classList.add('modal-open');
   ['cpw-old','cpw-new','cpw-confirm'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('cpw-err').textContent='';
   document.getElementById('cpw-ok').textContent='';
@@ -608,7 +629,7 @@ async function submitChangePw() {
   if (oldHash !== PW_HASH) { errEl.textContent='// 当前密码错误'; return; }
   PW_HASH = await sha256(newVal);
   okEl.textContent='// 密码已更新 · 请在保存网页后生效';
-  setTimeout(()=>{ document.getElementById('cpw-overlay').style.display='none'; }, 2000);
+  setTimeout(()=>{ document.getElementById('cpw-overlay').style.display='none'; if(!document.querySelector('.show[id$="overlay"]')) document.body.classList.remove('modal-open'); }, 2000);
 }
 
 /* ══════════════════════════════════════
@@ -782,6 +803,7 @@ let GH_REPO  = localStorage.getItem('gh_repo')  || '';
 let GH_TOKEN = localStorage.getItem('gh_token') || '';
 
 function openGhModal() {
+  document.body.classList.add('modal-open');
   document.getElementById('gh-user').value  = GH_USER;
   document.getElementById('gh-repo').value  = GH_REPO;
   document.getElementById('gh-token').value = GH_TOKEN;
@@ -791,6 +813,7 @@ function openGhModal() {
 }
 function closeGhModal() {
   document.getElementById('gh-overlay').classList.remove('show');
+  if(!document.querySelector('.show[id$="overlay"]')) document.body.classList.remove('modal-open');
 }
 
 function ghLog(msg, type='info') {
@@ -834,7 +857,6 @@ async function pushToGithub() {
   try {
     // Step 1: build HTML content
     ghLog('正在生成网页内容...', 'spin');
-    exitEditMode();
     const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML
       .replace(/let PW_HASH = \'[^\']*\'/, `let PW_HASH = \'${PW_HASH}\'`);
     const encoded = btoa(unescape(encodeURIComponent(html)));
@@ -871,7 +893,8 @@ async function pushToGithub() {
     if (putRes.ok) {
       ghLog('推送成功 ✓', 'ok');
       ghLog(`https://github.com/${user}/${repo}`, 'ok');
-      ghLog('Netlify 将在约 1 分钟内自动更新', 'info');
+      ghLog('GitHub Pages 将在约 1 分钟内自动更新', 'info');
+      exitEditMode();
     } else {
       const errData = await putRes.json().catch(()=>({}));
       ghLog(`推送失败：${errData.message || 'HTTP ' + putRes.status}`, 'err');
@@ -886,16 +909,5 @@ async function pushToGithub() {
   btn.disabled = false;
 }
 </script>
-
-
-<div id="aix-action-loading-host"></div><script src="chrome-extension://pljfekbkmmbkdfhddpebdlmfngigcohc/content/windowDataMessage.js"></script><div id="aix-drop-panel">
-    <a id="aix-drop-panel-close-btn">×</a>
-        <div id="aix-drop-panel-inner">
-            <div class="aix-content">
-                <svg class="aix-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5892"><path d="M494.933333 782.933333c2.133333 2.133333 4.266667 4.266667 8.533334 6.4h8.533333c6.4 0 10.666667-2.133333 14.933333-6.4l2.133334-2.133333 275.2-275.2c8.533333-8.533333 8.533333-21.333333 0-29.866667-8.533333-8.533333-21.333333-8.533333-29.866667 0L533.333333 716.8V128c0-12.8-8.533333-21.333333-21.333333-21.333333s-21.333333 8.533333-21.333333 21.333333v588.8L249.6 475.733333c-8.533333-8.533333-21.333333-8.533333-29.866667 0-8.533333 8.533333-8.533333 21.333333 0 29.866667l275.2 277.333333zM853.333333 874.666667H172.8c-12.8 0-21.333333 8.533333-21.333333 21.333333s8.533333 21.333333 21.333333 21.333333H853.333333c12.8 0 21.333333-8.533333 21.333334-21.333333s-10.666667-21.333333-21.333334-21.333333z" p-id="5893"></path></svg>
-                <div class="aix-title">拖拽到此处完成下载</div>
-                <div class="aix-desc">图片将完成下载</div>
-            </div>
-            <div id="aix-supported-by">AIX智能下载器</div>
-        </div>
-    </div></body><div style="position: fixed; width: 400px; height: 200px; background-color: rgb(255, 255, 255); display: none; padding: 10px 14px; font-size: 14px; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 15px; z-index: 2147483647; white-space: pre-wrap; overflow-y: auto; border-radius: 4px;"></div><div id="sc-translator-shadow" style="all: initial;"></div></html>
+</body>
+</html>
