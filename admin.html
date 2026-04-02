@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+.<!DOCTYPE html>
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
@@ -211,7 +211,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 #img-file-input,#cover-file-input,#pp-img-input{display:none;}
 
 /* card edit modal */
-#card-modal{position:fixed;inset:0;z-index:9002;background:rgba(3,8,16,.92);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;}
+#card-modal{position:fixed;inset:0;z-index:99999;background:rgba(3,8,16,.92);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;}
 #card-modal.show{display:flex;}
 #card-box{background:var(--dim);border:1px solid var(--border);width:520px;max-width:92vw;position:relative;padding:40px 44px;}
 #card-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));}
@@ -405,7 +405,7 @@ async function doLogin(){
   const val=document.getElementById('lk-input').value;
   const hash=await sha256(val);
   if(hash===PW_HASH){
-    document.getElementById('lock').style.display='none';
+    document.getElementById('lock').remove();
     document.getElementById('app').classList.add('show');
     init();
   } else {
@@ -671,7 +671,7 @@ function renderPagePanel(tab){
       <div class="pp-card-tags">${(item.tags||[]).map(t=>`<span class="pp-tag">${t}</span>`).join('')}</div>
       <button class="pp-card-del" onclick="deleteCard('${tab}',${i},event)">✕ 删除</button>
     `;
-    card.querySelector('.pp-card-title') && (card.onclick=()=>openCardModal(tab,i));
+    card.onclick=(e)=>{ if(!e.target.classList.contains('pp-card-del')) openCardModal(tab,i); };
     grid.appendChild(card);
   });
   const addBtn=document.createElement('div');
