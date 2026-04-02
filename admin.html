@@ -1136,10 +1136,7 @@ async function publishPost(){
     await ghPut('blog/index.html',indexHtml,'update: blog index');
     pushLog('博客列表页已更新','ok');
 
-    // 3. update homepage
-    pushLog('同步更新首页...','spin');
-    await ghPut('index.html',buildHomeHTML(),'update: homepage');
-    pushLog('首页已同步 ✓','ok');
+    // homepage loads posts dynamically from localStorage - no push needed
     pushLog('全部完成 · Netlify 将在约1分钟内自动部署','info');
     showToast('ok','发布成功 · Netlify 约1分钟后更新 ✓');
     setTimeout(()=>setStatus('idle','// 就绪'),4000);
@@ -1182,10 +1179,8 @@ async function pushPageData(){
       await ghPut('about/index.html',buildAboutHTML(),'update: about page');
       pushLog('关于我页已推送','ok');
     }
-    // Always update homepage last
-    pushLog('同步更新首页...','spin');
-    await ghPut('index.html',buildHomeHTML(),'update: homepage');
-    pushLog('首页已同步 ✓','ok');
+    // homepage loads data dynamically from localStorage - no push needed
+    pushLog('完成 · 首页将自动读取最新数据','info');
     setStatus('ok','// 推送成功');
     pushLog('Netlify 将在约1分钟内自动部署','info');
     showToast('ok','推送成功 · Netlify 约1分钟后更新 ✓');
