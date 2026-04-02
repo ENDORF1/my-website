@@ -16,12 +16,12 @@
   --font-code:'Fira Code',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-body);}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-body);cursor:auto;}
 
 /* ── LOCK SCREEN ── */
 #lock{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0;}
 #lock-box{background:var(--dim);border:1px solid var(--border);padding:48px 56px;width:400px;max-width:92vw;position:relative;}
-#lock-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));}
+#lock-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));pointer-events:none;}
 .lk-tag{font-family:var(--font-mono);font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:16px;display:block;}
 .lk-title{font-size:22px;font-weight:700;color:var(--white);letter-spacing:2px;margin-bottom:6px;}
 .lk-sub{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:28px;line-height:1.7;}
@@ -146,7 +146,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 #code-modal{position:fixed;inset:0;z-index:9000;background:rgba(3,8,16,.92);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;}
 #code-modal.show{display:flex;}
 #code-box{background:var(--dim);border:1px solid var(--border);width:660px;max-width:95vw;position:relative;}
-#code-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));}
+#code-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));pointer-events:none;}
 .cb-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);}
 .cb-title{font-family:var(--font-mono);font-size:12px;color:var(--cyan);letter-spacing:3px;}
 .cb-close{font-family:var(--font-mono);font-size:16px;color:var(--muted);cursor:pointer;background:none;border:none;transition:color .2s;}
@@ -160,10 +160,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .cb-insert:hover::before{transform:translateX(0);}
 
 /* gh config modal */
-#gh-modal{position:fixed;inset:0;z-index:9001;background:rgba(3,8,16,.92);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;}
+#gh-modal{position:fixed;inset:0;z-index:99990;background:rgba(3,8,16,.92);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;}
 #gh-modal.show{display:flex;}
 #gh-box{background:var(--dim);border:1px solid var(--border);width:420px;max-width:92vw;position:relative;padding:40px 48px;}
-#gh-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));}
+#gh-box::before{pointer-events:none;}
+#gh-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));pointer-events:none;}
 .gh-field{margin-bottom:14px;}
 .gh-label{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;display:block;margin-bottom:6px;}
 .gh-input{width:100%;background:rgba(0,245,255,.03);border:1px solid rgba(0,245,255,.12);border-bottom:1px solid var(--cyan);color:var(--white);font-family:var(--font-mono);font-size:13px;letter-spacing:2px;padding:10px 12px;outline:none;}
@@ -221,12 +222,18 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 #card-modal{position:fixed;inset:0;z-index:99999;background:rgba(3,8,16,.92);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;}
 #card-modal.show{display:flex;}
 #card-box{background:var(--dim);border:1px solid var(--border);width:520px;max-width:92vw;position:relative;padding:40px 44px;}
-#card-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));}
+#card-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));pointer-events:none;}
 .card-field{margin-bottom:14px;}
 .card-label{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;display:block;margin-bottom:6px;}
 .card-input,.card-textarea{width:100%;background:rgba(0,245,255,.03);border:1px solid rgba(0,245,255,.12);border-bottom:1px solid var(--cyan);color:var(--white);font-family:var(--font-mono);font-size:13px;letter-spacing:1px;padding:8px 12px;outline:none;font-family:var(--font-body);}
 .card-textarea{height:80px;resize:vertical;font-size:13px;}
 .card-img-preview{width:100%;height:100px;object-fit:cover;border:1px solid var(--border);margin-bottom:8px;display:none;}
+.focus-picker-wrap{position:relative;display:none;margin-bottom:8px;}
+.focus-picker-wrap.show{display:block;}
+.focus-picker-img{width:100%;height:180px;object-fit:cover;display:block;border:1px solid var(--border);cursor:crosshair;}
+.focus-dot{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--cyan);border:2px solid #fff;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 8px rgba(0,245,255,.8);transition:left .1s,top .1s;}
+.focus-hint{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:8px;display:none;}
+.focus-picker-wrap.show + .focus-hint{display:block;}
 .card-img-upload{width:100%;padding:8px;background:transparent;border:1px dashed rgba(0,245,255,.2);color:var(--muted);font-family:var(--font-mono);font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s;text-align:center;}
 .card-img-upload:hover{border-color:var(--cyan);color:var(--cyan);}
 .card-save{width:100%;padding:10px;background:transparent;border:1px solid var(--cyan);color:var(--cyan);font-family:var(--font-mono);font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-top:8px;position:relative;overflow:hidden;transition:color .3s;}
@@ -356,19 +363,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   </div>
 </div>
 
-<!-- gh config modal -->
-<div id="gh-modal">
-  <div id="gh-box">
-    <div style="font-family:var(--font-mono);font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:16px;">// GITHUB CONFIG</div>
-    <div style="font-size:20px;font-weight:700;color:#fff;letter-spacing:2px;margin-bottom:24px;">GitHub 配置</div>
-    <div class="gh-field"><label class="gh-label">用户名</label><input class="gh-input" id="gh-user" placeholder="octocat"></div>
-    <div class="gh-field"><label class="gh-label">仓库名</label><input class="gh-input" id="gh-repo" placeholder="my-site"></div>
-    <div class="gh-field"><label class="gh-label">Personal Access Token</label><input class="gh-input" id="gh-token" type="password" placeholder="ghp_..."></div>
-    <button class="gh-save" onclick="saveGhConfig()">保存</button>
-    <button class="gh-cancel" onclick="closeGhConfig()">取消</button>
-  </div>
-</div>
-
 <!-- card edit modal -->
 <div id="card-modal">
   <div id="card-box">
@@ -381,11 +375,29 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     <div class="card-field">
       <label class="card-label">封面图</label>
       <img class="card-img-preview" id="card-img-preview" src="">
+      <div class="focus-picker-wrap" id="focus-picker-wrap">
+        <img class="focus-picker-img" id="focus-picker-img" src="" onclick="setFocusPoint(event,this)">
+        <div class="focus-dot" id="focus-dot" style="left:50%;top:50%;"></div>
+      </div>
+      <div class="focus-hint">👆 点击图片选择展示焦点位置</div>
       <div class="card-img-upload" onclick="document.getElementById('pp-img-input').click()">📷 上传封面图</div>
       <input type="file" id="pp-img-input" accept="image/*" onchange="handleCardImg(this)">
     </div>
     <button class="card-save" onclick="saveCard()">保存卡片</button>
     <button class="card-cancel" onclick="closeCardModal()">取消</button>
+  </div>
+</div>
+
+<!-- gh config modal -->
+<div id="gh-modal">
+  <div id="gh-box">
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:16px;">// GITHUB CONFIG</div>
+    <div style="font-size:20px;font-weight:700;color:#fff;letter-spacing:2px;margin-bottom:24px;">GitHub 配置</div>
+    <div class="gh-field"><label class="gh-label">用户名</label><input class="gh-input" id="gh-user" placeholder="octocat"></div>
+    <div class="gh-field"><label class="gh-label">仓库名</label><input class="gh-input" id="gh-repo" placeholder="my-site"></div>
+    <div class="gh-field"><label class="gh-label">Personal Access Token</label><input class="gh-input" id="gh-token" type="password" placeholder="ghp_..."></div>
+    <button class="gh-save" onclick="saveGhConfig()">保存</button>
+    <button class="gh-cancel" onclick="closeGhConfig()">取消</button>
   </div>
 </div>
 
@@ -442,6 +454,7 @@ let currentTab  = 'blog';
 let editingCardType = null;
 let editingCardIdx  = null;
 let cardImgData = null;
+let cardImgPos = "50% 50%"; // object-position value
 let coverData   = null;
 
 function saveState(){
@@ -721,12 +734,37 @@ function openCardModal(type,idx){
   // show content field only for gallery
   document.getElementById('card-content-field').style.display=type==='gallery'?'block':'none';
   cardImgData=item.img||null;
+  cardImgPos=item.imgPos||'50% 50%';
   const prev=document.getElementById('card-img-preview');
-  if(cardImgData){prev.src=cardImgData;prev.style.display='block';}
-  else prev.style.display='none';
+  const picker=document.getElementById('focus-picker-wrap');
+  const pickerImg=document.getElementById('focus-picker-img');
+  if(cardImgData){
+    prev.src=cardImgData;prev.style.display='block';
+    pickerImg.src=cardImgData;
+    picker.classList.add('show');
+    // restore dot position
+    const [px,py]=cardImgPos.split(' ');
+    const dot=document.getElementById('focus-dot');
+    dot.style.left=px; dot.style.top=py;
+  } else {
+    prev.style.display='none';
+    picker.classList.remove('show');
+  }
   document.getElementById('card-modal').classList.add('show');
 }
 
+
+function setFocusPoint(e, imgEl){
+  const rect=imgEl.getBoundingClientRect();
+  const x=((e.clientX-rect.left)/rect.width*100).toFixed(1)+'%';
+  const y=((e.clientY-rect.top)/rect.height*100).toFixed(1)+'%';
+  cardImgPos=x+' '+y;
+  const dot=document.getElementById('focus-dot');
+  dot.style.left=x; dot.style.top=y;
+  // live preview
+  document.getElementById('card-img-preview').style.objectPosition=cardImgPos;
+  showToast('info','焦点已设置：'+x+' '+y);
+}
 function closeCardModal(){document.getElementById('card-modal').classList.remove('show');}
 
 async function handleCardImg(input){
@@ -739,9 +777,16 @@ async function handleCardImg(input){
   try{
     const url=await uploadImageToGH(file);
     cardImgData=url;
+    cardImgPos='50% 50%';
     const prev=document.getElementById('card-img-preview');
     prev.src=url; prev.style.display='block';
-    showToast('ok','图片上传成功 ✓');
+    // show focus picker
+    const pickerImg=document.getElementById('focus-picker-img');
+    const picker=document.getElementById('focus-picker-wrap');
+    pickerImg.src=url; picker.classList.add('show');
+    const dot=document.getElementById('focus-dot');
+    dot.style.left='50%'; dot.style.top='50%';
+    showToast('ok','图片上传成功 ✓ 点击图片选择展示焦点');
   }catch(e){
     showToast('err','图片上传失败：'+e.message);
   }
@@ -759,6 +804,7 @@ function saveCard(){
     link:document.getElementById('card-link-input').value,
     content:document.getElementById('card-content-input').value,
     img:cardImgData,
+    imgPos:cardImgPos,
     slug:slugify(title)
   };
   const data=editingCardType==='works'?works:gallery;
@@ -1066,7 +1112,7 @@ ${NAV_HTML()}
 function buildWorksHTML(){
   const cards=works.map(w=>{
     const inner=`
-      ${w.img?`<img class="wc-img" src="${w.img}" alt="">`:`<div class="wc-img-ph"></div>`}
+      ${w.img?`<img class="wc-img" src="${w.img}" style="object-position:${w.imgPos||'50% 50%'}" alt="">`:`<div class="wc-img-ph"></div>`}
       <div class="wc-body">
         <div class="wc-title">${w.title||''}</div>
         <div class="wc-desc">${w.desc||''}</div>
@@ -1110,7 +1156,7 @@ ${NAV_HTML()}
 function buildGalleryHTML(){
   const cards=gallery.map(g=>`
     <a class="gallery-card" href="/gallery/${g.slug||slugify(g.title)}.html">
-      ${g.img?`<img class="gc-img" src="${g.img}" alt="">`:`<div class="gc-img-ph"></div>`}
+      ${g.img?`<img class="gc-img" src="${g.img}" style="object-position:${g.imgPos||'50% 50%'}" alt="">`:`<div class="gc-img-ph"></div>`}
       <div class="gc-body">
         <div class="gc-type">${(g.tags||[])[0]||'// WORK'}</div>
         <div class="gc-title">${g.title||''}</div>
@@ -1193,7 +1239,7 @@ function buildHomeHTML(){
   // Gallery cards (up to 4)
   const galleryCards = gallery.slice(0,4).map(g=>`
     <a class="creation-card-live" href="/gallery/${g.slug||slugify(g.title)}.html">
-      ${g.img ? `<img class="cc-img" src="${g.img}" alt="${g.title}">` : '<div class="cc-img-ph"></div>'}
+      ${g.img ? `<img class="cc-img" src="${g.img}" style="object-position:${g.imgPos||'50% 50%'}" alt="${g.title}">` : '<div class="cc-img-ph"></div>'}
       <div class="cc-body">
         <div class="cc-type">${(g.tags||[])[0]||'// WORK'}</div>
         <div class="cc-name">${g.title||''}</div>
@@ -1203,7 +1249,7 @@ function buildHomeHTML(){
   // Works cards (up to 3)
   const worksCards = works.slice(0,3).map(w=>{
     const inner = `
-      ${w.img ? `<img class="wc-img" src="${w.img}" alt="${w.title}">` : '<div class="wc-img-ph"></div>'}
+      ${w.img ? `<img class="wc-img" src="${w.img}" style="object-position:${w.imgPos||'50% 50%'}" alt="${w.title}">` : '<div class="wc-img-ph"></div>'}
       <div class="proj-tag">// ${(w.tags||[])[0]||'PROJECT'}</div>
       <div class="proj-name">${w.title||''}</div>
       <div class="proj-desc">${w.desc||''}</div>
