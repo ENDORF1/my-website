@@ -75,15 +75,27 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
     </div>
   </div>
   <img class="post-cover" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775240433361-go9d5.png" alt="封面">
-  <div class="post-body">写在最前：今天想给大家分享的是我最最喜爱的卡组构建-Roguelike游戏，也就是早已鼎鼎大名的杀戮尖塔。我在电脑端上有着差不多快400小时，手机端上有差不多100小时的游戏经历，我想这足以证明我对它的喜爱。<div><figure class="post-figure"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775255997433-c5sr3.png" alt="图片"><figcaption>我的steam游戏时间截图</figcaption></figure><h1>一、核心循环总览：三层嵌套结构<span lang="EN-US"><o:p></o:p></span></h1><p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
-margin-left:0cm;line-height:133%">杀戮尖塔的玩法循环由三个层次构成，彼此嵌套、互相强化。理解这三层结构是分析整个游戏设计的基础。<span lang="EN-US"><o:p></o:p></span></p><p class="MsoNormal" style="margin-top:6.0pt"><span lang="EN-US">&nbsp;</span></p><div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+  <div class="post-body">写在最前：今天想给大家分享的是我最最喜爱的卡组构建-Roguelike游戏，也就是早已鼎鼎大名的杀戮尖塔。我在电脑端上有着差不多快400小时，手机端上有差不多100小时的游戏经历，我想这足以证明我对它的喜爱。<div><figure class="post-figure"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775255997433-c5sr3.png" alt="图片"><figcaption>我的steam游戏时间截图&nbsp;</figcaption><figcaption>
+
+<h1>一、核心循环总览：三层嵌套结构<span lang="EN-US"><o:p></o:p></span></h1>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">杀戮尖塔的玩法循环由三个层次构成，彼此嵌套、互相强化。而理解这三层结构是分析整个游戏设计的基础。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:6.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
 mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
 
 <h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
-mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">1.1&nbsp; </span>宏观循环</h2>
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">1.1&nbsp; </span>宏观循环（<span lang="EN-US">Macro Loop</span>）<span lang="EN-US"><o:p></o:p></span></h2>
 
-</div><p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
-margin-left:0cm;line-height:133%">时长：约<span lang="EN-US"> 45–90 </span>分钟<span lang="EN-US"> / </span>局<span lang="EN-US"><o:p></o:p></span></p><p class="MsoNormal" style="margin-top:4.0pt"><span lang="EN-US">&nbsp;</span></p><table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">时长：约<span lang="EN-US"> 45–90 </span>分钟<span lang="EN-US"> / </span>局<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:4.0pt"><span lang="EN-US">&nbsp;</span></p><table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
  mso-padding-alt:0cm .5pt 0cm .5pt;mso-border-insideh:.5pt solid windowtext;
  mso-border-insidev:.5pt solid windowtext">
  <tbody><tr>
@@ -148,16 +160,30 @@ margin-left:0cm;line-height:133%">时长：约<span lang="EN-US"> 45–90 </span
   <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">再次挑战</span></b><span lang="EN-US"><o:p></o:p></span></p>
   </td>
  </tr>
-</tbody></table><p class="MsoNormal" align="center" style="margin-top:3.0pt;margin-right:0cm;
-margin-bottom:3.0pt;margin-left:0cm;text-align:center"><i><span style="font-size:9.0pt;mso-fareast-font-family:Arial;color:#888780">驱动力：角色解锁<span lang="EN-US"> → </span>不同卡池<span lang="EN-US"> / </span>遗物<span lang="EN-US"> → </span>更高难度（<span lang="EN-US">Ascension A1–A20</span>）<span lang="EN-US">→ </span>再次挑战</span></i><span lang="EN-US"><o:p></o:p></span></p><p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US">&nbsp;</span></p><p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
-margin-left:0cm;line-height:133%">宏观循环的核心驱动是<span lang="EN-US">"</span>解锁<span lang="EN-US">-</span>成长<span lang="EN-US">"</span>的元进度机制。每次通关后解锁新的<span lang="EN-US"> Ascension </span>难度级别，也就是所谓的进阶难度，为核心玩家提供持续挑战阶梯。每个角色有独立卡池和专属遗物，驱动玩家体验不同流派。<span lang="EN-US"><o:p></o:p></span></p><p class="MsoNormal" style="margin-top:6.0pt"><span lang="EN-US">&nbsp;</span></p><div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+</tbody></table>
+
+<p class="MsoNormal" align="center" style="margin-top:3.0pt;margin-right:0cm;
+margin-bottom:3.0pt;margin-left:0cm;text-align:center"><i><span style="font-size:9.0pt;mso-fareast-font-family:Arial;color:#888780">驱动力：角色解锁<span lang="EN-US"> → </span>不同卡池<span lang="EN-US"> / </span>遗物<span lang="EN-US"> → </span>更高难度（<span lang="EN-US">Ascension A1–A20</span>）<span lang="EN-US">→ </span>再次挑战</span></i><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%"><span style="color: rgb(249, 250, 251); font-family: quote-cjk-patch, Inter, system-ui, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Oxygen, Ubuntu, Cantarell, &quot;Open Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif; font-size: 16px; background-color: rgb(21, 21, 23);">宏观循环的核心驱动是非常经典的钥匙和锁的机制。玩家完成特定事件（如通关游戏）即可获得钥匙，解锁对应的锁，从而创造出每一局都有新发现的快感，促使玩家主动探索游戏的边界。初次通关后，大量新卡牌解锁，激励玩家再次开局尝试；同时还能解锁一些强大的全局被动效果——遗物。在这个过程中，玩家能尝试的构筑越来越多，真正给人一种“我正在渐渐熟悉这个游戏”的感觉。在进阶模式下，通关后还会解锁新的进阶难度级别，为渴望挑战的玩家提供持续的挑战阶梯。</span><span style="background-color: rgb(21, 21, 23); color: rgb(249, 250, 251); font-family: quote-cjk-patch, Inter, system-ui, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Oxygen, Ubuntu, Cantarell, &quot;Open Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif; font-size: 16px;">此外，游戏胜利还能解锁新的角色。不同角色之间没有共享卡牌池，而是各自拥有完全独立的构筑体系——战士偏向堆叠力量/消耗卡牌，猎手偏向下毒/弃牌，机器人偏向充能球体系。这种设计迫使玩家切换角色时必须重新学习构筑逻辑，而非用同一套策略通吃所有角色，从而大幅提升游戏的内容深度和重复游玩价值。</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
 mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
 
 <h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
 mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">1.2&nbsp; </span>中观循环（<span lang="EN-US">Meso Loop</span>）<span lang="EN-US"><o:p></o:p></span></h2>
 
-</div><p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
-margin-left:0cm;line-height:133%">时长：约<span lang="EN-US"> 5–15 </span>分钟<span lang="EN-US"> / </span>楼层<span lang="EN-US"><o:p></o:p></span></p><p class="MsoNormal" style="margin-top:4.0pt"><span lang="EN-US">&nbsp;</span></p><table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">时长：约<span lang="EN-US"> 5–15 </span>分钟<span lang="EN-US"> / </span>楼层<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:4.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
  mso-padding-alt:0cm .5pt 0cm .5pt;mso-border-insideh:.5pt solid windowtext;
  mso-border-insidev:.5pt solid windowtext">
  <tbody><tr>
@@ -211,16 +237,32 @@ margin-left:0cm;line-height:133%">时长：约<span lang="EN-US"> 5–15 </span>
   <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">下一节点</span></b><span lang="EN-US"><o:p></o:p></span></p>
   </td>
  </tr>
-</tbody></table><p class="MsoNormal" align="center" style="margin-top:3.0pt;margin-right:0cm;
-margin-bottom:3.0pt;margin-left:0cm;text-align:center"><i><span style="font-size:9.0pt;mso-fareast-font-family:Arial;color:#888780">驱动力：卡组状态<span lang="EN-US"> → </span>路径风险<span lang="EN-US">/</span>收益判断<span lang="EN-US"> → </span>当前构筑目标</span></i><span lang="EN-US"><o:p></o:p></span></p><p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US">&nbsp;</span></p><p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
-margin-left:0cm;line-height:133%">中观循环是战略层，玩家在此评估资源状态与风险，决定走精英（高收益<span lang="EN-US">/</span>高风险）还是走安全路线。地图的有限可见性（只能看到前<span lang="EN-US"> 2–3 </span>步）制造持续的战略压力。<span lang="EN-US"><o:p></o:p></span></p><p class="MsoNormal" style="margin-top:6.0pt"><span lang="EN-US">&nbsp;</span></p><div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+</tbody></table>
+
+<p class="MsoNormal" align="center" style="margin-top:3.0pt;margin-right:0cm;
+margin-bottom:3.0pt;margin-left:0cm;text-align:center"><i><span style="font-size:9.0pt;mso-fareast-font-family:Arial;color:#888780">驱动力：卡组状态<span lang="EN-US"> → </span>路径风险<span lang="EN-US">/</span>收益判断<span lang="EN-US"> → </span>当前构筑目标</span></i><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%"><font color="#f9fafb" face="quote-cjk-patch, Inter, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Open Sans, Helvetica Neue, sans-serif"><span style="font-size: 16px;">中观循环是战略层，玩家在此评估资源状态与风险，决定走精英（高收益/高风险）还是走安全路线。但这个决策完全无法靠背板完成——杀戮尖塔的地图每层都是随机生成的，精英、营地、商店、问号的位置分布每局完全不同。好在游戏本身的地图是完全可见的，然而路径一旦选择就不可回退。你要在开局就规划好整层路线，每个分支都是当前收益与后续风险的权衡。此外，每局能从敌人身上获取的卡牌也是完全未知的。这就意味着：你判断要不要打这个精英，不仅要看自己现在的状态，还要看精英怪的前面有多少敌人，有没有可能赌一手抓到好的过渡卡，后面有没有营地补血、有没有商店避战。地图随机生成 + 怪物随机掉落 = 每局的中观决策都是全新的风险博弈，这也是Roguelite“重复可玩”的核心来源之一。</span></font></p>
+
+<p class="MsoNormal" style="margin-top:6.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
 mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
 
 <h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
 mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">1.3&nbsp; </span>微观循环（<span lang="EN-US">Micro Loop</span>）<span lang="EN-US"><o:p></o:p></span></h2>
 
-</div><p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
-margin-left:0cm;line-height:133%">时长：约<span lang="EN-US"> 1–5 </span>分钟<span lang="EN-US"> / </span>场战斗<span lang="EN-US"><o:p></o:p></span></p><p class="MsoNormal" style="margin-top:4.0pt"><span lang="EN-US">&nbsp;</span></p><table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">时长：约<span lang="EN-US"> 1–5 </span>分钟<span lang="EN-US"> / </span>场战斗<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:4.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
  mso-padding-alt:0cm .5pt 0cm .5pt;mso-border-insideh:.5pt solid windowtext;
  mso-border-insidev:.5pt solid windowtext">
  <tbody><tr>
@@ -274,59 +316,1365 @@ margin-left:0cm;line-height:133%">时长：约<span lang="EN-US"> 1–5 </span>�
   <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">敌方行动</span></b><span lang="EN-US"><o:p></o:p></span></p>
   </td>
  </tr>
-</tbody></table><p class="MsoNormal" align="center" style="margin-top:3.0pt;margin-right:0cm;
-margin-bottom:3.0pt;margin-left:0cm;text-align:center"><i><span style="font-size:9.0pt;mso-fareast-font-family:Arial;color:#888780">驱动力：能量限制（<span lang="EN-US">3 </span>点）<span lang="EN-US">→ </span>手牌优化<span lang="EN-US"> → </span>意图预判<span lang="EN-US"> → </span>伤害<span lang="EN-US"> / </span>防御平衡</span></i><span lang="EN-US"><o:p></o:p></span></p><p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US">&nbsp;</span></p><p>
+</tbody></table>
 
+<p class="MsoNormal" align="center" style="margin-top:3.0pt;margin-right:0cm;
+margin-bottom:3.0pt;margin-left:0cm;text-align:center"><i><span style="font-size:9.0pt;mso-fareast-font-family:Arial;color:#888780">驱动力：能量限制（<span lang="EN-US">3 </span>点）<span lang="EN-US">→ </span>手牌优化<span lang="EN-US"> → </span>意图预判<span lang="EN-US"> → </span>伤害<span lang="EN-US"> / </span>防御平衡</span></i><span lang="EN-US"><o:p></o:p></span></p>
 
+<p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US">&nbsp;</span></p><p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US"><span style="color: rgb(249, 250, 251); font-family: quote-cjk-patch, Inter, system-ui, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Oxygen, Ubuntu, Cantarell, &quot;Open Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif; font-size: 16px;">中观循环是战略层，玩家在此评估资源状态与风险，决定走精英（高收益/高风险）还是走安全路线。但这个决策完全无法靠背板完成——杀戮尖塔的地图每层都是随机生成的，精英、营地、商店、问号的位置分布每局完全不同。好在游戏本身的地图是完全可见的，然而路径一旦选择就不可回退。你要在开局就规划好整层路线，每个分支都是当前收益与后续风险的权衡。此外，每局能从敌人身上获取的卡牌也是完全未知的。这就意味着：你判断要不要打这个精英，不仅要看自己现在的状态，还要看精英怪的前面有多少敌人，有没有可能赌一手抓到好的过渡卡，后面有没有营地补血、有没有商店避战。地图随机生成 + 怪物随机掉落 = 每局的中观决策都是全新的风险博弈，这也是Roguelite“重复可玩”的核心来源之一。</span></span></p>
 
+<h1>二、资源系统与约束设计<span lang="EN-US"><o:p></o:p></span></h1>
 
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">游戏中的资源被精心设计成多个层次，不同资源的时效性和转化方式共同构建出复杂的决策空间。<span lang="EN-US"><o:p></o:p></span></p>
 
+<p class="MsoNormal" style="margin-top:7.0pt"><span lang="EN-US">&nbsp;</span></p>
 
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
 
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">2.1&nbsp; </span>战斗内资源<span lang="EN-US"><o:p></o:p></span></h2>
 
+</div>
 
+<p class="MsoNormal" style="margin-top:3.0pt"><span lang="EN-US">&nbsp;</span></p>
 
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
+ mso-padding-alt:0cm .5pt 0cm .5pt;mso-border-insideh:.5pt solid windowtext;
+ mso-border-insidev:.5pt solid windowtext">
+ <tbody><tr>
+  <td width="203" valign="top" style="width:152.0pt;border:solid #D3D1C7 1.0pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:5.0pt 7.0pt 5.0pt 7.0pt">
+  <p class="MsoNormal" style="margin-bottom:2.0pt"><b><span style="font-size:
+  8.5pt;mso-fareast-font-family:Arial;color:#7F77DD;text-transform:uppercase">核心约束</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <p class="MsoNormal" style="margin-bottom:3.0pt"><b><span style="mso-fareast-font-family:
+  Arial;color:#1A1A1A">能量（<span lang="EN-US">Energy</span>）</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <p class="MsoNormal" style="margin-bottom:3.0pt;line-height:125%"><span style="font-size:10.0pt;line-height:125%;mso-fareast-font-family:Arial;
+  color:#5F5E5A">每回合固定<span lang="EN-US"> 3 </span>点（遗物可扩展），是出牌的硬性上限，强制取舍而非<span lang="EN-US">"</span>全出<span lang="EN-US">"</span>。</span><span lang="EN-US"><o:p></o:p></span></p>
+  <div style="mso-element:para-border-div;border:none;border-top:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;padding:0cm 0cm 0cm 0cm">
+  <p class="MsoNormal" style="margin-top:3.0pt;border:none;mso-border-top-alt:
+  solid #D3D1C7 .25pt;padding:0cm;mso-padding-alt:0cm 0cm 0cm 0cm"><i><span style="font-size:9.0pt;mso-fareast-font-family:Arial;color:#888780">设计意图：制造每回合的决策密度</span></i><span lang="EN-US"><o:p></o:p></span></p>
+  </div>
+  </td>
+  <td width="8" valign="top" style="width:6.0pt;border:none white 1.0pt;border-left:
+  none;mso-border-left-alt:none white 0cm;mso-border-alt:none white 0cm;
+  padding:0cm .5pt 0cm .5pt">
+  <p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+  </td>
+  <td width="203" valign="top" style="width:152.0pt;border:solid #D3D1C7 1.0pt;
+  border-left:none;mso-border-left-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:white;padding:5.0pt 7.0pt 5.0pt 7.0pt">
+  <p class="MsoNormal" style="margin-bottom:2.0pt"><b><span style="font-size:
+  8.5pt;mso-fareast-font-family:Arial;color:#7F77DD;text-transform:uppercase">节奏控制</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <p class="MsoNormal" style="margin-bottom:3.0pt"><b><span style="mso-fareast-font-family:
+  Arial;color:#1A1A1A">手牌与抽牌堆</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <p class="MsoNormal" style="margin-bottom:3.0pt;line-height:125%"><span style="font-size:10.0pt;line-height:125%;mso-fareast-font-family:Arial;
+  color:#5F5E5A">每回合摸<span lang="EN-US"> 5 </span>张，弃牌堆打完后洗入抽牌堆，形成循环节奏感，支撑<span lang="EN-US">"</span>触底<span lang="EN-US">"</span>策略。</span><span lang="EN-US"><o:p></o:p></span></p>
+  <div style="mso-element:para-border-div;border:none;border-top:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;padding:0cm 0cm 0cm 0cm">
+  <p class="MsoNormal" style="margin-top:3.0pt;border:none;mso-border-top-alt:
+  solid #D3D1C7 .25pt;padding:0cm;mso-padding-alt:0cm 0cm 0cm 0cm"><i><span style="font-size:9.0pt;mso-fareast-font-family:Arial;color:#888780">设计意图：让卡组大小成为策略变量</span></i><span lang="EN-US"><o:p></o:p></span></p>
+  </div>
+  </td>
+  <td width="8" valign="top" style="width:6.0pt;border:none white 1.0pt;border-left:
+  none;mso-border-left-alt:none white 0cm;mso-border-alt:none white 0cm;
+  padding:0cm .5pt 0cm .5pt">
+  <p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+  </td>
+  <td width="203" valign="top" style="width:152.0pt;border:solid #D3D1C7 1.0pt;
+  border-left:none;mso-border-left-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:white;padding:5.0pt 7.0pt 5.0pt 7.0pt">
+  <p class="MsoNormal" style="margin-bottom:2.0pt"><b><span style="font-size:
+  8.5pt;mso-fareast-font-family:Arial;color:#7F77DD;text-transform:uppercase">状态积累</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <p class="MsoNormal" style="margin-bottom:3.0pt"><b><span style="mso-fareast-font-family:
+  Arial;color:#1A1A1A">格挡（<span lang="EN-US">Block</span>）</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <p class="MsoNormal" style="margin-bottom:3.0pt;line-height:125%"><span style="font-size:10.0pt;line-height:125%;mso-fareast-font-family:Arial;
+  color:#5F5E5A">每回合结束时归零，不可跨回合积累（基础规则），强制玩家每回合重新评估防御。</span><span lang="EN-US"><o:p></o:p></span></p>
+  <div style="mso-element:para-border-div;border:none;border-top:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;padding:0cm 0cm 0cm 0cm">
+  <p class="MsoNormal" style="margin-top:3.0pt;border:none;mso-border-top-alt:
+  solid #D3D1C7 .25pt;padding:0cm;mso-padding-alt:0cm 0cm 0cm 0cm"><i><span style="font-size:9.0pt;mso-fareast-font-family:Arial;color:#888780">设计意图：每回合的防御投入必须重新规划</span></i><span lang="EN-US"><o:p></o:p></span></p>
+  </div>
+  </td>
+ </tr>
+</tbody></table>
 
+<p class="MsoNormal" style="margin-top:7.0pt"><span lang="EN-US">&nbsp;</span></p>
 
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
 
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">2.2&nbsp; </span>跨战斗资源<span lang="EN-US"><o:p></o:p></span></h2>
 
+</div>
 
+<p class="MsoNormal" style="margin-top:3.0pt"><span lang="EN-US">&nbsp;</span></p>
 
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
+ mso-padding-alt:0cm .5pt 0cm .5pt;mso-border-insideh:.5pt solid windowtext;
+ mso-border-insidev:.5pt solid windowtext">
+ <tbody><tr>
+  <td width="203" valign="top" style="width:152.0pt;border:solid #D3D1C7 1.0pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:5.0pt 7.0pt 5.0pt 7.0pt">
+  <p class="MsoNormal" style="margin-bottom:2.0pt"><b><span style="font-size:
+  8.5pt;mso-fareast-font-family:Arial;color:#7F77DD;text-transform:uppercase">永久代价</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <p class="MsoNormal" style="margin-bottom:3.0pt"><b><span style="mso-fareast-font-family:
+  Arial;color:#1A1A1A">生命值</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <p class="MsoNormal" style="margin-bottom:3.0pt;line-height:125%"><span style="font-size:10.0pt;line-height:125%;mso-fareast-font-family:Arial;
+  color:#5F5E5A">不随战斗结束自动回复，战斗中的血量损耗是永久损失，制造战斗间的风险积累。</span><span lang="EN-US"><o:p></o:p></span></p>
+  <div style="mso-element:para-border-div;border:none;border-top:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;padding:0cm 0cm 0cm 0cm">
+  <p class="MsoNormal" style="margin-top:3.0pt;border:none;mso-border-top-alt:
+  solid #D3D1C7 .25pt;padding:0cm;mso-padding-alt:0cm 0cm 0cm 0cm"><i><span style="font-size:9.0pt;mso-fareast-font-family:Arial;color:#888780">设计意图：每次战斗都有长期后果</span></i><span lang="EN-US"><o:p></o:p></span></p>
+  </div>
+  </td>
+  <td width="8" valign="top" style="width:6.0pt;border:none white 1.0pt;border-left:
+  none;mso-border-left-alt:none white 0cm;mso-border-alt:none white 0cm;
+  padding:0cm .5pt 0cm .5pt">
+  <p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+  </td>
+  <td width="203" valign="top" style="width:152.0pt;border:solid #D3D1C7 1.0pt;
+  border-left:none;mso-border-left-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:white;padding:5.0pt 7.0pt 5.0pt 7.0pt">
+  <p class="MsoNormal" style="margin-bottom:2.0pt"><b><span style="font-size:
+  8.5pt;mso-fareast-font-family:Arial;color:#7F77DD;text-transform:uppercase">构筑核心</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <p class="MsoNormal" style="margin-bottom:3.0pt"><b><span style="mso-fareast-font-family:
+  Arial;color:#1A1A1A">卡组质量</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <p class="MsoNormal" style="margin-bottom:3.0pt;line-height:125%"><span style="font-size:10.0pt;line-height:125%;mso-fareast-font-family:Arial;
+  color:#5F5E5A">加强力牌可提升单局，但也可能稀释摸牌概率；主动删牌（<span lang="EN-US">75 </span>金）是反直觉却关键的优化手段。</span><span lang="EN-US"><o:p></o:p></span></p>
+  <div style="mso-element:para-border-div;border:none;border-top:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;padding:0cm 0cm 0cm 0cm">
+  <p class="MsoNormal" style="margin-top:3.0pt;border:none;mso-border-top-alt:
+  solid #D3D1C7 .25pt;padding:0cm;mso-padding-alt:0cm 0cm 0cm 0cm"><i><span style="font-size:9.0pt;mso-fareast-font-family:Arial;color:#888780">设计意图：让<span lang="EN-US">"</span>不加牌<span lang="EN-US">"</span>成为合理选择</span></i><span lang="EN-US"><o:p></o:p></span></p>
+  </div>
+  </td>
+  <td width="8" valign="top" style="width:6.0pt;border:none white 1.0pt;border-left:
+  none;mso-border-left-alt:none white 0cm;mso-border-alt:none white 0cm;
+  padding:0cm .5pt 0cm .5pt">
+  <p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+  </td>
+  <td width="203" valign="top" style="width:152.0pt;border:solid #D3D1C7 1.0pt;
+  border-left:none;mso-border-left-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:white;padding:5.0pt 7.0pt 5.0pt 7.0pt">
+  <p class="MsoNormal" style="margin-bottom:2.0pt"><b><span style="font-size:
+  8.5pt;mso-fareast-font-family:Arial;color:#7F77DD;text-transform:uppercase">经济系统</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <p class="MsoNormal" style="margin-bottom:3.0pt"><b><span style="mso-fareast-font-family:
+  Arial;color:#1A1A1A">金币</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <p class="MsoNormal" style="margin-bottom:3.0pt;line-height:125%"><span style="font-size:10.0pt;line-height:125%;mso-fareast-font-family:Arial;
+  color:#5F5E5A">用于商店消费、删牌（<span lang="EN-US">75 </span>金）、购买遗物<span lang="EN-US">/</span>药水，是有限但可预期的经济资源，驱动路径规划。</span><span lang="EN-US"><o:p></o:p></span></p>
+  <div style="mso-element:para-border-div;border:none;border-top:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;padding:0cm 0cm 0cm 0cm">
+  <p class="MsoNormal" style="margin-top:3.0pt;border:none;mso-border-top-alt:
+  solid #D3D1C7 .25pt;padding:0cm;mso-padding-alt:0cm 0cm 0cm 0cm"><i><span style="font-size:9.0pt;mso-fareast-font-family:Arial;color:#888780">设计意图：制造跨节点的经济预算规划</span></i><span lang="EN-US"><o:p></o:p></span></p>
+  </div>
+  </td>
+ </tr>
+</tbody></table>
 
+<p class="MsoNormal" style="margin-top:7.0pt"><span lang="EN-US">&nbsp;</span></p>
 
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
 
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">2.3&nbsp; </span>遗物（<span lang="EN-US">Relic</span>）系统<span lang="EN-US"><o:p></o:p></span></h2>
 
+</div>
 
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">遗物是最重要的构筑型资源，提供被动增益，且往往直接改变基础游戏规则。遗物间存在协同效应，推动玩家围绕特定遗物构建流派。<span lang="EN-US"><o:p></o:p></span></p>
 
+<p class="MsoNormal" style="margin-top:3.0pt"><span lang="EN-US">&nbsp;</span></p>
 
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
+ mso-border-top-alt:solid #7F77DD .5pt;mso-padding-alt:0cm .5pt 0cm .5pt;
+ mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid windowtext">
+ <tbody><tr>
+  <td valign="top" style="border:none white 1.0pt;mso-border-alt:none white 0cm;
+  background:#EEEDFE;padding:4.0pt 6.0pt 0cm 9.0pt">
+  <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+  Arial;color:#3C3489">设计洞察：遗物作为<span lang="EN-US">"</span>规则破坏者<span lang="EN-US">"</span></span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:none white 1.0pt;border-top:none;mso-border-top-alt:
+  none white 0cm;mso-border-alt:none white 0cm;background:#EEEDFE;padding:2.0pt 6.0pt 5.0pt 9.0pt">
+  <p class="MsoNormal" style="line-height:133%"><span style="font-size:10.5pt;
+  line-height:133%;mso-fareast-font-family:Arial">好的遗物设计不只是数值加成，而是改变原有规则（如<span lang="EN-US"> Barricade </span>让格挡可以跨回合保留，<span lang="EN-US">Snecko Eye </span>让费用随机化但允许持大手牌），创造出绕过常规约束的强力构筑路线，为玩家带来<span lang="EN-US">"</span>发现规则漏洞<span lang="EN-US">"</span>的兴奋感。</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table>
 
+<span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Arial&quot;,sans-serif;
+mso-fareast-font-family:等线;mso-fareast-theme-font:minor-fareast;mso-ansi-language:
+EN-US;mso-fareast-language:ZH-CN;mso-bidi-language:AR-SA"><br clear="all" style="mso-special-character:line-break;page-break-before:always">
+</span>
 
+<p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
 
+<h1>三、战斗系统核心机制<span lang="EN-US"><o:p></o:p></span></h1>
 
+<p class="MsoNormal" style="margin-top:4.0pt"><span lang="EN-US">&nbsp;</span></p>
 
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
 
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">3.1&nbsp; </span>意图（<span lang="EN-US">Intent</span>）系统：信息透明度设计<span lang="EN-US"><o:p></o:p></span></h2>
 
+</div>
 
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">敌方下回合的行动完全公开（伤害数值、施加的状态效果），这是<span lang="EN-US"> STS </span>区别于传统卡牌游戏最关键的设计决策之一。<span lang="EN-US"><o:p></o:p></span></p>
 
+<p class="MsoNormal" style="margin-top:3.0pt"><span lang="EN-US">&nbsp;</span></p>
 
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
+ mso-border-top-alt:solid #7F77DD .5pt;mso-padding-alt:0cm .5pt 0cm .5pt;
+ mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid windowtext">
+ <tbody><tr>
+  <td valign="top" style="border:none white 1.0pt;mso-border-alt:none white 0cm;
+  background:#EEEDFE;padding:4.0pt 6.0pt 0cm 9.0pt">
+  <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+  Arial;color:#3C3489">核心价值</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:none white 1.0pt;border-top:none;mso-border-top-alt:
+  none white 0cm;mso-border-alt:none white 0cm;background:#EEEDFE;padding:2.0pt 6.0pt 5.0pt 9.0pt">
+  <p class="MsoNormal" style="line-height:133%"><span style="font-size:10.5pt;
+  line-height:133%;mso-fareast-font-family:Arial">透明的意图系统将战斗从<span lang="EN-US">"</span>运气博弈<span lang="EN-US">"</span>转化为<span lang="EN-US">"</span>资源规划谜题<span lang="EN-US">"</span>。玩家不是在猜测对手，而是在规划最优出牌顺序。这大幅提升了策略深度，同时减少了因信息不对称产生的挫败感。死亡往往能找到明确的决策原因，而非<span lang="EN-US">"</span>我运气不好<span lang="EN-US">"</span>。</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table>
 
+<p class="MsoNormal" style="margin-top:6.0pt"><span lang="EN-US">&nbsp;</span></p>
 
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
 
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">3.2&nbsp; </span>格挡机制的反直觉设计<span lang="EN-US"><o:p></o:p></span></h2>
 
+</div>
 
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">格挡每回合结束时归零，不可积累（基础规则）。这与传统<span lang="EN-US"> RPG </span>的<span lang="EN-US">"</span>护盾可积累<span lang="EN-US">"</span>形成反差，带来更高频的防御资源决策压力。<span lang="EN-US"><o:p></o:p></span></p>
 
+<p class="MsoNormal" style="margin-top:3.0pt"><span lang="EN-US">&nbsp;</span></p>
 
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">部分遗物<span lang="EN-US">/</span>卡牌突破此规则（如<span lang="EN-US"> Barricade </span>让格挡保留），形成强力构筑路线，也让玩家体验到<span lang="EN-US">"</span>打破默认规则<span lang="EN-US">"</span>的惊喜感。规则的例外比规则本身更有设计价值<span lang="EN-US">——</span>它让玩家感受到发现秘密的满足感。<span lang="EN-US"><o:p></o:p></span></p>
 
+<p class="MsoNormal" style="margin-top:6.0pt"><span lang="EN-US">&nbsp;</span></p>
 
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
 
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">3.3&nbsp; </span>状态效果叠加系统<span lang="EN-US"><o:p></o:p></span></h2>
 
+</div>
 
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">强化<span lang="EN-US">/</span>弱化通过数值叠加运作（如<span lang="EN-US">"</span>力量<span lang="EN-US"> +2"</span>使每次攻击额外造成<span lang="EN-US"> 2 </span>点伤害），效果可量化、可预测，配合意图系统让玩家可以精确计算最优出牌顺序。<span lang="EN-US"><o:p></o:p></span></p>
 
+<p class="MsoNormal" style="margin-top:3.0pt"><span lang="EN-US">&nbsp;</span></p>
 
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">这套系统是卡牌协同的底层基础<span lang="EN-US">——</span>不同<span lang="EN-US"> Buff </span>之间可以产生几何级数的倍增效果。例如<span lang="EN-US">"</span>脆弱（<span lang="EN-US">Vulnerable</span>）<span lang="EN-US">
+× </span>易伤（<span lang="EN-US">Weak</span>）<span lang="EN-US"> × </span>力量（<span lang="EN-US">Strength</span>）<span lang="EN-US">"</span>组合，可以让单次攻击的伤害放大数倍。<span lang="EN-US"><o:p></o:p></span></p>
 
+<p class="MsoNormal" style="margin-top:6.0pt"><span lang="EN-US">&nbsp;</span></p>
 
-</p><p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
-margin-left:0cm;line-height:133%">微观循环是战术层，每回合<span lang="EN-US"> 3 </span>点能量的硬性约束制造出牌的取舍压力，而完全透明的敌方意图（<span lang="EN-US">Intent</span>）系统将战斗从<span lang="EN-US">"</span>随机博弈<span lang="EN-US">"</span>转化为<span lang="EN-US">"</span>资源规划谜题<span lang="EN-US">"</span>。<span lang="EN-US"><o:p></o:p></span></p></div></div>
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">3.4&nbsp; </span>卡牌类型分层<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">四类卡牌的生态比例决定了卡组的<span lang="EN-US">"</span>手感<span lang="EN-US">"</span>：<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:2.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-padding-alt:0cm .5pt 0cm .5pt;mso-border-insideh:.5pt solid windowtext;
+ mso-border-insidev:.5pt solid windowtext">
+ <thead>
+  <tr>
+   <td width="133" valign="top" style="width:100.0pt;border:solid #7F77DD 1.0pt;
+   mso-border-alt:solid #7F77DD .25pt;background:#3C3489;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+   Arial;color:white">类型</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="160" valign="top" style="width:120.0pt;border:solid #7F77DD 1.0pt;
+   border-left:none;mso-border-left-alt:solid #7F77DD .25pt;mso-border-alt:
+   solid #7F77DD .25pt;background:#3C3489;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+   Arial;color:white">功能定位</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="160" valign="top" style="width:120.0pt;border:solid #7F77DD 1.0pt;
+   border-left:none;mso-border-left-alt:solid #7F77DD .25pt;mso-border-alt:
+   solid #7F77DD .25pt;background:#3C3489;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+   Arial;color:white">设计特征</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="171" valign="top" style="width:128.0pt;border:solid #7F77DD 1.0pt;
+   border-left:none;mso-border-left-alt:solid #7F77DD .25pt;mso-border-alt:
+   solid #7F77DD .25pt;background:#3C3489;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+   Arial;color:white">比例失衡的风险</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+  </tr>
+ </thead>
+ <tbody><tr>
+  <td width="133" valign="top" style="width:100.0pt;border:solid #D3D1C7 1.0pt;
+  border-top:none;mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><b><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">攻击（<span lang="EN-US">Attack</span>）</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="160" valign="top" style="width:120.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">造成伤害，部分附带效果</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="160" valign="top" style="width:120.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">核心输出来源</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="171" valign="top" style="width:128.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">过多则缺乏稳定性和功能性</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="133" valign="top" style="width:100.0pt;border:solid #D3D1C7 1.0pt;
+  border-top:none;mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><b><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">技能（<span lang="EN-US">Skill</span>）</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="160" valign="top" style="width:120.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">格挡<span lang="EN-US"> / </span>增益<span lang="EN-US"> / </span>抽牌<span lang="EN-US"> / </span>能量操作</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="160" valign="top" style="width:120.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">提供循环支撑与防御</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="171" valign="top" style="width:128.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">过多则伤害输出不足</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="133" valign="top" style="width:100.0pt;border:solid #D3D1C7 1.0pt;
+  border-top:none;mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><b><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">能力（<span lang="EN-US">Power</span>）</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="160" valign="top" style="width:120.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">持续性被动效果</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="160" valign="top" style="width:120.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">通常一场战斗打出一次即可</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="171" valign="top" style="width:128.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">过多则开局前期脆弱</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="133" valign="top" style="width:100.0pt;border:solid #D3D1C7 1.0pt;
+  border-top:none;mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><b><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">诅咒<span lang="EN-US">/</span>状态</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="160" valign="top" style="width:120.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">负面效果，消耗出牌机会</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="160" valign="top" style="width:120.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">压缩可用资源</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="171" valign="top" style="width:128.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">被强制加入，破坏卡组节奏</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Arial&quot;,sans-serif;
+mso-fareast-font-family:等线;mso-fareast-theme-font:minor-fareast;mso-ansi-language:
+EN-US;mso-fareast-language:ZH-CN;mso-bidi-language:AR-SA"><br clear="all" style="mso-special-character:line-break;page-break-before:always">
+</span>
+
+<p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+
+<h1>四、卡牌构筑系统与流派逻辑<span lang="EN-US"><o:p></o:p></span></h1>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">构筑系统是整个游戏体验的核心，它将每局游戏转化为一个独一无二的<span lang="EN-US">"</span>叙事旅程<span lang="EN-US">"</span>。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:4.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">4.1&nbsp; </span>构筑原则：精瘦化（<span lang="EN-US">Deck
+Thinning</span>）<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">小卡组（<span lang="EN-US">8–12 </span>张）循环快，能保证关键牌出手率；大卡组提供更多应对手段但循环慢。<span lang="EN-US">STS </span>鼓励玩家主动删牌来<span lang="EN-US">"</span>优化<span lang="EN-US">"</span>卡组，而非无脑扩充<span lang="EN-US">——</span>这是一个反直觉但深刻的设计决策。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:3.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
+ mso-border-top-alt:solid #7F77DD .5pt;mso-padding-alt:0cm .5pt 0cm .5pt;
+ mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid windowtext">
+ <tbody><tr>
+  <td valign="top" style="border:none white 1.0pt;mso-border-alt:none white 0cm;
+  background:#E1F5EE;padding:4.0pt 6.0pt 0cm 9.0pt">
+  <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+  Arial;color:#1D9E75">设计洞察：删牌是<span lang="EN-US">"</span>行动<span lang="EN-US">"</span>而非<span lang="EN-US">"</span>放弃<span lang="EN-US">"</span></span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:none white 1.0pt;border-top:none;mso-border-top-alt:
+  none white 0cm;mso-border-alt:none white 0cm;background:#E1F5EE;padding:2.0pt 6.0pt 5.0pt 9.0pt">
+  <p class="MsoNormal" style="line-height:133%"><span style="font-size:10.5pt;
+  line-height:133%;mso-fareast-font-family:Arial">在大多数游戏中，<span lang="EN-US">"</span>删除内容<span lang="EN-US">"</span>是负面操作。而在<span lang="EN-US"> STS </span>中，花费<span lang="EN-US"> 75 </span>金删除一张无用的<span lang="EN-US">"</span>出击<span lang="EN-US">"</span>卡是正面的强化行为。这一反直觉机制要求玩家建立<span lang="EN-US">"</span>卡组生态<span lang="EN-US">"</span>的整体思维，而非孤立评估每张牌的价值。</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class="MsoNormal" style="margin-top:6.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">4.2&nbsp; </span>流派逻辑与策略一致性<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%"><span lang="EN-US">STS </span>的构筑乐趣来自于寻找卡牌与遗物之间的协同效应，形成<span lang="EN-US">"</span>流派<span lang="EN-US">"</span>：<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:3.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<p class="MsoListParagraph" style="margin-top:2.0pt;margin-right:0cm;margin-bottom:
+3.0pt;margin-left:32.0pt;text-indent:-16.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]-->毒叠加流（毒伤<span lang="EN-US"> × </span>遗物<span lang="EN-US"> × </span>多段中毒）：以状态伤害代替直接输出，擅长持久战<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="margin-top:2.0pt;margin-right:0cm;margin-bottom:
+3.0pt;margin-left:32.0pt;text-indent:-16.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]-->无限循环流（<span lang="EN-US">0 </span>费<span lang="EN-US"> / </span>抽牌<span lang="EN-US"> × </span>特定能力牌）：无限出牌循环，一回合解决战斗<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="margin-top:2.0pt;margin-right:0cm;margin-bottom:
+3.0pt;margin-left:32.0pt;text-indent:-16.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]-->力量叠加流（力量<span lang="EN-US"> × </span>攻击牌<span lang="EN-US"> × </span>增幅器）：单次攻击伤害极高，依赖前摇积累<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="margin-top:2.0pt;margin-right:0cm;margin-bottom:
+3.0pt;margin-left:32.0pt;text-indent:-16.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]-->格挡积累流（防御<span lang="EN-US"> × Barricade </span>遗物）：血量近乎不损失，以格挡代替攻击<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:3.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">协同流派上限极高，但需要关键牌齐全；散装卡组稳定但天花板低。玩家需根据随机出现的牌和遗物，动态调整策略方向<span lang="EN-US">——</span>这正是每局游戏独特性的来源。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:6.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">4.3&nbsp; </span>升级（<span lang="EN-US">Upgrade</span>）作为精炼机制<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">营地可以升级一张卡，将已有卡牌性能提升，而非加入新卡。这让玩家对已有卡组产生<span lang="EN-US">"</span>所有权感<span lang="EN-US">"</span>，并制造<span lang="EN-US">"</span>升哪张<span lang="EN-US">"</span>这一高密度决策时刻。升级机制与删牌机制共同构成卡组优化的两个维度：质量提升和数量精简。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:6.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">4.4&nbsp; </span>构筑作为渐进式叙事<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
+ mso-border-top-alt:solid #7F77DD .5pt;mso-padding-alt:0cm .5pt 0cm .5pt;
+ mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid windowtext">
+ <tbody><tr>
+  <td valign="top" style="border:none white 1.0pt;mso-border-alt:none white 0cm;
+  background:#EEEDFE;padding:4.0pt 6.0pt 0cm 9.0pt">
+  <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+  Arial;color:#3C3489">核心设计洞察</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:none white 1.0pt;border-top:none;mso-border-top-alt:
+  none white 0cm;mso-border-alt:none white 0cm;background:#EEEDFE;padding:2.0pt 6.0pt 5.0pt 9.0pt">
+  <p class="MsoNormal" style="line-height:133%"><span style="font-size:10.5pt;
+  line-height:133%;mso-fareast-font-family:Arial">每次战斗后的选牌时刻（三选一）是玩家构建<span lang="EN-US">"</span>本局故事<span lang="EN-US">"</span>的核心节点。玩家看到一张牌不只是评估其数值，而是在评估<span lang="EN-US">"</span>这是否符合我当前的构筑方向<span lang="EN-US">"——</span>这种持续的策略一致性追求，产生了强烈的沉浸感与代入感。每局卡组都是玩家本局所有决策的具象化总和，是可叙述的个人游戏故事。</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Arial&quot;,sans-serif;
+mso-fareast-font-family:等线;mso-fareast-theme-font:minor-fareast;mso-ansi-language:
+EN-US;mso-fareast-language:ZH-CN;mso-bidi-language:AR-SA"><br clear="all" style="mso-special-character:line-break;page-break-before:always">
+</span>
+
+<p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+
+<h1>五、地图系统与路径决策<span lang="EN-US"><o:p></o:p></span></h1>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">地图系统是中观循环的承载层，每一次路径选择都是资源风险的管理行为。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">5.1&nbsp; </span>节点类型矩阵<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-padding-alt:0cm .5pt 0cm .5pt;mso-border-insideh:.5pt solid windowtext;
+ mso-border-insidev:.5pt solid windowtext">
+ <thead>
+  <tr>
+   <td width="120" valign="top" style="width:90.0pt;border:solid #7F77DD 1.0pt;
+   mso-border-alt:solid #7F77DD .25pt;background:#3C3489;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+   Arial;color:white">节点</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="147" valign="top" style="width:110.0pt;border:solid #7F77DD 1.0pt;
+   border-left:none;mso-border-left-alt:solid #7F77DD .25pt;mso-border-alt:
+   solid #7F77DD .25pt;background:#3C3489;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+   Arial;color:white">直接收益</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="160" valign="top" style="width:120.0pt;border:solid #7F77DD 1.0pt;
+   border-left:none;mso-border-left-alt:solid #7F77DD .25pt;mso-border-alt:
+   solid #7F77DD .25pt;background:#3C3489;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+   Arial;color:white">直接风险</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="197" valign="top" style="width:148.0pt;border:solid #7F77DD 1.0pt;
+   border-left:none;mso-border-left-alt:solid #7F77DD .25pt;mso-border-alt:
+   solid #7F77DD .25pt;background:#3C3489;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+   Arial;color:white">策略价值</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+  </tr>
+ </thead>
+ <tbody><tr>
+  <td width="120" valign="top" style="width:90.0pt;border:solid #D3D1C7 1.0pt;
+  border-top:none;mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><b><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">普通战斗（<span lang="EN-US">M</span>）</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="147" valign="top" style="width:110.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">选一张牌<span lang="EN-US"> + </span>少量金币</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="160" valign="top" style="width:120.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">血量损耗（低<span lang="EN-US">–</span>中）</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="197" valign="top" style="width:148.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">早期快速扩充卡组骨架</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="120" valign="top" style="width:90.0pt;border:solid #D3D1C7 1.0pt;
+  border-top:none;mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><b><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">精英战斗（<span lang="EN-US">E</span>）</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="147" valign="top" style="width:110.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">必得遗物<span lang="EN-US"> + </span>选牌</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="160" valign="top" style="width:120.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">血量损耗（高）</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="197" valign="top" style="width:148.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">遗物是最强增益，决定流派成型</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="120" valign="top" style="width:90.0pt;border:solid #D3D1C7 1.0pt;
+  border-top:none;mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><b><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">营地（<span lang="EN-US">R</span>）</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="147" valign="top" style="width:110.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">回血<span lang="EN-US"> 30% </span>或升级一张牌</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="160" valign="top" style="width:120.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">无</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="197" valign="top" style="width:148.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">稀缺资源，回血<span lang="EN-US"> vs </span>升牌的两难决策</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="120" valign="top" style="width:90.0pt;border:solid #D3D1C7 1.0pt;
+  border-top:none;mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><b><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">商店（<span lang="EN-US">$</span>）</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="147" valign="top" style="width:110.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">购买牌<span lang="EN-US"> / </span>遗物<span lang="EN-US"> / </span>药水<span lang="EN-US"> / </span>删牌</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="160" valign="top" style="width:120.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">消耗金币</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="197" valign="top" style="width:148.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">唯一主动删牌入口；经济规划核心</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="120" valign="top" style="width:90.0pt;border:solid #D3D1C7 1.0pt;
+  border-top:none;mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><b><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">未知事件（<span lang="EN-US">?</span>）</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="147" valign="top" style="width:110.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">随机（好<span lang="EN-US">/</span>中<span lang="EN-US">/</span>坏）</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="160" valign="top" style="width:120.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">可能有负面结果</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="197" valign="top" style="width:148.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">期望值略正，是路径密度重要变量</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="120" valign="top" style="width:90.0pt;border:solid #D3D1C7 1.0pt;
+  border-top:none;mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><b><span lang="EN-US" style="font-size:10.0pt;line-height:125%;mso-fareast-font-family:Arial">Boss </span></b><b><span style="font-size:10.0pt;line-height:125%;mso-fareast-font-family:Arial">战（<span lang="EN-US">B</span>）</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="147" valign="top" style="width:110.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">选择<span lang="EN-US"> Boss </span>遗物</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="160" valign="top" style="width:120.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">极高伤害压力</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="197" valign="top" style="width:148.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span lang="EN-US" style="font-size:10.0pt;line-height:125%;mso-fareast-font-family:Arial">Boss </span><span style="font-size:10.0pt;line-height:125%;mso-fareast-font-family:Arial">遗物决定下一楼层核心策略</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class="MsoNormal" style="margin-top:7.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">5.2&nbsp; </span>有限视野的信息设计<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">玩家在当前节点可看到接下来<span lang="EN-US"> 2–3 </span>步的路径，但不能看到全图。这制造了<span lang="EN-US">"</span>短视规划<span lang="EN-US">"</span>的压力<span lang="EN-US">——</span>你必须根据当前卡组状态决定是否冒险走精英，而无法保证后续有营地补血。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:3.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
+ mso-border-top-alt:solid #7F77DD .5pt;mso-padding-alt:0cm .5pt 0cm .5pt;
+ mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid windowtext">
+ <tbody><tr>
+  <td valign="top" style="border:none white 1.0pt;mso-border-alt:none white 0cm;
+  background:#EEEDFE;padding:4.0pt 6.0pt 0cm 9.0pt">
+  <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+  Arial;color:#3C3489">设计原则：有限视野<span lang="EN-US"> + </span>不可逆路径<span lang="EN-US"> = </span>持续战略张力</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:none white 1.0pt;border-top:none;mso-border-top-alt:
+  none white 0cm;mso-border-alt:none white 0cm;background:#EEEDFE;padding:2.0pt 6.0pt 5.0pt 9.0pt">
+  <p class="MsoNormal" style="line-height:133%"><span style="font-size:10.5pt;
+  line-height:133%;mso-fareast-font-family:Arial">如果玩家能看到全图，路径选择就变成了计算题。有限视野让每次决策都是在不完整信息下的判断，这模拟了真实决策环境，也使得路径规划更有临场感和代入感。</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class="MsoNormal" style="margin-top:7.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">5.3&nbsp; </span>路径规划的核心张力<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">地图上最典型的两难决策：<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:3.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<p class="MsoListParagraph" style="margin-top:2.0pt;margin-right:0cm;margin-bottom:
+3.0pt;margin-left:32.0pt;text-indent:-16.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]-->精英<span lang="EN-US"> vs </span>普通：精英提供更强遗物，但血量压力更大；在低血量时走精英是<span lang="EN-US">"</span>豪赌<span lang="EN-US">"</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="margin-top:2.0pt;margin-right:0cm;margin-bottom:
+3.0pt;margin-left:32.0pt;text-indent:-16.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]-->营地回血<span lang="EN-US"> vs </span>升牌：血量不足时回血是必要的，但放弃升级关键牌也有长远代价<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="margin-top:2.0pt;margin-right:0cm;margin-bottom:
+3.0pt;margin-left:32.0pt;text-indent:-16.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]-->商店路线<span lang="EN-US"> vs </span>事件路线：商店提供可预期的强化，事件期望值略正但有随机风险<span lang="EN-US"><o:p></o:p></span></p>
+
+<span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Arial&quot;,sans-serif;
+mso-fareast-font-family:等线;mso-fareast-theme-font:minor-fareast;mso-ansi-language:
+EN-US;mso-fareast-language:ZH-CN;mso-bidi-language:AR-SA"><br clear="all" style="mso-special-character:line-break;page-break-before:always">
+</span>
+
+<p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+
+<h1>六、<span lang="EN-US">Roguelite </span>元循环与长期留存<span lang="EN-US"><o:p></o:p></span></h1>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%"><span lang="EN-US">STS </span>的长期留存依赖于元进度机制，让玩家在单局结束后仍有持续回归的动力。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:4.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">6.1&nbsp; </span>角色解锁与卡池扩展<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">每个角色游玩后解锁更多卡牌加入随机卡池。早期卡池较小，降低新手学习成本；后期随解锁增加，策略深度逐步提升。这种<span lang="EN-US">"</span>渐进式复杂度<span lang="EN-US">"</span>设计让玩家在不同阶段都能获得合适的挑战感。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">6.2&nbsp; </span>上升等级（<span lang="EN-US">Ascension</span>）难度系统<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">通关后解锁更高<span lang="EN-US"> Ascension </span>难度，每级叠加负面效果（如精英战斗更难、游戏开始时附加诅咒、<span lang="EN-US">Boss
+</span>更多等）。为核心玩家提供近乎无限的挑战梯度，同时不影响普通玩家体验。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:3.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
+ mso-border-top-alt:solid #7F77DD .5pt;mso-padding-alt:0cm .5pt 0cm .5pt;
+ mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid windowtext">
+ <tbody><tr>
+  <td valign="top" style="border:none white 1.0pt;mso-border-alt:none white 0cm;
+  background:#EEEDFE;padding:4.0pt 6.0pt 0cm 9.0pt">
+  <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+  Arial;color:#3C3489">设计价值：难度梯度的分层</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:none white 1.0pt;border-top:none;mso-border-top-alt:
+  none white 0cm;mso-border-alt:none white 0cm;background:#EEEDFE;padding:2.0pt 6.0pt 5.0pt 9.0pt">
+  <p class="MsoNormal" style="line-height:133%"><span lang="EN-US" style="font-size:10.5pt;line-height:133%;mso-fareast-font-family:Arial">Ascension
+  </span><span style="font-size:10.5pt;line-height:133%;mso-fareast-font-family:
+  Arial">系统的设计精妙之处在于它<span lang="EN-US">"</span>选择性地<span lang="EN-US">"</span>增加难度<span lang="EN-US">——</span>只对想要挑战的玩家生效，不强迫普通玩家接受。这与传统游戏的线性难度曲线不同，允许玩家自主定义<span lang="EN-US">"</span>通关<span lang="EN-US">"</span>的标准。</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">6.3&nbsp; </span>每日挑战（<span lang="EN-US">Daily Climb</span>）<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">固定种子<span lang="EN-US"> + </span>特殊修改器（<span lang="EN-US">Modifier</span>），全平台玩家使用相同参数，产生竞争性排行榜。将孤立的<span lang="EN-US"> Roguelike </span>体验转化为共同话题与社区叙事<span lang="EN-US">——</span>玩家可以讨论<span lang="EN-US">"</span>今天的每日该怎么打<span lang="EN-US">"</span>，形成集体记忆。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">6.4&nbsp; </span>自定义模式（<span lang="EN-US">Custom Run</span>）<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">允许玩家自定义修改器叠加，支持社区分享高难度设置，延伸官方内容的生命周期，体现了<span lang="EN-US"> UGC</span>（用户生成内容）思维在系统设计中的融合。<span lang="EN-US"><o:p></o:p></span></p>
+
+<span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Arial&quot;,sans-serif;
+mso-fareast-font-family:等线;mso-fareast-theme-font:minor-fareast;mso-ansi-language:
+EN-US;mso-fareast-language:ZH-CN;mso-bidi-language:AR-SA"><br clear="all" style="mso-special-character:line-break;page-break-before:always">
+</span>
+
+<p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+
+<h1>七、核心设计张力分析<span lang="EN-US"><o:p></o:p></span></h1>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%"><span lang="EN-US">STS </span>的高决策密度来源于多组精心设计的<span lang="EN-US">"</span>两难困境<span lang="EN-US">"</span>。以下是贯穿整个游戏体验的五组核心张力：<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-padding-alt:0cm .5pt 0cm .5pt;mso-border-insideh:.5pt solid windowtext;
+ mso-border-insidev:.5pt solid windowtext">
+ <thead>
+  <tr>
+   <td width="113" valign="top" style="width:85.0pt;border:solid #7F77DD 1.0pt;
+   mso-border-alt:solid #7F77DD .25pt;background:#3C3489;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+   Arial;color:white">张力维度</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="93" valign="top" style="width:70.0pt;border:solid #7F77DD 1.0pt;
+   border-left:none;mso-border-left-alt:solid #7F77DD .25pt;mso-border-alt:
+   solid #7F77DD .25pt;background:#3C3489;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+   Arial;color:white">选择<span lang="EN-US"> A</span></span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="100" valign="top" style="width:75.0pt;border:solid #7F77DD 1.0pt;
+   border-left:none;mso-border-left-alt:solid #7F77DD .25pt;mso-border-alt:
+   solid #7F77DD .25pt;background:#3C3489;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+   Arial;color:white">选择<span lang="EN-US"> B</span></span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="133" valign="top" style="width:100.0pt;border:solid #7F77DD 1.0pt;
+   border-left:none;mso-border-left-alt:solid #7F77DD .25pt;mso-border-alt:
+   solid #7F77DD .25pt;background:#3C3489;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+   Arial;color:white">产生原因</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="184" valign="top" style="width:138.0pt;border:solid #7F77DD 1.0pt;
+   border-left:none;mso-border-left-alt:solid #7F77DD .25pt;mso-border-alt:
+   solid #7F77DD .25pt;background:#3C3489;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+   Arial;color:white">设计价值</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+  </tr>
+ </thead>
+ <tbody><tr>
+  <td width="113" valign="top" style="width:85.0pt;border:solid #D3D1C7 1.0pt;
+  border-top:none;mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><b><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">加牌<span lang="EN-US"> vs. </span>删牌</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="93" valign="top" style="width:70.0pt;border-top:none;border-left:none;
+  border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">扩充卡组多样性</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="100" valign="top" style="width:75.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">保持卡组精瘦稳定</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="133" valign="top" style="width:100.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">摸牌概率机制</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="184" valign="top" style="width:138.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">让每次选牌都需考量整体卡组生态</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="113" valign="top" style="width:85.0pt;border:solid #D3D1C7 1.0pt;
+  border-top:none;mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><b><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">当前局<span lang="EN-US"> vs. </span>长线</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="93" valign="top" style="width:70.0pt;border-top:none;border-left:none;
+  border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">打精英获遗物（伤血）</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="100" valign="top" style="width:75.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">保血走安全路线</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="133" valign="top" style="width:100.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">血量不回复机制</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="184" valign="top" style="width:138.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">制造短期收益与长期风险的持续权衡</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="113" valign="top" style="width:85.0pt;border:solid #D3D1C7 1.0pt;
+  border-top:none;mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><b><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">攻击<span lang="EN-US"> vs. </span>防御</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="93" valign="top" style="width:70.0pt;border-top:none;border-left:none;
+  border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">出牌造伤</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="100" valign="top" style="width:75.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">出牌格挡</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="133" valign="top" style="width:100.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">能量有限<span lang="EN-US"> + </span>格挡归零</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="184" valign="top" style="width:138.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">每回合资源分配的核心决策，无最优解</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="113" valign="top" style="width:85.0pt;border:solid #D3D1C7 1.0pt;
+  border-top:none;mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><b><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">跟随随机<span lang="EN-US"> vs. </span>坚守策略</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="93" valign="top" style="width:70.0pt;border-top:none;border-left:none;
+  border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">顺应当前好牌调整流派</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="100" valign="top" style="width:75.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">坚持既定构筑方向</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="133" valign="top" style="width:100.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">奖励随机性</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="184" valign="top" style="width:138.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:#F1EFE8;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">考验玩家的策略灵活性与方向判断力</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="113" valign="top" style="width:85.0pt;border:solid #D3D1C7 1.0pt;
+  border-top:none;mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-alt:solid #D3D1C7 .25pt;
+  background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><b><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">营地回血<span lang="EN-US"> vs. </span>升牌</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="93" valign="top" style="width:70.0pt;border-top:none;border-left:none;
+  border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">保障生存能力</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="100" valign="top" style="width:75.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">强化卡组输出</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="133" valign="top" style="width:100.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">营地稀缺性</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="184" valign="top" style="width:138.0pt;border-top:none;border-left:
+  none;border-bottom:solid #D3D1C7 1.0pt;border-right:solid #D3D1C7 1.0pt;
+  mso-border-top-alt:solid #D3D1C7 .25pt;mso-border-left-alt:solid #D3D1C7 .25pt;
+  mso-border-alt:solid #D3D1C7 .25pt;background:white;padding:4.0pt 6.0pt 4.0pt 6.0pt">
+  <p class="MsoNormal" style="line-height:125%"><span style="font-size:10.0pt;
+  line-height:125%;mso-fareast-font-family:Arial">将资源管理压力与构筑决策直接绑定</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
+ mso-border-top-alt:solid #7F77DD .5pt;mso-padding-alt:0cm .5pt 0cm .5pt;
+ mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid windowtext">
+ <tbody><tr>
+  <td valign="top" style="border:none white 1.0pt;mso-border-alt:none white 0cm;
+  background:#EEEDFE;padding:4.0pt 6.0pt 0cm 9.0pt">
+  <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+  Arial;color:#3C3489">总结：为什么这些张力有效？</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:none white 1.0pt;border-top:none;mso-border-top-alt:
+  none white 0cm;mso-border-alt:none white 0cm;background:#EEEDFE;padding:2.0pt 6.0pt 5.0pt 9.0pt">
+  <p class="MsoNormal" style="line-height:133%"><span style="font-size:10.5pt;
+  line-height:133%;mso-fareast-font-family:Arial">好的两难困境不存在<span lang="EN-US">"</span>客观最优解<span lang="EN-US">"——</span>它依赖于玩家当前的资源状态、卡组方向和风险偏好。<span lang="EN-US">STS </span>的每个张力都满足这一条件：同样的选项，对不同卡组状态的玩家，会产生完全不同的最优选择。这使得<span lang="EN-US">"</span>对的答案<span lang="EN-US">"</span>因局而异，驱动玩家持续思考而非记忆策略。</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Arial&quot;,sans-serif;
+mso-fareast-font-family:等线;mso-fareast-theme-font:minor-fareast;mso-ansi-language:
+EN-US;mso-fareast-language:ZH-CN;mso-bidi-language:AR-SA"><br clear="all" style="mso-special-character:line-break;page-break-before:always">
+</span>
+
+<p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+
+<h1>八、随机性设计与可控感维持<span lang="EN-US"><o:p></o:p></span></h1>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%"><span lang="EN-US">STS </span>是一个<span lang="EN-US"> Roguelite </span>游戏，随机性是其核心特征之一。但其随机性的处理方式与大多数游戏不同，特别注重维持玩家的<span lang="EN-US">"</span>可控感<span lang="EN-US">"</span>。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:4.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">8.1&nbsp; </span>有意义的随机（<span lang="EN-US">Meaningful
+Randomness</span>）<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%"><span lang="EN-US">STS </span>的随机发生在构筑阶段（牌出现在选项中），而非执行阶段（战斗中的命中率<span lang="EN-US">/</span>闪避率）。玩家面对随机结果后需做主动决策，而非被动承受<span lang="EN-US">——</span>随机性成为<span lang="EN-US">"</span>策略输入<span lang="EN-US">"</span>而非<span lang="EN-US">"</span>结果决定者<span lang="EN-US">"</span>。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:3.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
+ mso-border-top-alt:solid #7F77DD .5pt;mso-padding-alt:0cm .5pt 0cm .5pt;
+ mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid windowtext">
+ <tbody><tr>
+  <td valign="top" style="border:none white 1.0pt;mso-border-alt:none white 0cm;
+  background:#FAEEDA;padding:4.0pt 6.0pt 0cm 9.0pt">
+  <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+  Arial;color:#BA7517">关键对比</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:none white 1.0pt;border-top:none;mso-border-top-alt:
+  none white 0cm;mso-border-alt:none white 0cm;background:#FAEEDA;padding:2.0pt 6.0pt 5.0pt 9.0pt">
+  <p class="MsoNormal" style="line-height:133%"><span style="font-size:10.5pt;
+  line-height:133%;mso-fareast-font-family:Arial">传统<span lang="EN-US"> JRPG/ARPG</span>：攻击有命中率（随机在执行层），玩家感受到<span lang="EN-US">"</span>我被随机性控制<span lang="EN-US">"</span>。<span lang="EN-US">&nbsp; STS</span>：牌随机出现（随机在构筑层），玩家感受到<span lang="EN-US">"</span>我在适应随机性做决策<span lang="EN-US">"</span>。后者将随机性从压迫感转化为设计素材。</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class="MsoNormal" style="margin-top:6.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">8.2&nbsp; </span>三选一结构的概率设计<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">选牌时永远是三张，稀有卡（<span lang="EN-US">Rare</span>）有概率出现。这个结构确保玩家有选择余地，且通过稀有度控制强力卡的出现频率，实现期望值的精确调控。即使三张都不理想，玩家仍有<span lang="EN-US">"</span>最次选择<span lang="EN-US">"</span>而非<span lang="EN-US">"</span>无选择<span lang="EN-US">"</span>。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:6.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">8.3&nbsp; </span>固定的敌方意图：消除战斗内随机<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">敌方行动完全透明，大幅减少战斗层面的随机挫败感。玩家死亡几乎总能找到<span lang="EN-US">"</span>原因<span lang="EN-US">"</span>（决策失误、资源透支），而非<span lang="EN-US">"</span>运气不好<span lang="EN-US">"</span>，这对维持挑战感与公平感至关重要。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:3.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">这一设计也使战斗成为<span lang="EN-US">"</span>谜题<span lang="EN-US">"</span>而非<span lang="EN-US">"</span>赌博<span lang="EN-US">"</span>：每个战斗场景都有可解方案，技术熟练的玩家可以在不损血的情况下通关绝大多数普通战斗。<span lang="EN-US"><o:p></o:p></span></p>
+
+<span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Arial&quot;,sans-serif;
+mso-fareast-font-family:等线;mso-fareast-theme-font:minor-fareast;mso-ansi-language:
+EN-US;mso-fareast-language:ZH-CN;mso-bidi-language:AR-SA"><br clear="all" style="mso-special-character:line-break;page-break-before:always">
+</span>
+
+<p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+
+<h1>九、设计总结：为什么这套循环有效<span lang="EN-US"><o:p></o:p></span></h1>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">从游戏设计角度，<span lang="EN-US">STS </span>的成功可以归结为以下四个核心设计原则：<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm">原则一：决策密度高且均匀分布<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">从宏观路径（走哪条线）到中观规划（进哪个节点）到微观出牌（这回合先打哪张），每一层都有需要玩家主动判断的时刻。没有<span lang="EN-US">"</span>等待<span lang="EN-US">"</span>或<span lang="EN-US">"</span>无聊时间段<span lang="EN-US">"</span>，维持持续的心理参与感。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm">原则二：失败有意义且具有教育性<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">死亡原因可溯源（意图透明<span lang="EN-US"> + </span>资源可计算），玩家每局死亡后通常能明确<span lang="EN-US">"</span>下次该怎么做<span lang="EN-US">"</span>，驱动再来一局的动力。死亡不是惩罚，而是学习体验。这与很多<span lang="EN-US">
+Roguelike </span>游戏的<span lang="EN-US">"</span>随机死亡<span lang="EN-US">"</span>形成鲜明对比。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm">原则三：构筑是一种渐进式叙事<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">卡组是<span lang="EN-US">"</span>你这局做的所有决策的总和<span lang="EN-US">"</span>，每局卡组都独一无二，产生可叙述的个人游戏故事，强化情感连接。玩家在描述自己这局游戏时，往往会讲述<span lang="EN-US">"</span>我拿到了什么遗物，因此构建了什么流派<span lang="EN-US">"——</span>这本身就是一种叙事体验。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:5.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
+mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
+
+<h2 style="border:none;mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm;
+mso-padding-alt:0cm 0cm 0cm 0cm">原则四：三层循环互相强化<span lang="EN-US"><o:p></o:p></span></h2>
+
+</div>
+
+<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
+margin-left:0cm;line-height:133%">微观战斗成功<span lang="EN-US"> → </span>中观卡组优化<span lang="EN-US"> → </span>宏观通关解锁，每一层的进步都为下一层积累动能，形成内聚的正反馈系统。没有任何一层是孤立存在的<span lang="EN-US">——</span>战斗的好坏直接影响构筑，构筑的好坏直接影响通关，通关又解锁了新的元进度内容。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-top:7.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
+ mso-border-top-alt:solid #7F77DD .5pt;mso-padding-alt:0cm .5pt 0cm .5pt;
+ mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid windowtext">
+ <tbody><tr>
+  <td valign="top" style="border:none white 1.0pt;mso-border-alt:none white 0cm;
+  background:#EEEDFE;padding:4.0pt 6.0pt 0cm 9.0pt">
+  <p class="MsoNormal"><b><span style="font-size:10.0pt;mso-fareast-font-family:
+  Arial;color:#3C3489">写在最后：<span lang="EN-US">STS </span>对<span lang="EN-US">"Roguelike
+  </span>进化<span lang="EN-US">"</span>的核心贡献</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:none white 1.0pt;border-top:none;mso-border-top-alt:
+  none white 0cm;mso-border-alt:none white 0cm;background:#EEEDFE;padding:2.0pt 6.0pt 5.0pt 9.0pt">
+  <p class="MsoNormal" style="line-height:133%"><span lang="EN-US" style="font-size:10.5pt;line-height:133%;mso-fareast-font-family:Arial">STS </span><span style="font-size:10.5pt;line-height:133%;mso-fareast-font-family:Arial">最重要的设计贡献，是证明了<span lang="EN-US">"</span>卡牌构筑<span lang="EN-US">"</span>与<span lang="EN-US">"Roguelike
+  </span>随机探索<span lang="EN-US">"</span>可以深度融合：随机性服务于构筑多样性，构筑多样性服务于重复可玩性。它将每局游戏从<span lang="EN-US">"</span>随机闯关<span lang="EN-US">"</span>升华为<span lang="EN-US">"</span>个人化的策略故事<span lang="EN-US">"</span>，这也是为什么即使对同一角色，玩家也能在数百小时的游玩中持续发现新的可能性。</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class="MsoNormal" style="margin-top:10.0pt"><span lang="EN-US">&nbsp;</span></p>
+
+<div style="mso-element:para-border-div;border:none;border-top:solid #D3D1C7 1.0pt;
+mso-border-top-alt:solid #D3D1C7 .25pt;padding:0cm 0cm 0cm 0cm">
+
+<p class="MsoNormal" align="center" style="margin-top:6.0pt;text-align:center;
+border:none;mso-border-top-alt:solid #D3D1C7 .25pt;padding:0cm;mso-padding-alt:
+0cm 0cm 0cm 0cm"><i><span style="font-size:9.0pt;mso-fareast-font-family:Arial;
+color:#888780">文档终<span lang="EN-US">&nbsp;
+·&nbsp; </span>游戏设计分析<span lang="EN-US">&nbsp; ·&nbsp; </span>杀戮尖塔（<span lang="EN-US">Slay the Spire</span>）</span></i><span lang="EN-US"><o:p></o:p></span></p>
+
+</div></figcaption></figure></div></div>
 </div>
 <script>
 (function(){
