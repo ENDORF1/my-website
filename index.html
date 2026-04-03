@@ -1190,10 +1190,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
 document.addEventListener('click', function(e){
   if(!document.body.classList.contains('edit-mode')) return;
   const a = e.target.closest('a');
-  if(a){
-    e.preventDefault();
-    e.stopPropagation();
-  }
+  if(!a) return;
+  // Allow clicks on buttons, inputs, contenteditable, and overlay controls inside <a>
+  if(e.target.closest('button, input, label, .creation-card-edit-overlay, .card-controls, .sec-controls, [contenteditable]')) return;
+  e.preventDefault();
+  e.stopPropagation();
 }, true);
 </script>
 </body>
