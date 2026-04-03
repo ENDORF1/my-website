@@ -694,6 +694,7 @@ function insertImage(){document.getElementById('img-file-input').click();}
 
 async function handleInlineImage(input){
   const file=input.files[0];if(!file)return;
+  if(!GH.token) GH.token = await decryptToken() || '';
   if(!GH.user||!GH.repo||!GH.token){
     showToast('err','请先配置 GitHub 才能上传图片');
     input.value=''; return;
@@ -713,6 +714,7 @@ async function handleInlineImage(input){
 
 async function handleCoverUpload(input){
   const file=input.files[0];if(!file)return;
+  if(!GH.token) GH.token = await decryptToken() || '';
   if(!GH.user||!GH.repo||!GH.token){
     showToast('err','请先配置 GitHub 才能上传图片');
     input.value=''; return;
@@ -963,6 +965,7 @@ function closeCardModal(){document.getElementById('card-modal').classList.remove
 
 async function handleCardImg(input){
   const file=input.files[0];if(!file)return;
+  if(!GH.token) GH.token = await decryptToken() || '';
   if(!GH.user||!GH.repo||!GH.token){
     showToast('err','请先配置 GitHub 才能上传图片');
     input.value=''; return;
@@ -1081,16 +1084,16 @@ async function decryptToken() {
 }
 let GH={user:'',repo:'',token:''};
 
-function loadGhConfig(){
+async function loadGhConfig(){
   GH.user  = localStorage.getItem('gh_user')  || '';
   GH.repo  = localStorage.getItem('gh_repo')  || '';
-  // Token loaded from encrypted storage into GH.token
-  decryptToken().then(t=>{ if(t) GH.token=t; });
+  const t = await decryptToken();
+  if(t) GH.token = t;
 }
 function openGhConfig(){
   document.getElementById('gh-user').value  = GH.user;
   document.getElementById('gh-repo').value  = GH.repo;
-  decryptToken().then(t=>{ document.getElementById('gh-token').value = t||''; });
+  decryptToken().then(t=>{ document.getElementById('gh-token').value = t || GH.token || ''; });
   document.getElementById('gh-modal').classList.add('show');
 }
 function closeGhConfig(){document.getElementById('gh-modal').classList.remove('show');}
@@ -1144,6 +1147,7 @@ async function ghPut(path,content,msg){
    PUBLISH
 ══════════════════════════════════════ */
 async function publishCurrent(){
+  if(!GH.token) GH.token = await decryptToken() || '';
   if(!GH.user||!GH.repo||!GH.token){openGhConfig();return;}
   document.getElementById('push-log-body').innerHTML='';
 
