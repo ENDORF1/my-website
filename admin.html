@@ -1120,7 +1120,7 @@ async function publishCurrent(){
 async function publishPost(){
   saveCurrentPost(false);
   const p=posts[currentPost];
-  if(!p.title){alert('请先填写文章标题');return;}
+  if(!p.title){showToast('err','请先填写文章标题');return;}
   setStatus('pushing','// 推送中...');
   pushLog('准备发布：'+p.title,'spin');
   try{
@@ -1153,10 +1153,22 @@ async function pushPageData(){
   pushLog('推送页面数据...','spin');
   try{
     if(currentTab==='works'){
+      if(works.length === 0){
+        pushLog('警告：项目列表为空，跳过推送以避免覆盖已有内容','err');
+        showToast('err','项目列表为空，请先在后台添加项目');
+        setStatus('idle','// 已跳过');
+        return;
+      }
       pushLog('推送游戏项目页...','spin');
       await ghPut('works/index.html',buildWorksHTML(),'update: works page');
       pushLog('游戏项目页已推送','ok');
     } else if(currentTab==='gallery'){
+      if(galleryCategories.every(cat=>cat.items.length===0)){
+        pushLog('警告：所有分类均为空，跳过推送以避免覆盖已有内容','err');
+        showToast('err','画廊内容为空，请先在后台添加作品');
+        setStatus('idle','// 已跳过');
+        return;
+      }
       pushLog('推送同人画廊列表页...','spin');
       await ghPut('gallery/index.html',buildGalleryHTML(),'update: gallery page');
       pushLog('同人画廊列表页已推送','ok');
