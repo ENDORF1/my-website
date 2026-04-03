@@ -429,9 +429,9 @@ body.modal-open body::before{z-index:1 !important;}
       <label>PERSONAL ACCESS TOKEN</label>
       <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxx" autocomplete="off">
     </div>
-    <button id="gh-push-btn" onclick="pushToGithub()" disabled="">⬆ 立即推送</button>
+    <button id="gh-push-btn" onclick="pushToGithub()">⬆ 立即推送</button>
     <button id="gh-cancel-btn" onclick="closeGhModal()">取消</button>
-    <div id="gh-log" class="show"><div class="log-spin">⟳ 正在生成网页内容...</div></div>
+    <div id="gh-log"></div>
   </div>
 </div>
 
