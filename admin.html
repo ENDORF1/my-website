@@ -1264,9 +1264,9 @@ async function publishPost(){
     await ghPut('blog/index.html',indexHtml,'update: blog index');
     pushLog('博客列表页已更新','ok');
 
-    // 同步更新首页
+    // 同步更新首页动态区块
     pushLog('更新首页...','spin');
-    await ghPut('index.html', buildHomeHTML(), 'update: homepage');
+    await patchHomeHTML();
     pushLog('首页已更新','ok');
     pushLog('全部完成 · Netlify 将在约1分钟内自动部署','info');
     showToast('ok','发布成功 · Netlify 约1分钟后更新 ✓');
@@ -1328,9 +1328,9 @@ async function pushPageData(){
       await ghPut('about/index.html',buildAboutHTML(),'update: about page');
       pushLog('关于我页已推送','ok');
     }
-    // 同步更新首页
+    // 同步更新首页动态区块
     pushLog('更新首页...','spin');
-    await ghPut('index.html', buildHomeHTML(), 'update: homepage');
+    await patchHomeHTML();
     pushLog('首页已更新','ok');
     pushLog('完成 · Netlify 将在约1分钟内自动部署','info');
     setStatus('ok','// 推送成功');
@@ -1345,6 +1345,60 @@ async function pushPageData(){
   }
 }
 
+async function patchHomeHTML(){
+  // 获取当前 index.html，只替换动态区块，保留其余所有内容
+  const apiBase = `https://api.github.com/repos/${GH.user}/${GH.repo}/contents/index.html`;
+  const headers = {'Authorization':`token ${GH.token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
+  const getRes = await fetch(apiBase, {headers});
+  if(!getRes.ok) throw new Error('获取首页失败 HTTP '+getRes.status);
+  const fileData = await getRes.json();
+  let html = decodeURIComponent(escape(atob(fileData.content.replace(/\n/g,''))));
+
+  // 生成 works 静态卡片
+  const worksHTML = works.slice(0,6).map(w=>{
+    const slug=w.slug||slugify(w.title);
+    return '<a class="proj-card" href="/works/'+slug+'.html">'
+      +'<div class="card-controls"><div class="card-drag-handle">\u283f\u283f</div><button class="card-delete" onclick="this.closest(\'.proj-card\').remove()">\u2715</button></div>'
+      +'<div class="proj-tag">// '+((w.tags||[])[0]?w.tags[0].toUpperCase():'PROJECT')+'</div>'
+      +'<div class="proj-name">'+w.title+'</div>'
+      +'<div class="proj-desc">'+(w.desc||'')+'</div>'
+      +'<div class="proj-meta">'+(w.tags||[]).map(t=>'<span class="tag">'+t+'</span>').join('')+'</div>'
+      +'<div class="proj-link-row"><input class="proj-link-input" type="text" placeholder="\u9879\u76ee\u94fe\u63a5 https://..." value="'+(w.link||'')+'" oninput="saveWorksToStorage()"></div>'
+      +'</a>';
+  }).join('') + '<button class="add-card-btn" onclick="addProject(this)">＋ \u6dfb\u52a0\u9879\u76ee</button>';
+
+  // 生成 posts 静态列表
+  const postsHTML = posts.filter(p=>!p.draft&&p.title).slice(0,6).map(p=>
+    '<a class="post-item" href="/blog/'+p.slug+'.html">'
+    +'<span class="post-drag-handle" style="display:none">\u283f</span>'
+    +'<span class="post-date">'+(p.date||'')+'</span>'
+    +'<span class="post-cat">'+(p.cat||'\u672a\u5206\u7c7b')+'</span>'
+    +'<span class="post-title">'+p.title+'</span>'
+    +'<span class="post-arrow">\u2192</span>'
+    +'</a>'
+  ).join('') || '<div class="no-posts-placeholder" style="font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:2px;padding:20px 24px;">// \u6682\u65e0\u5df2\u53d1\u5e03\u6587\u7ae0 \u00b7 \u8bf7\u5728\u540e\u53f0\u53d1\u5e03\u6587\u7ae0\u540e\u63a8\u9001</div>';
+
+  // 替换 dynamic-works-grid 内容（用唯一标记定位）
+  const worksStart = html.indexOf('id="dynamic-works-grid"');
+  if(worksStart !== -1){
+    const innerStart = html.indexOf('>', worksStart) + 1;
+    // 找对应的 </div>（含 add-card-btn 的那个 </div>）
+    const secEnd = html.indexOf('</section>', innerStart);
+    const innerEnd = html.lastIndexOf('</div>', secEnd);
+    html = html.slice(0, innerStart) + '\n    ' + worksHTML + '\n  ' + html.slice(innerEnd);
+  }
+
+  // 替换 dynamic-posts-list 内容
+  const postsStart = html.indexOf('id="dynamic-posts-list"');
+  if(postsStart !== -1){
+    const innerStart = html.indexOf('>', postsStart) + 1;
+    const addBtn = html.indexOf('<button class="add-post-btn"', innerStart);
+    html = html.slice(0, innerStart) + postsHTML + html.slice(addBtn);
+  }
+
+  // 推送回去
+  await ghPut('index.html', html, 'update: homepage dynamic content');
+}
 async function updateMainIndex(){
   // homepage is maintained manually - do not overwrite
 }
