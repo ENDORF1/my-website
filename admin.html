@@ -1735,6 +1735,11 @@ async function patchHomeHTML(){
       +'</a>';
   }).join('') + '<button class="add-card-btn" onclick="addProject(this)">\uff0b \u6dfb\u52a0\u9879\u76ee</button>';
 
+  // 验证拉取到的是正确版本的 index.html
+  if(html.indexOf('id="dynamic-posts-list"') === -1){
+    throw new Error('首页结构不匹配：GitHub 上的 index.html 可能是旧版本，请先手动推送一次带编辑功能的 index.html');
+  }
+
   // 替换 dynamic-posts-list 内容
   const postsId = html.indexOf('id="dynamic-posts-list"');
   if(postsId !== -1){
