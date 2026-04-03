@@ -409,7 +409,7 @@ body.modal-open body::before{z-index:1 !important;}
 <div id="save-toast">// 已保存为 index.html</div>
 
 <!-- ── GITHUB PUSH MODAL ── -->
-<div id="gh-overlay" class="show">
+<div id="gh-overlay" class="">
   <div id="gh-box">
     <span class="gh-tag">// GITHUB DEPLOY</span>
     <div class="gh-title">推送到 GitHub</div>
@@ -521,9 +521,9 @@ body.modal-open body::before{z-index:1 !important;}
 <footer>
   <div class="footer-text" contenteditable="false" spellcheck="false">© 2025 · BUILT WITH ♥ &amp; CODE</div>
   <div class="footer-links">
-    <div class="social-edit-wrap"><a class="social-label" id="sl-github" contenteditable="false" spellcheck="false" href="https://endorf1.github.io/#">GITHUB</a><input class="social-input" placeholder="GitHub URL" oninput="document.getElementById('sl-github').href=this.value||'#'" value="https://github.com/ENDORF1"></div>
+    <div class="social-edit-wrap"><a class="social-label" id="sl-github" contenteditable="false" spellcheck="false" href="https://github.com/ENDORF1">GITHUB</a><input class="social-input" placeholder="GitHub URL" oninput="document.getElementById('sl-github').href=this.value||'#'" value="https://github.com/ENDORF1"></div>
     <div class="social-edit-wrap"><a class="social-label" id="sl-bili" contenteditable="false" spellcheck="false" href="https://endorf1.github.io/#">BILIBILI</a><input class="social-input" placeholder="Bilibili URL" oninput="document.getElementById('sl-bili').href=this.value||'#'" value=""></div>
-    <div class="social-edit-wrap"><a class="social-label" id="sl-twitter" contenteditable="false" spellcheck="false" href="https://endorf1.github.io/#">Pixiv</a><input class="social-input" placeholder="Twitter URL" oninput="document.getElementById('sl-twitter').href=this.value||'#'" value="https://www.pixiv.net/users/107152559"></div>
+    <div class="social-edit-wrap"><a class="social-label" id="sl-twitter" contenteditable="false" spellcheck="false" href="https://www.pixiv.net/users/107152559">Pixiv</a><input class="social-input" placeholder="Twitter URL" oninput="document.getElementById('sl-twitter').href=this.value||'#'" value="https://www.pixiv.net/users/107152559"></div>
   </div>
 </footer>
 
@@ -743,11 +743,18 @@ function saveChanges(){
   document.querySelectorAll('.creation-link-input').forEach(inp=>{
     const a=inp.closest('a');if(a&&inp.value)a.setAttribute('href',inp.value);
   });
-  ['sl-github','sl-bili','sl-twitter'].forEach(id=>{const a=document.getElementById(id);if(a)a.setAttribute('href',a.href);});
+  // Sync social links from input values (not a.href which may be resolved incorrectly)
+  ['sl-github','sl-bili','sl-twitter'].forEach(id=>{
+    const a=document.getElementById(id);
+    const inp=a&&a.parentElement&&a.parentElement.querySelector('.social-input');
+    if(a&&inp&&inp.value) a.setAttribute('href',inp.value);
+  });
   // 哈希已保存在 localStorage，无需嵌入 HTML
   localStorage.setItem('_pw_hash', PW_HASH);
-  // 确保推送按钮不以 disabled 状态保存
+  // 确保推送按钮不以 disabled 状态保存，gh-overlay 不以 show 状态保存
   const _ghPushBtn=document.getElementById('gh-push-btn');if(_ghPushBtn)_ghPushBtn.disabled=false;
+  const _ghOvl=document.getElementById('gh-overlay');const _ghOvlCls=_ghOvl?_ghOvl.className:'';
+  if(_ghOvl)_ghOvl.className='';
   // 清除游标内联坐标，避免保存到文件中
   const $c=document.getElementById('cursor');const $r=document.getElementById('cursorRing');
   const _cs=$c?$c.getAttribute('style'):'';const _rs=$r?$r.getAttribute('style'):'';
@@ -759,6 +766,7 @@ function saveChanges(){
   // 还原
   if($c&&_cs)$c.setAttribute('style',_cs);if($r&&_rs)$r.setAttribute('style',_rs);
   if(ghLog)ghLog.className=_ghLogCls;
+  if(_ghOvl)_ghOvl.className=_ghOvlCls;
   const blob=new Blob([html],{type:'text/html;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='index.html';a.click();URL.revokeObjectURL(a.href);
   const t=document.getElementById('save-toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
@@ -1081,16 +1089,20 @@ async function pushToGithub() {
       if(el && sensitiveVals[id]!==undefined){ el.value=sensitiveVals[id]; el.removeAttribute('value'); }
     });
     // Sync social link hrefs
+    // Sync social links from input values
     ['sl-github','sl-bili','sl-twitter'].forEach(id=>{
-      const a = document.getElementById(id);
-      if(a) a.setAttribute('href', a.href);
+      const a=document.getElementById(id);
+      const inp=a&&a.parentElement&&a.parentElement.querySelector('.social-input');
+      if(a&&inp&&inp.value) a.setAttribute('href',inp.value);
     });
     // creation card 外链：用 input 原始值写回 href
     document.querySelectorAll('.creation-link-input').forEach(inp=>{
       const a=inp.closest('a');if(a&&inp.value)a.setAttribute('href',inp.value);
     });
-    // 确保推送按钮不以 disabled 状态保存
+    // 确保推送按钮不以 disabled 状态保存，gh-overlay 不以 show 状态保存
     const _ghPushBtn2=document.getElementById('gh-push-btn');if(_ghPushBtn2)_ghPushBtn2.disabled=false;
+    const _ghOvl2=document.getElementById('gh-overlay');const _ghOvlCls2=_ghOvl2?_ghOvl2.className:'';
+    if(_ghOvl2)_ghOvl2.className='';
     // 清除游标内联坐标与 gh-log 显示状态，避免序列化进 HTML
     const $c2=document.getElementById('cursor');const $r2=document.getElementById('cursorRing');
     const _cs2=$c2?$c2.getAttribute('style'):'';const _rs2=$r2?$r2.getAttribute('style'):'';
@@ -1103,6 +1115,7 @@ async function pushToGithub() {
     // 还原瞬态 DOM
     if($c2&&_cs2)$c2.setAttribute('style',_cs2);if($r2&&_rs2)$r2.setAttribute('style',_rs2);
     if(ghLogEl)ghLogEl.className=_ghCls;
+    if(_ghOvl2)_ghOvl2.className=_ghOvlCls2;
     const encoded = btoa(unescape(encodeURIComponent(html)));
     // Re-enter edit mode so user can continue editing after push
     enterEditMode();
