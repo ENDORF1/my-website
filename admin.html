@@ -1334,6 +1334,16 @@ ${NAV_HTML()}
   ${p.cover?`<img class="post-cover" src="${p.cover}" alt="封面">`:''}
   <div class="post-body">${p.content||''}</div>
 </div>
+<script>
+(function(){
+  document.addEventListener('contextmenu',function(e){e.preventDefault();});
+  document.addEventListener('dragstart',function(e){if(e.target.tagName==='IMG')e.preventDefault();});
+  document.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&(e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();
+    if(e.key==='PrintScreen')e.preventDefault();
+  });
+})();
+</script>
 </body></html>`;
 }
 
@@ -1374,6 +1384,16 @@ ${NAV_HTML()}
   <h1 class="page-heading">技术博客</h1>
   <div class="blog-grid">${cards||'<div style="font-family:Share Tech Mono,monospace;color:var(--muted);font-size:13px;letter-spacing:2px;">// 暂无已发布文章</div>'}</div>
 </div>
+<script>
+(function(){
+  document.addEventListener('contextmenu',function(e){e.preventDefault();});
+  document.addEventListener('dragstart',function(e){if(e.target.tagName==='IMG')e.preventDefault();});
+  document.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&(e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();
+    if(e.key==='PrintScreen')e.preventDefault();
+  });
+})();
+</script>
 </body></html>`;
 }
 
@@ -1418,6 +1438,16 @@ ${NAV_HTML()}
   <h1 class="page-heading">游戏开发</h1>
   <div class="works-grid">${cards||'<div style="font-family:Share Tech Mono,monospace;color:var(--muted);font-size:13px;letter-spacing:2px;">// 暂无项目</div>'}</div>
 </div>
+<script>
+(function(){
+  document.addEventListener('contextmenu',function(e){e.preventDefault();});
+  document.addEventListener('dragstart',function(e){if(e.target.tagName==='IMG')e.preventDefault();});
+  document.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&(e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();
+    if(e.key==='PrintScreen')e.preventDefault();
+  });
+})();
+</script>
 </body></html>`;
 }
 
@@ -1458,6 +1488,16 @@ ${NAV_HTML()}
   <h1 class="page-heading">同人创作</h1>
   <div class="gallery-grid">${cards||'<div style="font-family:Share Tech Mono,monospace;color:var(--muted);font-size:13px;letter-spacing:2px;">// 暂无作品</div>'}</div>
 </div>
+<script>
+(function(){
+  document.addEventListener('contextmenu',function(e){e.preventDefault();});
+  document.addEventListener('dragstart',function(e){if(e.target.tagName==='IMG')e.preventDefault();});
+  document.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&(e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();
+    if(e.key==='PrintScreen')e.preventDefault();
+  });
+})();
+</script>
 </body></html>`;
 }
 
@@ -1479,7 +1519,7 @@ ${BASE_CSS}
 .gd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:24px;}
 .gd-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;}
 .gd-tag{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--cyan);border:1px solid rgba(0,245,255,.3);padding:3px 8px;letter-spacing:1px;}
-.gd-img{max-width:100%;max-height:80vh;object-fit:contain;border:1px solid rgba(255,0,110,.2);display:block;margin:0 auto 40px;}
+.gd-canvas{max-width:100%;max-height:80vh;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);user-select:none;-webkit-user-drag:none;}
 .gd-body{max-width:720px;margin:0 auto;}
 .gd-body p{margin:0 0 16px;line-height:1.9;color:var(--text);}
 </style></head><body>
@@ -1489,9 +1529,48 @@ ${NAV_HTML()}
   <span class="gd-cat"># ${(g.tags||[])[0]||'WORK'}</span>
   <h1 class="gd-title">${g.title||''}</h1>
   <div class="gd-tags">${(g.tags||[]).map(t=>`<span class="gd-tag">${t}</span>`).join('')}</div>
-  ${g.img?`<img class="gd-img" src="${g.img}" alt="${g.title}">`:''}
+  ${(g.imgFull||g.img)?'<canvas id="gd-c" class="gd-canvas"></canvas>':''}
   <div class="gd-body">${contentHtml||( g.desc?`<p>${g.desc}</p>`:'' )}</div>
 </div>
+${(g.imgFull||g.img)?`<script>
+(function(){
+  var S="${(g.imgFull||g.img||'').replace(/\\/g,'\\\\').replace(/"/g,'\\"')}",W="Xcale";
+  var cv=document.getElementById('gd-c');if(!cv)return;
+  var cx=cv.getContext('2d'),im=new Image();
+  im.crossOrigin='anonymous';
+  function clean(){cx.clearRect(0,0,cv.width,cv.height);cx.drawImage(im,0,0,cv.width,cv.height);}
+  function drawWM(ctx,w,h){
+    ctx.save();
+    var fs=Math.max(18,Math.min(w,h)*0.045);
+    ctx.font='bold '+fs+'px \'Share Tech Mono\',monospace';
+    ctx.fillStyle='rgba(255,0,110,0.75)';ctx.strokeStyle='rgba(0,0,0,0.4)';ctx.lineWidth=1;
+    ctx.rotate(-Math.PI/6);
+    var sx=w*0.26,sy=Math.max(fs*2.2,h*0.12);
+    for(var y=-h*1.5;y<w+h*1.5;y+=sy)
+      for(var x=-w*1.5;x<w+h*1.5;x+=sx){ctx.strokeText(W,x,y);ctx.fillText(W,x,y);}
+    ctx.restore();
+  }
+  im.onload=function(){
+    var mw=Math.min(im.naturalWidth,window.innerWidth-80),sc=mw/im.naturalWidth;
+    cv.width=im.naturalWidth*sc;cv.height=im.naturalHeight*sc;
+    clean();
+    var wc=document.createElement('canvas');wc.width=cv.width;wc.height=cv.height;
+    var wx=wc.getContext('2d');wx.drawImage(im,0,0,wc.width,wc.height);drawWM(wx,wc.width,wc.height);
+    cv.toDataURL=function(){return wc.toDataURL.apply(wc,arguments);};
+    cv.toBlob=function(cb,t,q){return wc.toBlob(cb,t,q);};
+    document.addEventListener('contextmenu',function(e){e.preventDefault();});
+    cv.addEventListener('dragstart',function(e){e.preventDefault();});
+    cv.addEventListener('touchstart',function(e){e.preventDefault();},{passive:false});
+    document.addEventListener('keydown',function(e){
+      if((e.ctrlKey||e.metaKey)&&(e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();
+      if(e.key==='PrintScreen')e.preventDefault();
+    });
+  };
+  im.onerror=function(){var fb=document.createElement('img');fb.src=S;fb.className='gd-img';cv.replaceWith(fb);};
+  im.src=S;
+})();
+<\/script>`:''
+}
 </body></html>`;
 }
 
@@ -1711,6 +1790,16 @@ ${NAV_HTML()}
   <div class="page-count">${cat.items.length} 件作品</div>
   <div class="gallery-grid">${cards||'<div style="font-family:Share Tech Mono,monospace;color:var(--muted);font-size:13px;letter-spacing:2px;">// 暂无作品</div>'}</div>
 </div>
+<script>
+(function(){
+  document.addEventListener('contextmenu',function(e){e.preventDefault();});
+  document.addEventListener('dragstart',function(e){if(e.target.tagName==='IMG')e.preventDefault();});
+  document.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&(e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();
+    if(e.key==='PrintScreen')e.preventDefault();
+  });
+})();
+</script>
 </body></html>`;
 }
 
