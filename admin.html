@@ -213,6 +213,45 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .pl-err{color:var(--magenta);}
 .pl-spin{color:var(--yellow);}
 
+/* works editor panel */
+#works-list-panel{width:280px;flex-shrink:0;background:var(--dim);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+#works-list{flex:1;overflow-y:auto;padding:8px 0;}
+#works-list::-webkit-scrollbar{width:4px;}
+#works-list::-webkit-scrollbar-track{background:transparent;}
+#works-list::-webkit-scrollbar-thumb{background:var(--muted);border-radius:2px;}
+.wi-item{padding:12px 16px;cursor:pointer;border-left:2px solid transparent;position:relative;transition:background .15s;}
+.wi-item:hover{background:rgba(0,245,255,.04);}
+.wi-item.active{background:rgba(0,245,255,.06);border-left-color:var(--cyan);}
+.wi-title{font-size:13px;color:var(--white);margin-bottom:4px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wi-meta{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:1px;}
+.wi-draft{position:absolute;right:12px;top:12px;font-family:var(--font-mono);font-size:9px;color:var(--yellow);letter-spacing:1px;border:1px solid rgba(255,230,0,.3);padding:1px 5px;}
+#works-editor-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+#works-meta-bar{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:10px;flex-shrink:0;}
+#works-title-input{background:transparent;border:none;border-bottom:1px solid rgba(0,245,255,.15);color:var(--white);font-size:22px;font-weight:700;letter-spacing:1px;padding:6px 0;outline:none;width:100%;font-family:var(--font-body);transition:border-color .2s;}
+#works-title-input:focus{border-bottom-color:var(--cyan);}
+#works-title-input::placeholder{color:var(--muted);}
+#works-editor-toolbar{display:flex;gap:2px;padding:8px 24px;border-bottom:1px solid var(--border);flex-wrap:wrap;flex-shrink:0;background:rgba(4,10,20,.5);}
+#works-editor-wrap{flex:1;display:flex;overflow:hidden;}
+#works-editor-content{flex:1;padding:32px 48px;outline:none;overflow-y:auto;font-size:15px;line-height:1.9;color:var(--text);font-family:var(--font-body);}
+#works-editor-content::-webkit-scrollbar{width:6px;}
+#works-editor-content::-webkit-scrollbar-thumb{background:var(--muted);border-radius:3px;}
+#works-editor-content:empty::before{content:'开始写项目介绍...';color:var(--muted);pointer-events:none;}
+#works-editor-content h2{font-size:22px;font-weight:700;color:var(--white);margin:28px 0 12px;padding-left:12px;border-left:3px solid var(--magenta);}
+#works-editor-content h3{font-size:18px;font-weight:700;color:var(--white);margin:24px 0 10px;padding-left:10px;border-left:2px solid var(--yellow);}
+#works-editor-content p{margin:0 0 12px;color:var(--text);}
+#works-editor-content strong{color:var(--white);font-weight:700;}
+#works-editor-content em{color:var(--cyan);font-style:italic;}
+#works-editor-content ul,#works-editor-content ol{margin:8px 0 16px 24px;}
+#works-editor-content li{margin-bottom:6px;color:var(--text);}
+#works-editor-content a{color:var(--cyan);text-decoration:none;border-bottom:1px solid rgba(0,245,255,.3);}
+#works-editor-content blockquote{border-left:3px solid var(--cyan);padding:12px 20px;margin:16px 0;background:rgba(0,245,255,.04);color:var(--muted);}
+#works-editor-content hr{border:none;border-top:1px solid var(--border);margin:32px 0;}
+#works-editor-content img{max-width:100%;border:1px solid var(--border);margin:8px 0;}
+#works-editor-content pre{background:#0a0e1a;border:1px solid rgba(0,245,255,.15);margin:16px 0;overflow:hidden;position:relative;}
+#works-editor-content pre code{display:block;padding:16px 20px;font-family:var(--font-code);font-size:13px;line-height:1.7;color:#a8c8e8;overflow-x:auto;}
+#works-editor-content .video-embed{position:relative;width:100%;padding-bottom:56.25%;margin:24px 0;background:#000;}
+#works-editor-content .video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+
 /* works / gallery / about panels */
 #page-panel{flex:1;display:none;flex-direction:column;overflow:hidden;}
 #page-panel.show{display:flex;}
@@ -323,7 +362,65 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   <div id="panels">
 
     <!-- post list -->
-    <div id="post-list-panel">
+    <!-- works list panel -->
+    <div id="works-list-panel" class="hidden">
+      <div class="pl-header">
+        <span class="pl-title">// 游戏项目</span>
+        <button class="pl-new" onclick="newWork()" title="新建项目">＋</button>
+      </div>
+      <div id="works-list"></div>
+    </div>
+
+    <!-- works editor panel -->
+    <div id="works-editor-panel" class="hidden">
+      <div id="works-meta-bar">
+        <input id="works-title-input" type="text" placeholder="项目标题...">
+        <div class="meta-row">
+          <span class="meta-label">标签</span>
+          <input class="meta-input" id="works-tags" placeholder="如：IN PROGRESS, ROGUELIKE, CARD GAME" style="width:260px">
+          <span class="meta-label">日期</span>
+          <input class="meta-input" id="works-date" type="date" style="width:140px">
+          <span class="meta-label">状态</span>
+          <select class="meta-input" id="works-status" style="width:100px;background:transparent;color:var(--text);">
+            <option value="draft">草稿</option>
+            <option value="published">已发布</option>
+          </select>
+          <span class="meta-label">外链</span>
+          <input class="meta-input" id="works-link" placeholder="https://..." style="width:200px">
+          <button id="works-cover-btn" onclick="document.getElementById('works-cover-input').click()">📷 封面图</button>
+          <img id="works-cover-preview" src="" alt="封面" style="display:none;height:36px;width:60px;object-fit:cover;border:1px solid var(--border);cursor:pointer;" onclick="document.getElementById('works-cover-input').click()">
+          <input type="file" id="works-cover-input" accept="image/*" style="display:none" onchange="handleWorksCover(this)">
+        </div>
+      </div>
+      <div id="works-editor-toolbar">
+        <button class="et-btn" onclick="wfmt('h2')">H2</button>
+        <button class="et-btn" onclick="wfmt('h3')">H3</button>
+        <div class="et-sep"></div>
+        <button class="et-btn" onclick="wexec('bold')"><b>B</b></button>
+        <button class="et-btn" onclick="wexec('italic')"><i>I</i></button>
+        <button class="et-btn" onclick="wexec('underline')"><u>U</u></button>
+        <button class="et-btn" onclick="wexec('strikeThrough')"><s>S</s></button>
+        <div class="et-sep"></div>
+        <button class="et-btn" onclick="wfmt('ul')">• 列表</button>
+        <button class="et-btn" onclick="wfmt('ol')">1. 列表</button>
+        <button class="et-btn" onclick="wfmt('blockquote')">❝ 引用</button>
+        <button class="et-btn" onclick="wfmt('hr')">— 分割线</button>
+        <div class="et-sep"></div>
+        <button class="et-btn" onclick="wOpenCode()">&lt;/&gt; 代码</button>
+        <button class="et-btn" onclick="wInsertImg()">🖼 图片</button>
+        <button class="et-btn" onclick="wInsertVideo()">▶ 视频</button>
+        <button class="et-btn" onclick="wInsertLink()">🔗 链接</button>
+        <div class="et-sep"></div>
+        <button class="et-btn" onclick="wexec('undo')">↩</button>
+        <button class="et-btn" onclick="wexec('redo')">↪</button>
+      </div>
+      <div id="works-editor-wrap">
+        <div id="works-editor-content" contenteditable="true" spellcheck="false"></div>
+      </div>
+      <input type="file" id="works-img-input" accept="image/*" style="display:none" onchange="wHandleImg(this)">
+    </div>
+
+        <div id="post-list-panel">
       <div class="pl-header">
         <span class="pl-title">// 文章列表</span>
         <button class="pl-new" onclick="newPost()" title="新建文章">＋</button>
@@ -403,32 +500,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   </div>
 </div>
 
-<!-- card edit modal -->
+<!-- card edit modal (gallery only) -->
 <div id="card-modal">
   <div id="card-box">
-    <div style="font-family:var(--font-mono);font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:16px;">// 编辑卡片</div>
-    <div class="card-field"><label class="card-label">标题</label><input class="card-input" id="card-title-input" placeholder="如：卡牌 DEMO / 明日方舟同人志"></div>
-    <div class="card-field"><label class="card-label">描述</label><textarea class="card-textarea" id="card-desc-input" placeholder="如：受《杀戮尖塔》启发的独立卡牌 Roguelike，探索卡组构建的边界。"></textarea></div>
-    <div class="card-field"><label class="card-label">标签<span style="color:var(--muted);font-size:10px;font-weight:normal;margin-left:8px;">第一个 = 卡片左上角红色小标（如 IN PROGRESS），其余 = 青色标签（如 ROGUELIKE）</span></label><input class="card-input" id="card-tags-input" placeholder="如：IN PROGRESS, ROGUELIKE, CARD GAME"></div>
-    <div class="card-field" id="card-link-field"><label class="card-label" id="card-link-label">链接<span style="color:var(--muted);font-size:10px;font-weight:normal;margin-left:8px;">填了就跳这个链接，不填就跳 /works/ 总页</span></label><input class="card-input" id="card-link-input" placeholder="如：https://github.com/你的用户名/项目名"></div>
-    <div class="card-field" id="card-content-field"><label class="card-label">详情正文（同人作品用，支持换行）</label><textarea class="card-textarea" id="card-content-input" placeholder="作品介绍、创作背景等..." style="height:100px;"></textarea></div>
-    <!-- works 富文本编辑器 -->
-    <div class="card-field" id="works-editor-field" style="display:none;">
-      <label class="card-label">项目详情页正文</label>
-      <div id="works-editor-toolbar" style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px;">
-        <button class="ed-btn" onclick="weCmd('bold')"><b>B</b></button>
-        <button class="ed-btn" onclick="weCmd('italic')"><i>I</i></button>
-        <button class="ed-btn" onclick="weHeading(2)">H2</button>
-        <button class="ed-btn" onclick="weHeading(3)">H3</button>
-        <button class="ed-btn" onclick="weCmd('insertUnorderedList')">&bull; 列表</button>
-        <button class="ed-btn" onclick="weInsertCode()">代码块</button>
-        <button class="ed-btn" onclick="weInsertImg()">插图</button>
-        <button class="ed-btn" onclick="weInsertVideo()">插视频</button>
-        <button class="ed-btn" onclick="weCmd('removeFormat')">清除格式</button>
-      </div>
-      <div id="works-editor-content" contenteditable="true" style="min-height:200px;background:#0a0e1a;border:1px solid rgba(0,245,255,.15);padding:16px;color:#c8e0f0;font-size:14px;line-height:1.8;outline:none;overflow-y:auto;max-height:360px;"></div>
-      <input type="file" id="works-img-input" accept="image/*" style="display:none" onchange="weHandleImg(this)">
-    </div>
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:16px;">// 编辑作品</div>
+    <div class="card-field"><label class="card-label">标题</label><input class="card-input" id="card-title-input" placeholder="作品标题"></div>
+    <div class="card-field"><label class="card-label">简介</label><textarea class="card-textarea" id="card-desc-input" placeholder="作品简介、创作背景等..."></textarea></div>
+    <div class="card-field" id="card-content-field"><label class="card-label">详情正文（支持换行）</label><textarea class="card-textarea" id="card-content-input" placeholder="作品详细介绍..." style="height:100px;"></textarea></div>
     <div class="card-field">
       <label class="card-label">封面图</label>
       <img class="card-img-preview" id="card-img-preview" src="">
@@ -444,7 +522,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       <div class="card-img-upload" onclick="document.getElementById('pp-img-input').click()">📷 上传封面图</div>
       <input type="file" id="pp-img-input" accept="image/*" onchange="handleCardImg(this)">
     </div>
-    <button class="card-save" onclick="saveCard()">保存卡片</button>
+    <button class="card-save" onclick="saveCard()">保存</button>
     <button class="card-cancel" onclick="closeCardModal()">取消</button>
   </div>
 </div>
@@ -569,19 +647,28 @@ function switchTab(tab, btn){
   document.querySelectorAll('.tb-nav-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
 
-  const blogLeft   = document.getElementById('post-list-panel');
-  const blogRight  = document.getElementById('editor-panel');
-  const pagePanel  = document.getElementById('page-panel');
-  const pubBtn     = document.getElementById('pub-btn');
+  const blogLeft      = document.getElementById('post-list-panel');
+  const blogRight     = document.getElementById('editor-panel');
+  const worksLeft     = document.getElementById('works-list-panel');
+  const worksRight    = document.getElementById('works-editor-panel');
+  const pagePanel     = document.getElementById('page-panel');
+  const pubBtn        = document.getElementById('pub-btn');
+
+  // hide all first
+  [blogLeft,blogRight,worksLeft,worksRight].forEach(el=>el.classList.add('hidden'));
+  pagePanel.classList.remove('show');
 
   if(tab==='blog'){
     blogLeft.classList.remove('hidden');
     blogRight.classList.remove('hidden');
-    pagePanel.classList.remove('show');
     pubBtn.textContent='⬆ 发布';
+  } else if(tab==='works'){
+    worksLeft.classList.remove('hidden');
+    worksRight.classList.remove('hidden');
+    pubBtn.textContent='⬆ 推送更新';
+    renderWorksList();
+    if(works.length > 0 && currentWork === null) selectWork(0);
   } else {
-    blogLeft.classList.add('hidden');
-    blogRight.classList.add('hidden');
     pagePanel.classList.add('show');
     pubBtn.textContent='⬆ 推送更新';
     renderPagePanel(tab);
@@ -708,7 +795,9 @@ function insertCodeBlock(){
   const code=document.getElementById('code-content').value;
   const lines=code.split('\n').map(l=>`<span class="line">${escHtml(l)}</span>`).join('');
   const html=`<pre><span class="code-lang">${escHtml(lang)}</span><code>${lines}</code></pre><p><br></p>`;
-  document.getElementById('editor-content').focus();
+  const edId=(window._codeTarget==='works')?'works-editor-content':'editor-content';
+  window._codeTarget=null;
+  document.getElementById(edId).focus();
   document.execCommand('insertHTML',false,html);
   closeCodeModal();
   showToast('ok','代码块已插入 ✓');
@@ -768,6 +857,158 @@ function insertLink(){
 /* ══════════════════════════════════════
    PAGE PANELS (works / gallery / about)
 ══════════════════════════════════════ */
+/* ══════════════════════════════════════
+   WORKS EDITOR
+══════════════════════════════════════ */
+let currentWork = null;
+let worksCoverData = null;
+let worksCoverFullData = null;
+
+function renderWorksList(){
+  const el = document.getElementById('works-list');
+  el.innerHTML = '';
+  if(!works.length){
+    el.innerHTML = '<div style="padding:20px 16px;font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:1px;">// 暂无项目<br>点击 ＋ 新建</div>';
+    return;
+  }
+  works.forEach((w,i)=>{
+    const d = document.createElement('div');
+    d.className = 'wi-item' + (currentWork===i?' active':'');
+    d.innerHTML = '<div class="wi-title">'+(w.title||'（无标题）')+'</div>'
+      +'<div class="wi-meta">'+(w.date||'')+(w.tags&&w.tags[0]?' · '+w.tags[0]:'')+'</div>'
+      +(w.draft!==false?'<span class="wi-draft">草稿</span>':'');
+    d.onclick = ()=>{ saveCurrentWork(); selectWork(i); };
+    el.appendChild(d);
+  });
+}
+
+function selectWork(i){
+  currentWork = i;
+  const w = works[i];
+  document.getElementById('works-title-input').value = w.title||'';
+  document.getElementById('works-tags').value = (w.tags||[]).join(', ');
+  document.getElementById('works-date').value = w.date||new Date().toISOString().slice(0,10);
+  document.getElementById('works-status').value = w.draft===false?'published':'draft';
+  document.getElementById('works-link').value = w.link||'';
+  document.getElementById('works-editor-content').innerHTML = w.content||'';
+  worksCoverData = w.img||null;
+  worksCoverFullData = w.imgFull||null;
+  const prev = document.getElementById('works-cover-preview');
+  if(worksCoverData){ prev.src=worksCoverData; prev.style.display='block'; }
+  else { prev.style.display='none'; }
+  renderWorksList();
+}
+
+function saveCurrentWork(isDraft=null){
+  if(currentWork===null) return;
+  const w = works[currentWork];
+  w.title = document.getElementById('works-title-input').value||'（无标题）';
+  w.tags = document.getElementById('works-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  w.date = document.getElementById('works-date').value||new Date().toISOString().slice(0,10);
+  const statusVal = document.getElementById('works-status').value;
+  w.draft = isDraft !== null ? isDraft : (statusVal==='published'?false:true);
+  w.link = document.getElementById('works-link').value;
+  w.content = document.getElementById('works-editor-content').innerHTML;
+  w.img = worksCoverData;
+  w.imgFull = worksCoverFullData||worksCoverData;
+  w.slug = slugify(w.title);
+  saveState();
+  renderWorksList();
+}
+
+function newWork(){
+  const w={title:'',tags:[],date:new Date().toISOString().slice(0,10),content:'',img:null,link:'',draft:true,slug:''};
+  works.unshift(w);
+  saveState();
+  selectWork(0);
+  document.getElementById('works-title-input').focus();
+  showToast('info','新项目已创建，开始填写吧');
+}
+
+function deleteWork(i, e){
+  e.stopPropagation();
+  if(!confirm('确认删除这个项目？')) return;
+  works.splice(i,1);
+  if(currentWork===i){ currentWork=null; document.getElementById('works-editor-content').innerHTML=''; }
+  else if(currentWork>i){ currentWork--; }
+  saveState();
+  renderWorksList();
+  showToast('ok','已删除');
+}
+
+/* auto-save works every 10s */
+setInterval(()=>{ if(currentWork!==null && currentTab==='works') saveCurrentWork(); }, 10000);
+
+async function handleWorksCover(input){
+  const file=input.files[0]; if(!file) return;
+  if(!GH.token) GH.token=await decryptToken()||'';
+  if(!GH.user||!GH.repo||!GH.token){ showToast('err','请先配置 GitHub 才能上传图片'); input.value=''; return; }
+  showToast('info','⟳ 上传封面中...');
+  try{
+    const [thumbUrl, fullUrl] = await Promise.all([uploadImageToGH(file), uploadImageToGHRaw(file)]);
+    worksCoverData = thumbUrl;
+    worksCoverFullData = fullUrl;
+    const prev = document.getElementById('works-cover-preview');
+    prev.src = thumbUrl; prev.style.display='block';
+    showToast('ok','✓ 封面已上传');
+  }catch(e){ showToast('err','上传失败：'+e.message); }
+  input.value='';
+}
+
+/* works 编辑器命令 */
+function wexec(cmd){ document.getElementById('works-editor-content').focus(); document.execCommand(cmd,false,null); }
+function wfmt(type){
+  const ed=document.getElementById('works-editor-content'); ed.focus();
+  const sel=window.getSelection(); const text=sel.toString()||'';
+  let node;
+  if(type==='h2'){node=document.createElement('h2');node.textContent=text||'标题二';}
+  else if(type==='h3'){node=document.createElement('h3');node.textContent=text||'标题三';}
+  else if(type==='ul'){document.execCommand('insertUnorderedList');return;}
+  else if(type==='ol'){document.execCommand('insertOrderedList');return;}
+  else if(type==='blockquote'){node=document.createElement('blockquote');node.textContent=text||'引用内容';}
+  else if(type==='hr'){document.execCommand('insertHTML',false,'<hr><p><br></p>');return;}
+  if(node){ const p=document.createElement('p'); p.appendChild(document.createTextNode('')); const frag=document.createDocumentFragment(); frag.appendChild(node); frag.appendChild(p); document.execCommand('insertHTML',false,node.outerHTML+'<p><br></p>'); }
+}
+function wInsertImg(){ document.getElementById('works-img-input').click(); }
+async function wHandleImg(input){
+  const file=input.files[0]; if(!file) return;
+  if(!GH.token) GH.token=await decryptToken()||'';
+  if(!GH.user||!GH.repo||!GH.token){ showToast('err','请先配置 GitHub 才能上传图片'); input.value=''; return; }
+  showUploadStatus('loading','⟳ 上传图片中...');
+  try{
+    const url=await uploadImageToGH(file);
+    document.getElementById('works-editor-content').focus();
+    document.execCommand('insertHTML',false,'<img src="'+url+'" alt=""><p><br></p>');
+    showUploadStatus('ok','✓ 图片已插入');
+  }catch(e){ showUploadStatus('err','✕ 上传失败：'+e.message); }
+  input.value='';
+}
+function wInsertVideo(){
+  const url=prompt('请粘贴 B站 或 YouTube 视频链接：');
+  if(!url) return;
+  let embedUrl='';
+  const bvMatch=url.match(/BV[\w]+/);
+  const avMatch=url.match(/av(\d+)/i);
+  if(bvMatch){ embedUrl='https://player.bilibili.com/player.html?bvid='+bvMatch[0]+'&page=1&high_quality=1&autoplay=0'; }
+  else if(avMatch){ embedUrl='https://player.bilibili.com/player.html?aid='+avMatch[1]+'&page=1&high_quality=1&autoplay=0'; }
+  const ytMatch=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([-\w]+)/);
+  if(ytMatch) embedUrl='https://www.youtube.com/embed/'+ytMatch[1];
+  if(!embedUrl){ showToast('err','无法识别链接，请粘贴 B站或 YouTube 链接'); return; }
+  document.getElementById('works-editor-content').focus();
+  document.execCommand('insertHTML',false,'<div class="video-embed"><iframe src="'+embedUrl+'" allowfullscreen allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe></div><p><br></p>');
+}
+function wInsertLink(){
+  const url=prompt('请输入链接 URL：'); if(!url) return;
+  const text=prompt('链接文字：','链接'); if(text===null) return;
+  document.getElementById('works-editor-content').focus();
+  document.execCommand('insertHTML',false,'<a href="'+url+'">'+text+'</a>');
+}
+function wOpenCode(){
+  // 复用博客的代码弹窗，但插入到 works editor
+  window._codeTarget='works';
+  openCodeModal();
+}
+
 function renderPagePanel(tab){
   const titleEl=document.getElementById('pp-title');
   const bodyEl=document.getElementById('pp-body');
@@ -781,30 +1022,7 @@ function renderPagePanel(tab){
     return;
   }
   if(tab==='works'){
-    const label='// 游戏项目';
-    titleEl.textContent=label;
-    bodyEl.innerHTML='';
-    const grid=document.createElement('div');
-    grid.className='pp-grid';
-    works.forEach((item,i)=>{
-      const card=document.createElement('div');
-      card.className='pp-card';
-      card.innerHTML=`
-        ${item.img?`<img class="pp-card-img" src="${item.img}" alt="">`:`<div class="pp-card-img-placeholder">📷 点击上传封面</div>`}
-        <div class="pp-card-title">${item.title||'无标题'}</div>
-        <div class="pp-card-desc">${item.desc||''}</div>
-        <div class="pp-card-tags">${(item.tags||[]).map(t=>`<span class="pp-tag">${t}</span>`).join('')}</div>
-        <button class="pp-card-del" onclick="deleteCard('works',${i},event)">✕ 删除</button>
-      `;
-      card.onclick=(e)=>{ if(!e.target.classList.contains('pp-card-del')) openCardModal('works',i); };
-      grid.appendChild(card);
-    });
-    const addBtn=document.createElement('div');
-    addBtn.className='pp-add';
-    addBtn.textContent='＋ 添加项目';
-    addBtn.onclick=()=>openCardModal('works',null);
-    grid.appendChild(addBtn);
-    bodyEl.appendChild(grid);
+    // works now has its own panel - this branch shouldn't normally be reached
     return;
   }
   // Gallery: category-based
@@ -915,11 +1133,8 @@ function openCatItemModal(ci,ii){
   const item=ii!==null?galleryCategories[ci].items[ii]:{title:'',desc:'',content:'',link:'',img:null,imgPos:'50% 50%'};
   document.getElementById('card-title-input').value=item.title||'';
   document.getElementById('card-desc-input').value=item.desc||'';
-  document.getElementById('card-tags-input').value='';
-  document.getElementById('card-link-input').value=item.link||'';
   document.getElementById('card-content-input').value=item.content||'';
   document.getElementById('card-content-field').style.display='block';
-  document.getElementById('card-link-field').style.display='none';
   catItemImgData=item.img||null;
   catItemImgPos=item.imgPos||'50% 50%';
   const prev=document.getElementById('card-img-preview');
@@ -940,33 +1155,24 @@ function openCatItemModal(ci,ii){
 }
 
 function openCardModal(type,idx){
+  // works now uses its own editor panel — only gallery uses this modal
+  if(type==='works') return;
   editingCardType=type;
   editingCardIdx=idx;
-  const data=type==='works'?works:gallery;
-  const item=idx!==null?data[idx]:{title:'',desc:'',tags:[],link:'',content:'',img:null};
+  const item=idx!==null?galleryCategories[editingCatIdx]?.items[idx]||{}:{title:'',desc:'',tags:[],content:'',img:null};
   document.getElementById('card-title-input').value=item.title||'';
   document.getElementById('card-desc-input').value=item.desc||'';
-  document.getElementById('card-tags-input').value=(item.tags||[]).join(', ');
-  document.getElementById('card-link-input').value=item.link||'';
+  document.getElementById('card-content-field').style.display='block';
   document.getElementById('card-content-input').value=item.content||'';
-  // content field: gallery uses textarea, works uses rich editor
-  document.getElementById('card-content-field').style.display=type==='gallery'?'block':'none';
-  document.getElementById('works-editor-field').style.display=type==='works'?'block':'none';
-  if(type==='works'){
-    document.getElementById('works-editor-content').innerHTML=item.content||'';
-  }
-  // hide link field for gallery (gallery items link to their detail page automatically)
-  document.getElementById('card-link-field').style.display=type==='gallery'?'none':'block';
   cardImgData=item.img||null;
+  cardImgFullData=item.imgFull||null;
   cardImgPos=item.imgPos||'50% 50%';
   const prev=document.getElementById('card-img-preview');
   const picker=document.getElementById('focus-picker-wrap');
   const pickerImg=document.getElementById('focus-picker-img');
   if(cardImgData){
-    prev.src=cardImgData;prev.style.display='block';
-    pickerImg.src=cardImgData;
-    picker.classList.add('show');
-    // restore dot position
+    prev.src=cardImgData; prev.style.display='block';
+    pickerImg.src=cardImgData; picker.classList.add('show');
     const [px,py]=cardImgPos.split(' ');
     const dot=document.getElementById('focus-dot');
     dot.style.left=px; dot.style.top=py;
@@ -1084,7 +1290,6 @@ function saveCard(){
       title:title,
       desc:document.getElementById('card-desc-input').value,
       content:document.getElementById('card-content-input').value,
-      link:document.getElementById('card-link-input').value,
       img:catItemImgData,
       imgPos:catItemImgPos,
       slug:slugify(title)
@@ -1099,26 +1304,22 @@ function saveCard(){
   }
 
   if(!editingCardType){showToast('err','发生错误，请重新打开卡片');return;}
-  const worksContent = editingCardType==='works'
-    ? document.getElementById('works-editor-content').innerHTML
-    : document.getElementById('card-content-input').value;
   const item={
     title:title,
     desc:document.getElementById('card-desc-input').value,
-    tags:document.getElementById('card-tags-input').value.split(',').map(t=>t.trim()).filter(Boolean),
-    link:document.getElementById('card-link-input').value,
-    content:worksContent,
+    content:document.getElementById('card-content-input').value,
     img:cardImgData,
     imgFull:cardImgFullData||cardImgData,
     imgPos:cardImgPos,
     slug:slugify(title)
   };
-  const data=editingCardType==='works'?works:gallery;
+  // gallery only
+  const data=gallery;
   if(editingCardIdx!==null) data[editingCardIdx]=item;
   else data.push(item);
   saveState();
   closeCardModal();
-  renderPagePanel(editingCardType);
+  renderPagePanel('gallery');
   showToast('ok','卡片已保存 ✓ — 点击「推送更新」发布到网站');
 }
 
@@ -1241,6 +1442,7 @@ async function publishCurrent(){
   if(currentTab==='blog'){
     await publishPost();
   } else {
+    if(currentTab==='works') saveCurrentWork(null);
     await pushPageData();
   }
 }
