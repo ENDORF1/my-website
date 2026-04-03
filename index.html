@@ -5,6 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<meta name="version" content="1775250098936">
 <meta name="version" content="1775247125385">
 <meta name="version" content="1775244317578">
 <meta name="version" content="1775217578279">
@@ -482,7 +483,8 @@ body.modal-open body::before{z-index:1 !important;}
     <div class="sec-line"></div>
   </div>
   <div class="projects-grid" id="dynamic-works-grid">
-    <button class="add-card-btn" onclick="addProject(this)">＋ 添加项目</button>
+    <!-- 动态加载自后台项目数据 -->
+    <div style="font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: 2px; padding: 28px; grid-column: 1 / -1;">// 暂无项目 · 请在后台添加项目后推送</div><button class="add-card-btn" onclick="addProject(this)">＋ 添加项目</button>
   </div>
 </section>
 
@@ -496,7 +498,8 @@ body.modal-open body::before{z-index:1 !important;}
     <h2 class="sec-title" contenteditable="false" spellcheck="false">技术博客</h2>
     <div class="sec-line"></div>
   </div>
-  <div class="posts-list" id="dynamic-posts-list"><div class="no-posts-placeholder" style="font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:2px;padding:20px 24px;">// 暂无已发布文章 · 请在后台发布文章后推送</div><button class="add-post-btn" onclick="addPost(this)">＋ 添加文章</button>
+  <div class="posts-list" id="dynamic-posts-list"><div class="no-posts-placeholder" style="font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:2px;padding:20px 24px;">// 暂无已发布文章 · 请在后台发布文章后推送</div></div>
+  <button class="add-post-btn" onclick="addPost(this)">＋ 添加文章</button>
 </section>
 
 <section class="page-section" id="sec-creations" data-draggable="1">
@@ -1456,6 +1459,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 ══════════════════════════════════════ */
 // Link navigation handled by clearing hrefs in enterEditMode
 </script>
+
 
 
 
