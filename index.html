@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="zh"><head>
+<html lang="zh">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="version" content="1775208649297">
 <title>_DEV.LOG — 个人主页</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&amp;family=Rajdhani:wght@300;400;600;700&amp;family=Noto+Sans+SC:wght@300;400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#030810;--bg2:#060f1a;--dim:#0a1628;--text:#c8e0f0;--muted:#3a5a7a;--cyan:#00f5ff;--magenta:#ff006e;--yellow:#ffe600;--glow-c:0 0 8px #00f5ff88,0 0 24px #00f5ff44;--glow-m:0 0 8px #ff006e88,0 0 24px #ff006e44;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -338,16 +338,16 @@ body.modal-open nav{z-index:1 !important;}
 body.modal-open body::before{z-index:1 !important;}
 </style>
 </head>
-<body class="modal-open">
+<body>
 
 <!-- ── CURSORS ── -->
-<div class="cursor" id="cursor" style="left: 1024px; top: 587px; transform: translate(-50%, -50%) scale(1); background: var(--cyan);"></div>
-<div class="cursor-ring" id="cursorRing" style="left: 1024px; top: 587.028px; width: 36px; height: 36px;"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
 <!-- ══════════════════════════════
      PASSWORD MODAL (login)
 ══════════════════════════════ -->
-<div id="pw-overlay" class="">
+<div id="pw-overlay">
   <div id="pw-box">
     <span class="pw-tag">// ACCESS CONTROL</span>
     <div class="pw-title">编辑模式 · 验证</div>
@@ -384,9 +384,9 @@ body.modal-open body::before{z-index:1 !important;}
       <span class="pw-eye" onclick="toggleEye('cpw-confirm',this)">👁</span>
     </div>
     <span class="pw-err" id="cpw-err"></span>
-    <span class="pw-ok" id="cpw-ok"></span>
+    <span class="pw-ok"  id="cpw-ok"></span>
     <button id="cpw-submit" onclick="submitChangePw()">确认修改</button>
-    <button id="cpw-cancel" onclick="document.getElementById('cpw-overlay').style.display='none'; if(!document.querySelector('.show[id$=" overlay"]'))="" document.body.classlist.remove('modal-open')"="">取消</button>
+    <button id="cpw-cancel" onclick="document.getElementById('cpw-overlay').style.display='none'; if(!document.querySelector('.show[id$="overlay"]')) document.body.classList.remove('modal-open')">取消</button>
   </div>
 </div>
 
@@ -394,7 +394,7 @@ body.modal-open body::before{z-index:1 !important;}
 <button id="edit-toggle" onclick="openPwModal()">🔒 编辑内容</button>
 
 <!-- ── EDIT TOOLBAR ── -->
-<div id="edit-toolbar" style="display: none;">
+<div id="edit-toolbar">
   <span class="tb-label">// 编辑模式</span>
   <div class="tb-sep"></div>
   <span class="tb-hint">⠿ 拖动排序 · 点击文字修改</span>
@@ -408,7 +408,7 @@ body.modal-open body::before{z-index:1 !important;}
 <div id="save-toast">// 已保存为 index.html</div>
 
 <!-- ── GITHUB PUSH MODAL ── -->
-<div id="gh-overlay" class="show">
+<div id="gh-overlay">
   <div id="gh-box">
     <span class="gh-tag">// GITHUB DEPLOY</span>
     <div class="gh-title">推送到 GitHub</div>
@@ -429,35 +429,35 @@ body.modal-open body::before{z-index:1 !important;}
       <label>PERSONAL ACCESS TOKEN</label>
       <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxx" autocomplete="off">
     </div>
-    <button id="gh-push-btn" onclick="pushToGithub()" disabled="">⬆ 立即推送</button>
+    <button id="gh-push-btn" onclick="pushToGithub()">⬆ 立即推送</button>
     <button id="gh-cancel-btn" onclick="closeGhModal()">取消</button>
-    <div id="gh-log" class="show"><div class="log-spin">⟳ 正在生成网页内容...</div></div>
+    <div id="gh-log"></div>
   </div>
 </div>
 
 <!-- ── NAV ── -->
 <nav>
-  <a class="nav-logo" contenteditable="false" spellcheck="false" href="/">_<span contenteditable="false" spellcheck="false">DEV</span>.LOG</a>
+  <a class="nav-logo" href="/">_<span>DEV</span>.LOG</a>
   <div class="nav-links">
-    <a contenteditable="false" spellcheck="false" href="/blog/">博客</a>
-    <a contenteditable="false" spellcheck="false" href="/works/">项目</a>
-    <a contenteditable="false" spellcheck="false" href="/gallery/">创作</a>
-    <a contenteditable="false" spellcheck="false" href="/about/">关于</a>
-    <a style="color:rgba(58,90,122,.5);font-size:10px;" contenteditable="false" spellcheck="false" href="#sec-projects">↓ 本页</a>
+    <a href="/blog/">博客</a>
+    <a href="/works/">项目</a>
+    <a href="/gallery/">创作</a>
+    <a href="/about/">关于</a>
+    <a href="#sec-projects" style="color:rgba(58,90,122,.5);font-size:10px;">↓ 本页</a>
   </div>
 </nav>
 
 <!-- ── HERO ── -->
 <section id="hero">
-  <div class="hero-tag" contenteditable="false" spellcheck="false">// INDEPENDENT DEVELOPER · GAME MAKER · CREATOR</div>
+  <div class="hero-tag">// INDEPENDENT DEVELOPER · GAME MAKER · CREATOR</div>
   <h1 class="hero-name">
     <span class="glitch-wrap" data-text="HELLO,">HELLO,</span>
-    <span class="line2" contenteditable="false" spellcheck="false">WORLD.</span>
+    <span class="line2">WORLD.</span>
   </h1>
-  <p id="hero-sub" class="hero-sub" contenteditable="false" spellcheck="false">独立开发者 · 卡牌游戏制作中<br><span class="hl" contenteditable="false" spellcheck="false">明日方舟</span> 开服老玩家 · 同人创作者<br>代码 / 像素 / 故事</p>
+  <p id="hero-sub" class="hero-sub">独立开发者 · 卡牌游戏制作中<br><span class="hl">明日方舟</span> 开服老玩家 · 同人创作者<br>代码 / 像素 / 故事</p>
   <div class="hero-btns">
-    <a class="btn-primary" href="#sec-projects">查看项目</a>
-    <a class="btn-sec" href="#sec-blog">最新文章</a>
+    <a href="#sec-projects" class="btn-primary">查看项目</a>
+    <a href="#sec-blog" class="btn-sec">最新文章</a>
   </div>
   <div class="hero-deco"></div>
   <div class="hero-deco-center"></div>
@@ -473,12 +473,12 @@ body.modal-open body::before{z-index:1 !important;}
   </div>
   <div class="sec-header">
     <span class="sec-num">01</span>
-    <h2 class="sec-title" contenteditable="false" spellcheck="false">游戏开发</h2>
+    <h2 class="sec-title">游戏开发</h2>
     <div class="sec-line"></div>
   </div>
   <div class="projects-grid" id="dynamic-works-grid">
     <!-- 动态加载自后台项目数据 -->
-    <div style="font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: 2px; padding: 28px; grid-column: 1 / -1;">// 暂无项目 · 请在后台添加项目后推送</div><button class="add-card-btn" onclick="addProject(this)">＋ 添加项目</button>
+    <button class="add-card-btn" onclick="addProject(this)">＋ 添加项目</button>
   </div>
 </section>
 
@@ -489,28 +489,30 @@ body.modal-open body::before{z-index:1 !important;}
   </div>
   <div class="sec-header">
     <span class="sec-num">02</span>
-    <h2 class="sec-title" contenteditable="false" spellcheck="false">技术博客</h2>
+    <h2 class="sec-title">技术博客</h2>
     <div class="sec-line"></div>
   </div>
-  <div class="posts-list" id="dynamic-posts-list"><div class="no-posts-placeholder" style="font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:2px;padding:20px 24px;">// 暂无已发布文章 · 请在后台发布文章后推送</div></div>
+  <div class="posts-list" id="dynamic-posts-list">
+    <!-- 动态加载自后台文章数据 -->
+  </div>
   <button class="add-post-btn" onclick="addPost(this)">＋ 添加文章</button>
 </section>
 
-<section class="page-section" id="sec-creations" draggable="false">
+<section class="page-section" id="sec-creations">
   <div class="sec-controls">
     <div class="sec-drag-handle">⠿ 拖动模块</div>
     <button class="sec-delete-btn" onclick="deleteSection(this)">✕ 删除模块</button>
   </div>
   <div class="sec-header">
     <span class="sec-num">03</span>
-    <h2 class="sec-title" contenteditable="false" spellcheck="false">同人创作</h2>
+    <h2 class="sec-title">同人创作</h2>
     <div class="sec-line"></div>
   </div>
   <div class="creations-grid">
-    <a class="creation-card" data-cover-mode="gradient" data-cat-slug="illust" data-cover-img="" data-cover-pos="50% 50%" href="/gallery/original/"><div class="creation-bg c1"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type" contenteditable="false" spellcheck="false">// ILLUST</div><div class="creation-name" contenteditable="false" spellcheck="false">原创作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/illust/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
-    <a class="creation-card" data-cover-mode="gradient" data-cat-slug="merch" data-cover-img="" data-cover-pos="50% 50%" href="/gallery/merch/"><div class="creation-bg c2"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type" contenteditable="false" spellcheck="false">// MERCH</div><div class="creation-name" contenteditable="false" spellcheck="false">漫展周边</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/merch/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
-    <a class="creation-card" data-cover-mode="gradient" data-cat-slug="fanwork" data-cover-img="" data-cover-pos="50% 50%" draggable="false" href="/gallery/fanwork/"><div class="creation-bg c3"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type" contenteditable="false" spellcheck="false">// FANWORK</div><div class="creation-name" contenteditable="false" spellcheck="false">同人创作</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/fanwork/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
-    <a class="creation-card" data-cover-mode="gradient" data-cat-slug="other" data-cover-img="" data-cover-pos="50% 50%" href="/gallery/other/"><div class="creation-bg c4"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type" contenteditable="false" spellcheck="false">// OTHER</div><div class="creation-name" contenteditable="false" spellcheck="false">更多作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/other/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" href="/gallery/illust/" data-cover-mode="gradient" data-cat-slug="illust" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c1"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type">// ILLUST</div><div class="creation-name">插画作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/illust/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" href="/gallery/merch/" data-cover-mode="gradient" data-cat-slug="merch" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c2"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type">// MERCH</div><div class="creation-name">漫展周边</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/merch/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" href="/gallery/fanwork/" data-cover-mode="gradient" data-cat-slug="fanwork" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c3"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type">// FANWORK</div><div class="creation-name">同人创作</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/fanwork/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" href="/gallery/other/" data-cover-mode="gradient" data-cat-slug="other" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c4"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type">// OTHER</div><div class="creation-name">更多作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/other/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
     <button class="add-creation-btn" onclick="addCreation(this)">＋</button>
   </div>
 </section>
@@ -518,11 +520,11 @@ body.modal-open body::before{z-index:1 !important;}
 </div><!-- /sections-container -->
 
 <footer>
-  <div class="footer-text" contenteditable="false" spellcheck="false">© 2025 · BUILT WITH ♥ &amp; CODE</div>
+  <div class="footer-text">© 2025 · BUILT WITH ♥ & CODE</div>
   <div class="footer-links">
-    <div class="social-edit-wrap"><a class="social-label" id="sl-github" contenteditable="false" spellcheck="false" href="#">GITHUB</a><input class="social-input" placeholder="GitHub URL" oninput="document.getElementById('sl-github').href=this.value||'#'"></div>
-    <div class="social-edit-wrap"><a class="social-label" id="sl-bili" contenteditable="false" spellcheck="false" href="#">BILIBILI</a><input class="social-input" placeholder="Bilibili URL" oninput="document.getElementById('sl-bili').href=this.value||'#'"></div>
-    <div class="social-edit-wrap"><a class="social-label" id="sl-twitter" contenteditable="false" spellcheck="false" href="#">TWITTER</a><input class="social-input" placeholder="Twitter URL" oninput="document.getElementById('sl-twitter').href=this.value||'#'"></div>
+    <div class="social-edit-wrap"><a class="social-label" id="sl-github" href="#">GITHUB</a><input class="social-input" placeholder="GitHub URL" oninput="document.getElementById('sl-github').href=this.value||'#'"></div>
+    <div class="social-edit-wrap"><a class="social-label" id="sl-bili" href="#">BILIBILI</a><input class="social-input" placeholder="Bilibili URL" oninput="document.getElementById('sl-bili').href=this.value||'#'"></div>
+    <div class="social-edit-wrap"><a class="social-label" id="sl-twitter" href="#">TWITTER</a><input class="social-input" placeholder="Twitter URL" oninput="document.getElementById('sl-twitter').href=this.value||'#'"></div>
   </div>
 </footer>
 
@@ -706,6 +708,8 @@ function renumber(){document.querySelectorAll('.page-section').forEach((s,i)=>{c
 ══════════════════════════════════════ */
 function saveChanges(){
   exitEditMode();
+  document.querySelectorAll('input, textarea').forEach(el=>el.setAttribute('value', el.value));
+  ['sl-github','sl-bili','sl-twitter'].forEach(id=>{const a=document.getElementById(id);if(a)a.setAttribute('href',a.href);});
   // Update the stored hash in the saved file
   const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML
     .replace(/let PW_HASH = '[^']*'/, `let PW_HASH = '${PW_HASH}'`);
@@ -794,19 +798,40 @@ function makeSecDrag(sec){
     overClassA:'drag-over-top',overClassB:'drag-over-bottom',
     insertFn:(c,d,t,e,r)=>{e.clientY<r.top+r.height/2?c.insertBefore(d,t):c.insertBefore(d,t.nextSibling);renumber();}});
 }
+function syncWorksOrder(){
+  const works = JSON.parse(localStorage.getItem('works')||'[]');
+  const cards = [...document.querySelectorAll('.proj-card')];
+  const reordered = cards.map(card=>{
+    const title = card.querySelector('.proj-name')?.textContent||'';
+    return works.find(w=>w.title===title) || null;
+  }).filter(Boolean);
+  if(reordered.length) localStorage.setItem('works', JSON.stringify(reordered));
+}
+function syncPostsOrder(){
+  const posts = JSON.parse(localStorage.getItem('posts')||'[]');
+  const items = [...document.querySelectorAll('.post-item')];
+  const slugOrder = items.map(item=>{
+    const a = item.closest('a') || item;
+    const href = a.getAttribute('href') || a.dataset.savedHref || '';
+    return href.replace('/blog/','').replace('.html','');
+  });
+  const reordered = slugOrder.map(slug=>posts.find(p=>p.slug===slug)).filter(Boolean);
+  const drafts = posts.filter(p=>p.draft);
+  if(reordered.length) localStorage.setItem('posts', JSON.stringify([...reordered, ...drafts]));
+}
 function makeProjDrag(card){
   makeDraggable({el:card,handleSel:'.card-drag-handle',
     containerFn:e=>e.closest('.projects-grid'),
     siblingsSel:'.proj-card',dragClass:'is-dragging',
     overClassA:'drag-over-left',overClassB:'drag-over-right',
-    insertFn:(c,d,t,e,r)=>{e.clientX<r.left+r.width/2?c.insertBefore(d,t):c.insertBefore(d,t.nextSibling);}});
+    insertFn:(c,d,t,e,r)=>{e.clientX<r.left+r.width/2?c.insertBefore(d,t):c.insertBefore(d,t.nextSibling); syncWorksOrder();}});
 }
 function makePostDrag(item){
   makeDraggable({el:item,handleSel:'.post-drag-handle',
     containerFn:e=>e.closest('.posts-list'),
     siblingsSel:'.post-item',dragClass:'is-dragging',
     overClassA:'drag-over-top',overClassB:'drag-over-bottom',
-    insertFn:(c,d,t,e,r)=>{e.clientY<r.top+r.height/2?c.insertBefore(d,t):c.insertBefore(d,t.nextSibling);}});
+    insertFn:(c,d,t,e,r)=>{e.clientY<r.top+r.height/2?c.insertBefore(d,t):c.insertBefore(d,t.nextSibling); syncPostsOrder();}});
 }
 function makeCreationDrag(card){
   makeDraggable({el:card,handleSel:'.creation-drag-handle',
@@ -889,6 +914,15 @@ async function pushToGithub() {
     ghLog('正在生成网页内容...', 'spin');
     // Exit edit mode BEFORE capturing HTML so pushed file is always in view mode
     exitEditMode();
+    // Sync all input values to HTML attributes so outerHTML captures them
+    document.querySelectorAll('input, textarea').forEach(el=>{
+      el.setAttribute('value', el.value);
+    });
+    // Sync social link hrefs
+    ['sl-github','sl-bili','sl-twitter'].forEach(id=>{
+      const a = document.getElementById(id);
+      if(a) a.setAttribute('href', a.href);
+    });
     const ts = Date.now();
     const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML
       .replace(/let PW_HASH = '[^']*'/, `let PW_HASH = '${PW_HASH}'`)
@@ -1120,6 +1154,9 @@ function loadDynamicWorks(){
   });
 
   if(works.length === 0){
+    // No data in localStorage - keep existing static HTML cards, don't overwrite
+    const existingCards = [...grid.querySelectorAll('.proj-card')];
+    if(existingCards.length > 0) return;
     const ph = document.createElement('div');
     ph.style.cssText = 'font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:2px;padding:28px;grid-column:1/-1;';
     ph.textContent = '// 暂无项目 · 请在后台添加项目后推送';
@@ -1160,6 +1197,9 @@ function loadDynamicPosts(){
     .slice(0, 6);
 
   if(posts.length === 0){
+    // No data - keep existing static HTML
+    const existingItems = [...list.querySelectorAll('.post-item')];
+    if(existingItems.length > 0) return;
     list.innerHTML = '<div class="no-posts-placeholder" style="font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:2px;padding:20px 24px;">// 暂无已发布文章 · 请在后台发布文章后推送</div>';
     return;
   }
@@ -1208,6 +1248,5 @@ document.addEventListener('DOMContentLoaded', ()=>{
 ══════════════════════════════════════ */
 // Link navigation handled by clearing hrefs in enterEditMode
 </script>
-
-
-</body></html>
+</body>
+</html>
