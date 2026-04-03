@@ -717,15 +717,26 @@ function makeDragList(container, itemSel, onReorder){
     if(!el || el.closest('.pp-add')) return;
     // don't drag if clicking a button / input inside
     if(e.target.tagName==='BUTTON'||e.target.tagName==='INPUT') return;
-    e.preventDefault();
-    dragging = el;
-    const r = el.getBoundingClientRect();
-    offX = e.clientX - r.left;
-    offY = e.clientY - r.top;
-    ghost = mkGhost(el);
-    el.style.opacity = '0.3';
+    // 只有真正拖动才阻止默认行为，纯点击不干预
+    const startX = e.clientX, startY = e.clientY;
+    let dragStarted = false;
+    const r0 = el.getBoundingClientRect();
+    offX = e.clientX - r0.left;
+    offY = e.clientY - r0.top;
 
     function onMove(e){
+      if(!dragStarted){
+        if(Math.abs(e.clientX-startX)<4 && Math.abs(e.clientY-startY)<4) return;
+        // 超过4px才算拖拽开始
+        dragStarted = true;
+        e.preventDefault();
+        dragging = el;
+        const r = el.getBoundingClientRect();
+        offX = e.clientX - r.left;
+        offY = e.clientY - r.top;
+        ghost = mkGhost(el);
+        el.style.opacity = '0.3';
+      }
       ghost.style.left = (e.clientX-offX)+'px';
       ghost.style.top  = (e.clientY-offY)+'px';
       // find target sibling
@@ -749,6 +760,7 @@ function makeDragList(container, itemSel, onReorder){
     function onUp(e){
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseup', onUp);
+      if(!dragStarted){ dragging=null; return; } // 纯点击，不处理排序
       ghost.remove(); ghost=null;
       dragging.style.opacity='';
       siblings().forEach(s=>s.classList.remove('drag-over-top','drag-over-bottom','drag-over-left','drag-over-right'));
