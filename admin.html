@@ -168,6 +168,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 #editor-content figure.post-figure figcaption{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:6px;}
 /* table in editor */
 #editor-content table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;}
+#editor-content .table-wrap{display:block;width:100%;overflow-x:auto;}
 #editor-content table td,#editor-content table th{border:1px solid rgba(0,245,255,.25);padding:8px 12px;color:var(--text);}
 #editor-content table th{background:rgba(0,245,255,.06);color:var(--white);font-weight:600;}
 #editor-content table tr:hover td{background:rgba(0,245,255,.03);}
@@ -261,6 +262,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 #works-editor-content img{max-width:100%;border:1px solid var(--border);margin:8px 0;}
 #works-editor-content img{max-width:100%;border:1px solid var(--border);margin:12px auto;display:block;}
 #works-editor-content table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;}
+#works-editor-content .table-wrap{display:block;width:100%;overflow-x:auto;}
 #works-editor-content table td,#works-editor-content table th{border:1px solid rgba(0,245,255,.25);padding:8px 12px;color:var(--text);}
 #works-editor-content table th{background:rgba(0,245,255,.06);color:var(--white);font-weight:600;}
 #works-editor-content pre{background:#0a0e1a;border:1px solid rgba(0,245,255,.15);margin:16px 0;overflow:hidden;position:relative;}
@@ -1070,10 +1072,92 @@ setInterval(()=>{if(currentPost!==null)saveCurrentPost(true);},10000);
 document.getElementById('editor-content').addEventListener('input',()=>updateWordCount('editor-content','blog-word-count'));
 document.getElementById('works-editor-content').addEventListener('input',()=>updateWordCount('works-editor-content','works-word-count'));
 
+/* paste cleaner: strip Word/mso junk, fix table widths */
+function _cleanPaste(edId){
+  return function(e){
+    e.preventDefault();
+    let html=(e.clipboardData||window.clipboardData).getData('text/html');
+    if(!html){
+      const txt=(e.clipboardData||window.clipboardData).getData('text/plain');
+      document.execCommand('insertText',false,txt);
+      return;
+    }
+    // Remove mso-* and Office namespace junk
+    html=html.replace(/<o:p[^>]*>[\s\S]*?<\/o:p>/gi,'');
+    html=html.replace(/<w:[^>]+>[\s\S]*?<\/w:[^>]+>/gi,'');
+    html=html.replace(/mso-[a-z\-]+\s*:[^;"]*/gi,'');
+    html=html.replace(/\s*style="\s*"/gi,'');
+    // Strip fixed pixel widths on tables so margin:auto works
+    html=html.replace(/(<table[^>]*)\s+width="\d+[^"]*"/gi,'$1');
+    html=html.replace(/(<table[^>]*style="[^"]*)width\s*:\s*\d+px/gi,'$1width:100%');
+    // Wrap table in a div.table-wrap for easier targeting
+    html=html.replace(/(<table[\s\S]*?<\/table>)/gi,'<div class="table-wrap">$1</div>');
+    document.getElementById(edId).focus();
+    document.execCommand('insertHTML',false,html);
+  };
+}
+document.getElementById('editor-content').addEventListener('paste',_cleanPaste('editor-content'));
+document.getElementById('works-editor-content').addEventListener('paste',_cleanPaste('works-editor-content'));
+
 /* ══════════════════════════════════════
    EDITOR
 ══════════════════════════════════════ */
-function exec(cmd,val=null){document.getElementById('editor-content').focus();document.execCommand(cmd,false,val);}
+function _findAlignTarget(ed){
+  const sel=window.getSelection();
+  if(!sel||!sel.rangeCount)return null;
+  let node=sel.getRangeAt(0).commonAncestorContainer;
+  if(node.nodeType===3)node=node.parentElement;
+  const blockTags=/^(TABLE|PRE|FIGURE|BLOCKQUOTE|H[1-6]|UL|OL|HR)$/;
+  let block=node;
+  let divCandidate=null;
+  while(block&&block!==ed){
+    if(blockTags.test(block.tagName))return block;
+    // Prefer .table-wrap divs (our paste wrapper) or any div containing a table
+    if(block.tagName==='DIV'){
+      if(block.classList.contains('table-wrap'))return block;
+      if(!divCandidate)divCandidate=block;
+    }
+    block=block.parentElement;
+  }
+  if(divCandidate){
+    const tbl=divCandidate.querySelector('table');
+    if(tbl)return tbl;
+    return divCandidate;
+  }
+  return null;
+}
+
+function _applyAlign(el,align){
+  if(align==='center'){
+    if(el.style.width&&el.style.width.endsWith('px'))el.style.width='100%';
+    el.style.marginLeft='auto';
+    el.style.marginRight='auto';
+    el.style.textAlign='center';
+    if(el.tagName==='TABLE')el.style.display='table';
+  } else if(align==='left'){
+    el.style.marginLeft='0';
+    el.style.marginRight='auto';
+    el.style.textAlign='left';
+  } else {
+    el.style.marginLeft='auto';
+    el.style.marginRight='0';
+    el.style.textAlign='right';
+  }
+}
+
+function exec(cmd,val=null){
+  const ed=document.getElementById('editor-content');
+  ed.focus();
+  if(cmd==='justifyCenter'||cmd==='justifyLeft'||cmd==='justifyRight'){
+    const target=_findAlignTarget(ed);
+    if(target){
+      _applyAlign(target,cmd==='justifyCenter'?'center':cmd==='justifyLeft'?'left':'right');
+      return;
+    }
+  }
+  document.execCommand(cmd,false,val);
+}
+
 
 function fmt(type){
   const ed=document.getElementById('editor-content');
@@ -1458,7 +1542,19 @@ async function handleWorksCover(input){
 }
 
 /* works 编辑器命令 */
-function wexec(cmd){ document.getElementById('works-editor-content').focus(); document.execCommand(cmd,false,null); }
+function wexec(cmd){
+  const ed=document.getElementById('works-editor-content');
+  ed.focus();
+  if(cmd==='justifyCenter'||cmd==='justifyLeft'||cmd==='justifyRight'){
+    const target=_findAlignTarget(ed);
+    if(target){
+      _applyAlign(target,cmd==='justifyCenter'?'center':cmd==='justifyLeft'?'left':'right');
+      return;
+    }
+  }
+  document.execCommand(cmd,false,null);
+}
+
 function wfmt(type){
   const ed=document.getElementById('works-editor-content'); ed.focus();
   const sel=window.getSelection(); const text=sel.toString()||'';
@@ -2338,8 +2434,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--cyan);transition:width .3s;}
 .nav-links a:hover{color:var(--cyan);}
 .nav-links a:hover::after{width:100%;}
-.page-wrap{position:relative;z-index:1;padding:120px 10vw 80px;}
+.page-wrap{position:relative;z-index:1;padding:88px 10vw 80px;max-width:900px;margin:0 auto;}
 `;
+
+function cleanContent(html){
+  if(!html)return '';
+  // Collapse 2+ consecutive empty paragraphs into a single one
+  html=html.replace(/(<p[^>]*>\s*(<br\s*/?>|&nbsp;)?\s*<\/p>\s*){2,}/gi,'<p><br></p>');
+  // Remove empty paragraphs immediately after block elements (h1-h6, table, pre, figure, blockquote, hr, div)
+  html=html.replace(/(<\/(h[1-6]|table|pre|figure|blockquote|div)>)\s*(<p[^>]*>\s*(<br\s*/?>|&nbsp;)?\s*<\/p>\s*)+/gi,'$1');
+  // Remove empty paragraphs immediately before block elements
+  html=html.replace(/(<p[^>]*>\s*(<br\s*/?>|&nbsp;)?\s*<\/p>\s*)+(<(h[1-6]|table|pre|figure|blockquote|div))/gi,'<$4');
+  // Remove empty paragraphs at very start and end
+  html=html.replace(/^(\s*<p[^>]*>\s*(<br\s*/?>|&nbsp;)?\s*<\/p>\s*)+/i,'');
+  html=html.replace(/(\s*<p[^>]*>\s*(<br\s*/?>|&nbsp;)?\s*<\/p>\s*)+$/i,'');
+  return html;
+}
 
 function buildPostHTML(p){
   return`<!DOCTYPE html>
@@ -2349,12 +2459,12 @@ function buildPostHTML(p){
 <title>${p.title} · _DEV.LOG</title>
 <style>
 ${BASE_CSS}
-.post-header{margin-bottom:48px;}
+/* post-header merged below */
 .post-cat{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:16px;display:block;}
 .post-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;line-height:1.2;margin-bottom:16px;}
 .post-meta{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;display:flex;gap:20px;flex-wrap:wrap;}
-.post-cover{width:100%;max-height:400px;object-fit:cover;border:1px solid rgba(0,245,255,.15);margin-bottom:48px;display:block;}
-.post-body{max-width:720px;}
+/* post-cover merged below */
+.post-body{max-width:720px;margin:0 auto;}
 .post-body h1{font-size:28px;font-weight:700;color:#fff;margin:40px 0 16px;padding-left:16px;border-left:4px solid var(--cyan);}
 .post-body h2{font-size:22px;font-weight:700;color:#fff;margin:32px 0 12px;padding-left:12px;border-left:3px solid var(--magenta);}
 .post-body h3{font-size:18px;font-weight:700;color:#fff;margin:24px 0 10px;padding-left:10px;border-left:2px solid var(--yellow);}
@@ -2379,8 +2489,10 @@ ${BASE_CSS}
 .post-body pre code{display:block;padding:16px 20px;font-family:'Fira Code',monospace;font-size:13px;line-height:1.7;color:#a8c8e8;overflow-x:auto;counter-reset:line;}
 .post-body pre code .line{display:block;position:relative;padding-left:40px;}
 .post-body pre code .line::before{content:counter(line);counter-increment:line;position:absolute;left:0;width:30px;text-align:right;color:var(--muted);user-select:none;font-size:11px;}
-.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;margin-bottom:40px;transition:color .2s;}
+.back-btn{display:block;max-width:720px;margin:0 auto 40px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;transition:color .2s;}
 .back-btn:hover{color:var(--cyan);}
+.post-header{max-width:720px;margin:0 auto 48px;}
+.post-cover{display:block;width:100%;max-width:720px;max-height:400px;object-fit:cover;border:1px solid rgba(0,245,255,.15);margin:0 auto 48px;}
 </style>
 </head>
 <body>
@@ -2396,7 +2508,7 @@ ${NAV_HTML()}
     </div>
   </div>
   ${p.cover?`<img class="post-cover" src="${p.cover}" alt="封面">`:''}
-  <div class="post-body">${p.content||''}</div>
+  <div class="post-body">${cleanContent(p.content||'')}</div>
 </div>
 ${('<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',function(e){e.preventDefault();});\n  document.addEventListener(\'dragstart\',function(e){if(e.target.tagName===\'IMG\')e.preventDefault();});\n  document.addEventListener(\'keydown\',function(e){\n    if((e.ctrlKey||e.metaKey)&&(e.key===\'s\'||e.key===\'S\'||e.key===\'p\'||e.key===\'P\'))e.preventDefault();\n    if(e.key===\'PrintScreen\')e.preventDefault();\n  });\n})();\n</'+'script>')}
 </body></html>`;
