@@ -161,6 +161,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 #editor-content hr{border:none;border-top:1px solid var(--border);margin:32px 0;}
 #editor-content img{max-width:100%;border:1px solid var(--border);margin:8px 0;}
 
+/* image centering in editors */
+#editor-content img{max-width:100%;border:1px solid var(--border);margin:12px auto;display:block;}
+#editor-content figure.post-figure{margin:16px 0;text-align:center;}
+#editor-content figure.post-figure img{margin:0 auto;}
+#editor-content figure.post-figure figcaption{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:6px;}
+/* table in editor */
+#editor-content table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;}
+#editor-content table td,#editor-content table th{border:1px solid rgba(0,245,255,.25);padding:8px 12px;color:var(--text);}
+#editor-content table th{background:rgba(0,245,255,.06);color:var(--white);font-weight:600;}
+#editor-content table tr:hover td{background:rgba(0,245,255,.03);}
 /* code blocks in editor */
 #editor-content pre{background:#0a0e1a;border:1px solid rgba(0,245,255,.15);border-radius:0;margin:16px 0;overflow:hidden;position:relative;}
 #editor-content pre .code-lang{position:absolute;top:0;right:0;font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;padding:6px 12px;background:rgba(0,245,255,.05);border-bottom:1px solid rgba(0,245,255,.1);border-left:1px solid rgba(0,245,255,.1);}
@@ -249,10 +259,56 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 #works-editor-content blockquote{border-left:3px solid var(--cyan);padding:12px 20px;margin:16px 0;background:rgba(0,245,255,.04);color:var(--muted);}
 #works-editor-content hr{border:none;border-top:1px solid var(--border);margin:32px 0;}
 #works-editor-content img{max-width:100%;border:1px solid var(--border);margin:8px 0;}
+#works-editor-content img{max-width:100%;border:1px solid var(--border);margin:12px auto;display:block;}
+#works-editor-content table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;}
+#works-editor-content table td,#works-editor-content table th{border:1px solid rgba(0,245,255,.25);padding:8px 12px;color:var(--text);}
+#works-editor-content table th{background:rgba(0,245,255,.06);color:var(--white);font-weight:600;}
 #works-editor-content pre{background:#0a0e1a;border:1px solid rgba(0,245,255,.15);margin:16px 0;overflow:hidden;position:relative;}
 #works-editor-content pre code{display:block;padding:16px 20px;font-family:var(--font-code);font-size:13px;line-height:1.7;color:#a8c8e8;overflow-x:auto;}
 #works-editor-content .video-embed{position:relative;width:100%;padding-bottom:56.25%;margin:24px 0;background:#000;}
 #works-editor-content .video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+
+/* enhanced toolbar elements */
+.et-select{font-family:var(--font-mono);font-size:11px;background:transparent;border:1px solid transparent;color:var(--muted);cursor:pointer;padding:3px 6px;outline:none;transition:all .2s;letter-spacing:1px;height:28px;}
+.et-select:hover,.et-select:focus{color:var(--cyan);border-color:rgba(0,245,255,.2);}
+.et-select option{background:var(--dim);color:var(--text);}
+.et-color-wrap{position:relative;display:inline-flex;align-items:center;}
+.et-color-swatch{width:12px;height:3px;position:absolute;bottom:3px;left:50%;transform:translateX(-50%);pointer-events:none;border-radius:1px;}
+.et-hidden-input{position:absolute;opacity:0;width:0;height:0;pointer-events:none;}
+.et-word-count{font-family:var(--font-mono);font-size:10px;color:var(--muted);padding:4px 8px;letter-spacing:1px;align-self:center;white-space:nowrap;}
+
+/* fullscreen editor */
+.editor-fullscreen{position:fixed!important;inset:0!important;z-index:9500!important;background:var(--bg)!important;display:flex!important;flex-direction:column!important;}
+.editor-fullscreen #editor-toolbar,.editor-fullscreen #works-editor-toolbar{flex-shrink:0;}
+.editor-fullscreen #editor-content,.editor-fullscreen #works-editor-content{flex:1;max-width:800px;margin:0 auto;width:100%;}
+
+/* find & replace modal */
+#find-modal{position:fixed;inset:0;z-index:9100;background:rgba(3,8,16,.88);backdrop-filter:blur(14px);display:none;align-items:flex-start;justify-content:center;padding-top:80px;}
+#find-modal.show{display:flex;}
+#find-box{background:var(--dim);border:1px solid var(--border);width:480px;max-width:94vw;position:relative;}
+#find-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));pointer-events:none;}
+.fb-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);}
+.fb-title{font-family:var(--font-mono);font-size:12px;color:var(--cyan);letter-spacing:3px;}
+.fb-body{padding:20px;}
+.fb-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.fb-label{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;width:40px;flex-shrink:0;}
+.fb-input{flex:1;background:rgba(0,245,255,.03);border:1px solid rgba(0,245,255,.15);border-bottom:1px solid var(--cyan);color:var(--white);font-family:var(--font-mono);font-size:13px;padding:7px 10px;outline:none;letter-spacing:1px;}
+.fb-actions{display:flex;gap:8px;margin-top:14px;}
+.fb-btn{font-family:var(--font-mono);font-size:11px;letter-spacing:2px;padding:6px 16px;border:1px solid;background:transparent;cursor:pointer;text-transform:uppercase;transition:all .2s;}
+.fb-btn-find{border-color:var(--cyan);color:var(--cyan);}
+.fb-btn-find:hover{background:var(--cyan);color:var(--bg);}
+.fb-btn-rep{border-color:rgba(0,245,255,.4);color:var(--muted);}
+.fb-btn-rep:hover{border-color:var(--cyan);color:var(--cyan);}
+.fb-btn-all{border-color:rgba(255,230,0,.4);color:var(--yellow);}
+.fb-btn-all:hover{background:rgba(255,230,0,.1);}
+.fb-stat{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:1px;min-height:20px;margin-top:8px;}
+
+/* table insert modal */
+#table-modal{position:fixed;inset:0;z-index:9100;background:rgba(3,8,16,.88);backdrop-filter:blur(14px);display:none;align-items:center;justify-content:center;}
+#table-modal.show{display:flex;}
+#table-box{background:var(--dim);border:1px solid var(--border);padding:36px 44px;width:320px;max-width:94vw;position:relative;}
+#table-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));pointer-events:none;}
+
 
 .img-mgr-btn{font-family:var(--font-mono);font-size:10px;padding:4px 12px;border:1px solid rgba(0,245,255,.25);color:var(--muted);background:transparent;cursor:pointer;letter-spacing:1px;transition:all .2s;}
 .img-mgr-btn:hover{color:var(--cyan);border-color:var(--cyan);}
@@ -407,19 +463,51 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <button class="et-btn" onclick="wexec('italic')"><i>I</i></button>
         <button class="et-btn" onclick="wexec('underline')"><u>U</u></button>
         <button class="et-btn" onclick="wexec('strikeThrough')"><s>S</s></button>
+        <button class="et-btn" onclick="wexec('superscript')" style="font-size:10px;">x²</button>
+        <button class="et-btn" onclick="wexec('subscript')" style="font-size:10px;">x₂</button>
+        <div class="et-sep"></div>
+        <button class="et-btn" onclick="wexec('justifyLeft')" title="左对齐">⬤L</button>
+        <button class="et-btn" onclick="wexec('justifyCenter')" title="居中">⬤C</button>
+        <button class="et-btn" onclick="wexec('justifyRight')" title="右对齐">⬤R</button>
+        <div class="et-sep"></div>
+        <select class="et-select" onchange="applyFontSize(this,'works-editor-content')" title="字号">
+          <option value="">字号</option>
+          <option value="12px">小 · 12</option>
+          <option value="15px">正常 · 15</option>
+          <option value="18px">中 · 18</option>
+          <option value="22px">大 · 22</option>
+          <option value="28px">特大 · 28</option>
+        </select>
+        <div class="et-color-wrap" title="文字颜色">
+          <button class="et-btn" onclick="document.getElementById('works-text-color').click()" style="font-weight:700;position:relative;padding-bottom:8px;">A<span class="et-color-swatch" id="works-text-swatch" style="background:#00f5ff;"></span></button>
+          <input type="color" id="works-text-color" class="et-hidden-input" value="#00f5ff" oninput="applyTextColor(this.value,'works-editor-content','works-text-swatch')">
+        </div>
+        <div class="et-color-wrap" title="高亮颜色">
+          <button class="et-btn" onclick="document.getElementById('works-hl-color').click()" style="position:relative;padding-bottom:8px;">H<span class="et-color-swatch" id="works-hl-swatch" style="background:#ffe600;"></span></button>
+          <input type="color" id="works-hl-color" class="et-hidden-input" value="#ffe600" oninput="applyHighlight(this.value,'works-editor-content','works-hl-swatch')">
+        </div>
         <div class="et-sep"></div>
         <button class="et-btn" onclick="wfmt('ul')">• 列表</button>
         <button class="et-btn" onclick="wfmt('ol')">1. 列表</button>
         <button class="et-btn" onclick="wfmt('blockquote')">❝ 引用</button>
         <button class="et-btn" onclick="wfmt('hr')">— 分割线</button>
+        <button class="et-btn" onclick="wexec('indent')" title="增加缩进">→|</button>
+        <button class="et-btn" onclick="wexec('outdent')" title="减少缩进">|←</button>
         <div class="et-sep"></div>
         <button class="et-btn" onclick="wOpenCode()">&lt;/&gt; 代码</button>
         <button class="et-btn" onclick="wInsertImg()">🖼 图片</button>
         <button class="et-btn" onclick="wInsertVideo()">▶ 视频</button>
         <button class="et-btn" onclick="wInsertLink()">🔗 链接</button>
+        <button class="et-btn" onclick="openTableModal('works-editor-content')" title="插入表格">⊞ 表格</button>
+        <div class="et-sep"></div>
+        <button class="et-btn" onclick="wexec('removeFormat')" title="清除格式" style="color:var(--magenta);">Tx</button>
+        <button class="et-btn" onclick="openFindReplace('works-editor-content')" title="查找替换">🔍</button>
+        <button class="et-btn" onclick="toggleEditorFullscreen('works-editor-panel')" title="全屏编辑" id="works-fs-btn">⛶ 全屏</button>
         <div class="et-sep"></div>
         <button class="et-btn" onclick="wexec('undo')">↩</button>
         <button class="et-btn" onclick="wexec('redo')">↪</button>
+        <div class="et-sep"></div>
+        <span class="et-word-count" id="works-word-count">0 字</span>
       </div>
       <div id="works-editor-wrap">
         <div id="works-editor-content" contenteditable="true" spellcheck="false"></div>
@@ -461,18 +549,50 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <button class="et-btn" onclick="exec('italic')" title="斜体"><i>I</i></button>
         <button class="et-btn" onclick="exec('underline')" title="下划线"><u>U</u></button>
         <button class="et-btn" onclick="exec('strikeThrough')" title="删除线"><s>S</s></button>
+        <button class="et-btn" onclick="exec('superscript')" title="上标" style="font-size:10px;">x²</button>
+        <button class="et-btn" onclick="exec('subscript')" title="下标" style="font-size:10px;">x₂</button>
+        <div class="et-sep"></div>
+        <button class="et-btn" onclick="exec('justifyLeft')" title="左对齐">⬤L</button>
+        <button class="et-btn" onclick="exec('justifyCenter')" title="居中">⬤C</button>
+        <button class="et-btn" onclick="exec('justifyRight')" title="右对齐">⬤R</button>
+        <div class="et-sep"></div>
+        <select class="et-select" onchange="applyFontSize(this,'editor-content')" title="字号">
+          <option value="">字号</option>
+          <option value="12px">小 · 12</option>
+          <option value="15px">正常 · 15</option>
+          <option value="18px">中 · 18</option>
+          <option value="22px">大 · 22</option>
+          <option value="28px">特大 · 28</option>
+        </select>
+        <div class="et-color-wrap" title="文字颜色">
+          <button class="et-btn" onclick="document.getElementById('blog-text-color').click()" style="font-weight:700;position:relative;padding-bottom:8px;">A<span class="et-color-swatch" id="blog-text-swatch" style="background:#00f5ff;"></span></button>
+          <input type="color" id="blog-text-color" class="et-hidden-input" value="#00f5ff" oninput="applyTextColor(this.value,'editor-content','blog-text-swatch')">
+        </div>
+        <div class="et-color-wrap" title="高亮颜色">
+          <button class="et-btn" onclick="document.getElementById('blog-hl-color').click()" style="position:relative;padding-bottom:8px;">H<span class="et-color-swatch" id="blog-hl-swatch" style="background:#ffe600;"></span></button>
+          <input type="color" id="blog-hl-color" class="et-hidden-input" value="#ffe600" oninput="applyHighlight(this.value,'editor-content','blog-hl-swatch')">
+        </div>
         <div class="et-sep"></div>
         <button class="et-btn" onclick="fmt('ul')" title="无序列表">• 列表</button>
         <button class="et-btn" onclick="fmt('ol')" title="有序列表">1. 列表</button>
         <button class="et-btn" onclick="fmt('blockquote')" title="引用">❝ 引用</button>
         <button class="et-btn" onclick="fmt('hr')" title="分割线">— 分割线</button>
+        <button class="et-btn" onclick="exec('indent')" title="增加缩进">→|</button>
+        <button class="et-btn" onclick="exec('outdent')" title="减少缩进">|←</button>
         <div class="et-sep"></div>
         <button class="et-btn" onclick="openCodeModal()" title="代码块">&lt;/&gt; 代码</button>
         <button class="et-btn" onclick="insertImage()" title="插入图片">🖼 图片</button>
         <button class="et-btn" onclick="insertLink()" title="插入链接">🔗 链接</button>
+        <button class="et-btn" onclick="openTableModal('editor-content')" title="插入表格">⊞ 表格</button>
+        <div class="et-sep"></div>
+        <button class="et-btn" onclick="exec('removeFormat')" title="清除格式" style="color:var(--magenta);">Tx</button>
+        <button class="et-btn" onclick="openFindReplace('editor-content')" title="查找替换">🔍</button>
+        <button class="et-btn" onclick="toggleEditorFullscreen('editor-panel')" title="全屏编辑" id="blog-fs-btn">⛶ 全屏</button>
         <div class="et-sep"></div>
         <button class="et-btn" onclick="exec('undo')" title="撤销">↩</button>
         <button class="et-btn" onclick="exec('redo')" title="重做">↪</button>
+        <div class="et-sep"></div>
+        <span class="et-word-count" id="blog-word-count">0 字</span>
       </div>
 
       <div id="editor-wrap">
@@ -568,6 +688,60 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     <button class="pl-log-close" onclick="document.getElementById('push-log').classList.remove('show')">✕</button>
   </div>
   <div id="push-log-body"></div>
+</div>
+
+<!-- find & replace modal -->
+<div id="find-modal">
+  <div id="find-box">
+    <div class="fb-header">
+      <span class="fb-title">// 查找 · 替换</span>
+      <button class="cb-close" onclick="closeFindReplace()">✕</button>
+    </div>
+    <div class="fb-body">
+      <div class="fb-row">
+        <span class="fb-label">查找</span>
+        <input class="fb-input" id="find-input" placeholder="查找内容..." oninput="doFind()">
+      </div>
+      <div class="fb-row">
+        <span class="fb-label">替换</span>
+        <input class="fb-input" id="replace-input" placeholder="替换为...">
+      </div>
+      <div class="fb-actions">
+        <button class="fb-btn fb-btn-find" onclick="doFind()">查找</button>
+        <button class="fb-btn fb-btn-rep" onclick="doReplaceOne()">替换一个</button>
+        <button class="fb-btn fb-btn-all" onclick="doReplaceAll()">全部替换</button>
+      </div>
+      <div class="fb-stat" id="find-stat"></div>
+    </div>
+  </div>
+</div>
+
+<!-- table insert modal -->
+<div id="table-modal">
+  <div id="table-box">
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:16px;">// 插入表格</div>
+    <div class="gh-field"><label class="gh-label">行数</label><input class="gh-input" id="tbl-rows" type="number" value="3" min="1" max="20"></div>
+    <div class="gh-field"><label class="gh-label">列数</label><input class="gh-input" id="tbl-cols" type="number" value="3" min="1" max="10"></div>
+    <div class="gh-field" style="display:flex;align-items:center;gap:10px;">
+      <input type="checkbox" id="tbl-header" checked style="accent-color:var(--cyan);">
+      <label class="gh-label" for="tbl-header" style="margin:0;cursor:pointer;">包含表头行</label>
+    </div>
+    <button class="gh-save" onclick="confirmInsertTable()">插入</button>
+    <button class="gh-cancel" onclick="document.getElementById('table-modal').classList.remove('show')">取消</button>
+  </div>
+</div>
+
+<!-- delete confirm modal -->
+<div id="del-modal" style="position:fixed;inset:0;z-index:9200;background:rgba(3,8,16,.9);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;">
+  <div style="background:var(--dim);border:1px solid rgba(255,0,110,.3);padding:40px 48px;width:380px;max-width:92vw;position:relative;">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--magenta),var(--cyan));"></div>
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;">// 确认删除</div>
+    <div id="del-modal-msg" style="font-size:15px;color:var(--white);margin-bottom:24px;line-height:1.6;"></div>
+    <div style="display:flex;gap:12px;">
+      <button onclick="confirmDelete()" style="flex:1;padding:10px;background:transparent;border:1px solid var(--magenta);color:var(--magenta);font-family:var(--font-mono);font-size:12px;letter-spacing:2px;cursor:pointer;text-transform:uppercase;transition:all .2s;" onmouseover="this.style.background='rgba(255,0,110,.15)'" onmouseout="this.style.background='transparent'">确认删除</button>
+      <button onclick="document.getElementById('del-modal').style.display='none'" style="flex:1;padding:10px;background:transparent;border:1px solid rgba(0,245,255,.3);color:var(--muted);font-family:var(--font-mono);font-size:12px;letter-spacing:2px;cursor:pointer;text-transform:uppercase;transition:color .2s;" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='var(--muted)'">取消</button>
+    </div>
+  </div>
 </div>
 
 <input type="file" id="img-file-input" accept="image/*" onchange="handleInlineImage(this)">
@@ -823,7 +997,10 @@ function renderPostList(){
         </div>
       </div>
       ${p.draft?'<span class="pi-draft">草稿</span>':''}
+      <button onclick="deletePost(${i},event)" class="pp-card-del" style="position:static;opacity:0;margin-left:4px;transition:opacity .2s;" title="删除">✕</button>
     `;
+    d.onmouseenter=()=>{ const btn=d.querySelector('.pp-card-del'); if(btn)btn.style.opacity='1'; };
+    d.onmouseleave=()=>{ const btn=d.querySelector('.pp-card-del'); if(btn)btn.style.opacity='0'; };
     d.onclick=()=>selectPost(i);
     el.appendChild(d);
   });
@@ -888,6 +1065,10 @@ function slugify(str){
 
 /* auto-save every 10s */
 setInterval(()=>{if(currentPost!==null)saveCurrentPost(true);},10000);
+
+/* word count listeners */
+document.getElementById('editor-content').addEventListener('input',()=>updateWordCount('editor-content','blog-word-count'));
+document.getElementById('works-editor-content').addEventListener('input',()=>updateWordCount('works-editor-content','works-word-count'));
 
 /* ══════════════════════════════════════
    EDITOR
@@ -998,6 +1179,168 @@ function insertLink(){
 }
 
 /* ══════════════════════════════════════
+   DELETE POST
+══════════════════════════════════════ */
+let _pendingDeleteType=null, _pendingDeleteIdx=null;
+function deletePost(i,e){
+  e.stopPropagation();
+  const p=posts[i];
+  showDeleteModal('确认删除文章「'+(p.title||'无标题')+'」？此操作不可撤销。', ()=>{
+    posts.splice(i,1);
+    if(currentPost===i){ currentPost=null; document.getElementById('editor-content').innerHTML=''; document.getElementById('post-title-input').value=''; }
+    else if(currentPost>i){ currentPost--; }
+    saveState(); renderPostList(); showToast('ok','文章已删除 ✓');
+  });
+}
+
+function showDeleteModal(msg, cb){
+  document.getElementById('del-modal-msg').textContent=msg;
+  document.getElementById('del-modal').style.display='flex';
+  _pendingDeleteCb=cb;
+}
+let _pendingDeleteCb=null;
+function confirmDelete(){
+  document.getElementById('del-modal').style.display='none';
+  if(_pendingDeleteCb){ _pendingDeleteCb(); _pendingDeleteCb=null; }
+}
+
+/* ══════════════════════════════════════
+   ENHANCED EDITOR FUNCTIONS
+══════════════════════════════════════ */
+
+/* Font size */
+function applyFontSize(sel, edId){
+  const size=sel.value; if(!size){ sel.selectedIndex=0; return; }
+  const ed=document.getElementById(edId); ed.focus();
+  document.execCommand('insertHTML',false,`<span style="font-size:${size}">${window.getSelection().toString()||'文字'}</span>`);
+  sel.selectedIndex=0;
+}
+
+/* Text color */
+function applyTextColor(val, edId, swatchId){
+  document.getElementById(swatchId).style.background=val;
+  const ed=document.getElementById(edId); ed.focus();
+  document.execCommand('foreColor',false,val);
+}
+
+/* Highlight */
+function applyHighlight(val, edId, swatchId){
+  document.getElementById(swatchId).style.background=val;
+  const ed=document.getElementById(edId); ed.focus();
+  document.execCommand('hiliteColor',false,val);
+}
+
+/* Word count */
+function updateWordCount(edId, countId){
+  const ed=document.getElementById(edId);
+  const el=document.getElementById(countId);
+  if(!ed||!el)return;
+  const text=(ed.innerText||ed.textContent||'').trim();
+  const chars=text.replace(/\s/g,'').length;
+  const words=text?text.split(/[\s\n]+/).filter(Boolean).length:0;
+  el.textContent=chars+' 字 · '+words+' 词';
+}
+
+/* Fullscreen */
+let _fsPanel=null;
+function toggleEditorFullscreen(panelId){
+  const panel=document.getElementById(panelId);
+  if(!panel) return;
+  if(_fsPanel){
+    // exit
+    panel.style.cssText='';
+    _fsPanel=null;
+    document.querySelectorAll('[id$="-fs-btn"]').forEach(b=>b.textContent='⛶ 全屏');
+    document.removeEventListener('keydown',_fsEscHandler);
+  } else {
+    _fsPanel=panel;
+    panel.style.cssText='position:fixed;inset:0;z-index:9500;background:var(--bg);display:flex;flex-direction:column;';
+    document.querySelectorAll('[id$="-fs-btn"]').forEach(b=>b.textContent='✕ 退出全屏');
+    document.addEventListener('keydown',_fsEscHandler);
+  }
+}
+function _fsEscHandler(e){ if(e.key==='Escape'&&_fsPanel) toggleEditorFullscreen(_fsPanel.id); }
+
+/* Find & Replace */
+let _findEdId=null;
+function openFindReplace(edId){
+  _findEdId=edId;
+  document.getElementById('find-input').value='';
+  document.getElementById('replace-input').value='';
+  document.getElementById('find-stat').textContent='';
+  document.getElementById('find-modal').classList.add('show');
+  setTimeout(()=>document.getElementById('find-input').focus(),60);
+}
+function closeFindReplace(){
+  document.getElementById('find-modal').classList.remove('show');
+  // remove highlights
+  const ed=document.getElementById(_findEdId||'editor-content');
+  if(ed) ed.querySelectorAll('.fr-highlight').forEach(s=>{ const t=document.createTextNode(s.textContent); s.replaceWith(t); });
+}
+function doFind(){
+  const q=document.getElementById('find-input').value.trim();
+  const stat=document.getElementById('find-stat');
+  const ed=document.getElementById(_findEdId||'editor-content');
+  if(!q||!ed){ stat.textContent=''; return; }
+  // count occurrences in text
+  const text=ed.innerText||'';
+  const re=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');
+  const matches=(text.match(re)||[]).length;
+  stat.textContent=matches>0?'找到 '+matches+' 处匹配':'未找到';
+  stat.style.color=matches>0?'var(--cyan)':'var(--magenta)';
+}
+function doReplaceOne(){
+  const q=document.getElementById('find-input').value;
+  const r=document.getElementById('replace-input').value;
+  const ed=document.getElementById(_findEdId||'editor-content');
+  if(!q||!ed) return;
+  const html=ed.innerHTML;
+  const re=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i');
+  ed.innerHTML=html.replace(re,r);
+  doFind();
+}
+function doReplaceAll(){
+  const q=document.getElementById('find-input').value;
+  const r=document.getElementById('replace-input').value;
+  const ed=document.getElementById(_findEdId||'editor-content');
+  if(!q||!ed) return;
+  const re=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');
+  const count=(ed.innerHTML.match(re)||[]).length;
+  ed.innerHTML=ed.innerHTML.replace(re,r);
+  document.getElementById('find-stat').textContent='已替换 '+count+' 处';
+  document.getElementById('find-stat').style.color='var(--green)';
+}
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==='h'){ e.preventDefault(); openFindReplace(currentTab==='blog'?'editor-content':'works-editor-content'); }
+});
+
+/* Table insert */
+let _tableEdId=null;
+function openTableModal(edId){
+  _tableEdId=edId;
+  document.getElementById('table-modal').classList.add('show');
+}
+function confirmInsertTable(){
+  const rows=parseInt(document.getElementById('tbl-rows').value)||3;
+  const cols=parseInt(document.getElementById('tbl-cols').value)||3;
+  const hasHeader=document.getElementById('tbl-header').checked;
+  let html='<table>';
+  if(hasHeader){
+    html+='<thead><tr>'+Array(cols).fill(0).map((_,c)=>'<th>列'+(c+1)+'</th>').join('')+'</tr></thead>';
+  }
+  html+='<tbody>';
+  const bodyRows=hasHeader?rows-1:rows;
+  for(let r=0;r<bodyRows;r++){
+    html+='<tr>'+Array(cols).fill(0).map(()=>'<td></td>').join('')+'</tr>';
+  }
+  html+='</tbody></table><p><br></p>';
+  const ed=document.getElementById(_tableEdId||'editor-content'); ed.focus();
+  document.execCommand('insertHTML',false,html);
+  document.getElementById('table-modal').classList.remove('show');
+  showToast('ok','表格已插入 ✓');
+}
+
+/* ══════════════════════════════════════
    PAGE PANELS (works / gallery / about)
 ══════════════════════════════════════ */
 /* ══════════════════════════════════════
@@ -1023,7 +1366,10 @@ function renderWorksList(){
       +'<div class="wi-title">'+(w.title||'（无标题）')+'</div>'
       +'<div class="wi-meta">'+(w.date||'')+(w.tags&&w.tags[0]?' · '+w.tags[0]:'')+'</div>'
       +'</div>'
-      +(w.draft!==false?'<span class="wi-draft">草稿</span>':'');
+      +(w.draft!==false?'<span class="wi-draft">草稿</span>':'')
+      +'<button onclick="deleteWork('+i+',event)" class="pp-card-del" style="position:static;opacity:0;margin-left:4px;transition:opacity .2s;" title="删除">✕</button>';
+    d.onmouseenter=()=>{ const btn=d.querySelector('.pp-card-del'); if(btn)btn.style.opacity='1'; };
+    d.onmouseleave=()=>{ const btn=d.querySelector('.pp-card-del'); if(btn)btn.style.opacity='0'; };
     d.onclick = ()=>{ saveCurrentWork(); selectWork(i); };
     el.appendChild(d);
   });
@@ -1083,13 +1429,13 @@ function newWork(){
 
 function deleteWork(i, e){
   e.stopPropagation();
-  if(!confirm('确认删除这个项目？')) return;
-  works.splice(i,1);
-  if(currentWork===i){ currentWork=null; document.getElementById('works-editor-content').innerHTML=''; }
-  else if(currentWork>i){ currentWork--; }
-  saveState();
-  renderWorksList();
-  showToast('ok','已删除');
+  const w=works[i];
+  showDeleteModal('确认删除项目「'+(w.title||'无标题')+'」？此操作不可撤销。', ()=>{
+    works.splice(i,1);
+    if(currentWork===i){ currentWork=null; document.getElementById('works-editor-content').innerHTML=''; }
+    else if(currentWork>i){ currentWork--; }
+    saveState(); renderWorksList(); showToast('ok','项目已删除 ✓');
+  });
 }
 
 /* auto-save works every 10s */
@@ -2020,10 +2366,14 @@ ${BASE_CSS}
 .post-body a{color:var(--cyan);border-bottom:1px solid rgba(0,245,255,.3);text-decoration:none;}
 .post-body blockquote{border-left:3px solid var(--cyan);padding:12px 20px;margin:20px 0;background:rgba(0,245,255,.04);color:var(--muted);}
 .post-body hr{border:none;border-top:1px solid rgba(0,245,255,.15);margin:40px 0;}
-.post-body img{display:block;max-width:100%;width:auto;border:1px solid rgba(0,245,255,.15);margin:20px auto 0;}
+.post-body img{display:block;max-width:100%;width:auto;border:1px solid rgba(0,245,255,.15);margin:20px auto;}
 .post-body figure.post-figure{margin:20px 0;text-align:center;}
 .post-body figure.post-figure img{margin:0 auto;}
 .post-body figure.post-figure figcaption{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:8px;padding:0 8px;}
+.post-body table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;}
+.post-body table td,.post-body table th{border:1px solid rgba(0,245,255,.25);padding:10px 14px;color:var(--text);line-height:1.6;}
+.post-body table th{background:rgba(0,245,255,.06);color:#fff;font-weight:600;}
+.post-body table tr:hover td{background:rgba(0,245,255,.03);}
 .post-body pre{background:#0a0e1a;border:1px solid rgba(0,245,255,.15);margin:20px 0;overflow:hidden;position:relative;}
 .post-body pre .code-lang{position:absolute;top:0;right:0;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;padding:6px 12px;background:rgba(0,245,255,.05);border-bottom:1px solid rgba(0,245,255,.1);border-left:1px solid rgba(0,245,255,.1);}
 .post-body pre code{display:block;padding:16px 20px;font-family:'Fira Code',monospace;font-size:13px;line-height:1.7;color:#a8c8e8;overflow-x:auto;counter-reset:line;}
