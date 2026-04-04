@@ -2413,14 +2413,17 @@ async function renderImagesPanel(){
 function _renderImageList(body){
   const unused = _imgList.filter(f=>!f.used);
   const used   = _imgList.filter(f=>f.used);
+  const hasSelected = _imgSelected.size > 0;
 
   let html = '<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;">'
     +'<span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:1px;">'
-    +_imgList.length+' 张图片 · '+unused.length+' 张未使用</span>'
+    +_imgList.length+' 张图片 · '+unused.length+' 张未使用'+(hasSelected?' · 已选 '+_imgSelected.size+' 张':'')+'</span>'
     +'<button onclick="_selectAllImages()" class="img-mgr-btn">全选</button>'
     +'<button onclick="_selectAll()" class="img-mgr-btn">全选未使用</button>'
     +'<button onclick="_selectNone()" class="img-mgr-btn">取消全选</button>'
-    +'<button id="img-delete-btn" onclick="_deleteSelected()" class="img-mgr-btn img-del-btn">🗑 删除所选</button>'
+    +'<button id="img-delete-btn" onclick="_deleteSelected()" class="img-mgr-btn img-del-btn"'
+    +(hasSelected ? '' : ' style="display:none"')
+    +'>🗑 删除所选 ('+_imgSelected.size+')</button>'
     +'</div>';
 
   // 未使用
@@ -2467,28 +2470,20 @@ function _toggleSelectEl(el){
 function _toggleSelect(path){
   if(_imgSelected.has(path)) _imgSelected.delete(path);
   else _imgSelected.add(path);
-  const deleteBtn = document.getElementById('img-delete-btn');
-  if(deleteBtn) deleteBtn.style.display = _imgSelected.size>0 ? '' : 'none';
   _renderImageList(document.getElementById('pp-body'));
 }
 
 function _selectAllImages(){
   _imgList.forEach(f=>_imgSelected.add(f.path));
-  const deleteBtn = document.getElementById('img-delete-btn');
-  if(deleteBtn) deleteBtn.style.display = _imgSelected.size>0 ? '' : 'none';
   _renderImageList(document.getElementById('pp-body'));
 }
 function _selectAll(){
   _imgList.filter(f=>!f.used).forEach(f=>_imgSelected.add(f.path));
-  const deleteBtn = document.getElementById('img-delete-btn');
-  if(deleteBtn) deleteBtn.style.display = _imgSelected.size>0 ? '' : 'none';
   _renderImageList(document.getElementById('pp-body'));
 }
 
 function _selectNone(){
   _imgSelected.clear();
-  const deleteBtn = document.getElementById('img-delete-btn');
-  if(deleteBtn) deleteBtn.style.display = 'none';
   _renderImageList(document.getElementById('pp-body'));
 }
 
