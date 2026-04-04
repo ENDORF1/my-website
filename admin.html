@@ -2274,15 +2274,18 @@ async function patchHomeHTML(){
   const bytes = Uint8Array.from(atob(b64), c=>c.charCodeAt(0));
   let html = new TextDecoder('utf-8').decode(bytes);
 
+  // HTML转义函数
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/`/g,'&#x60;');
+
   // 生成 posts 静态列表
   const publishedPosts = posts.filter(p=>!p.draft&&p.title).slice(0,6);
   const postsHTML = publishedPosts.length
     ? publishedPosts.map(p=>
-        '<a class="post-item" href="/blog/'+p.slug+'.html">'
+        '<a class="post-item" href="/blog/'+esc(p.slug)+'.html">'
         +'<span class="post-drag-handle" style="display:none">\u283f</span>'
-        +'<span class="post-date">'+(p.date||'')+'</span>'
-        +'<span class="post-cat">'+(p.cat||'\u672a\u5206\u7c7b')+'</span>'
-        +'<span class="post-title">'+p.title+'</span>'
+        +'<span class="post-date">'+esc(p.date||'')+'</span>'
+        +'<span class="post-cat">'+esc(p.cat||'\u672a\u5206\u7c7b')+'</span>'
+        +'<span class="post-title">'+esc(p.title)+'</span>'
         +'<span class="post-arrow">\u2192</span>'
         +'</a>'
       ).join('')
@@ -2293,13 +2296,13 @@ async function patchHomeHTML(){
   const publishedWorks = works.filter(w=>w.draft===false&&w.title).slice(0,6);
   const worksHTML = publishedWorks.map(w=>{
     const slug=w.slug||slugify(w.title);
-    return '<a class="proj-card" href="/works/'+slug+'.html">'
+    return '<a class="proj-card" href="/works/'+esc(slug)+'.html">'
       +'<div class="card-controls"><div class="card-drag-handle">\u283f\u283f</div>'
       +'<button class="card-delete" onclick="this.closest(\'.proj-card\').remove()">\u2715</button></div>'
-      +'<div class="proj-tag">// '+((w.tags||[])[0]?w.tags[0].toUpperCase():'PROJECT')+'</div>'
-      +'<div class="proj-name">'+w.title+'</div>'
-      +'<div class="proj-desc">'+(w.desc||'')+'</div>'
-      +'<div class="proj-meta">'+(w.tags||[]).map(t=>'<span class="tag">'+t+'</span>').join('')+'</div>'
+      +'<div class="proj-tag">// '+esc(((w.tags||[])[0]?w.tags[0].toUpperCase():'PROJECT'))+'</div>'
+      +'<div class="proj-name">'+esc(w.title)+'</div>'
+      +'<div class="proj-desc">'+esc(w.desc||'')+'</div>'
+      +'<div class="proj-meta">'+(w.tags||[]).map(t=>'<span class="tag">'+esc(t)+'</span>').join('')+'</div>'
       +'</a>';
   }).join('') + '<button class="add-card-btn" onclick="addProject(this)">\uff0b \u6dfb\u52a0\u9879\u76ee</button>';
 
@@ -2882,24 +2885,27 @@ function buildGalleryDetailHTML(g){
     '</body></html>';
 }
 function buildHomeHTML(){
+  // HTML转义函数
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/`/g,'&#x60;');
+  
   // Recent 4 blog posts (published only)
   const recentPosts = posts.filter(p=>!p.draft).slice(0,4);
   const postRows = recentPosts.map(p=>`
-    <a class="post-item" href="/blog/${p.slug}.html">
-      <span class="post-date">${p.date||''}</span>
-      <span class="post-cat">${p.cat||'未分类'}</span>
-      <span class="post-title">${p.title}</span>
+    <a class="post-item" href="/blog/${esc(p.slug)}.html">
+      <span class="post-date">${esc(p.date||'')}</span>
+      <span class="post-cat">${esc(p.cat||'未分类')}</span>
+      <span class="post-title">${esc(p.title)}</span>
       <span class="post-arrow">→</span>
     </a>`).join('') || '<div class="no-posts">// 暂无已发布文章</div>';
 
   // Gallery cards: show category cards (up to 4)
   const galleryCards = galleryCategories.slice(0,4).map(cat=>{
     const firstImg=cat.items.find(i=>i.img);
-    return `<a class="creation-card-live" href="/gallery/${cat.slug}/">
-      ${firstImg ? `<img class="cc-img" src="${firstImg.img}" style="object-position:${firstImg.imgPos||'50% 50%'}" alt="${cat.name}">` : '<div class="cc-img-ph"></div>'}
+    return `<a class="creation-card-live" href="/gallery/${esc(cat.slug)}/">
+      ${firstImg ? `<img class="cc-img" src="${esc(firstImg.img)}" style="object-position:${esc(firstImg.imgPos||'50% 50%')}" alt="${esc(cat.name)}">` : '<div class="cc-img-ph"></div>'}
       <div class="cc-body">
         <div class="cc-type">// ${cat.items.length} 件作品</div>
-        <div class="cc-name">${cat.name}</div>
+        <div class="cc-name">${esc(cat.name)}</div>
       </div>
     </a>`;
   }).join('') || '';
@@ -2907,13 +2913,13 @@ function buildHomeHTML(){
   // Works cards (up to 3)
   const worksCards = works.slice(0,3).map(w=>{
     const inner = `
-      ${w.img ? `<img class="wc-img" src="${w.img}" style="object-position:${w.imgPos||'50% 50%'}" alt="${w.title}">` : '<div class="wc-img-ph"></div>'}
-      <div class="proj-tag">// ${(w.tags||[])[0]||'PROJECT'}</div>
-      <div class="proj-name">${w.title||''}</div>
-      <div class="proj-desc">${w.desc||''}</div>
-      <div class="proj-meta">${(w.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div>`;
+      ${w.img ? `<img class="wc-img" src="${esc(w.img)}" style="object-position:${esc(w.imgPos||'50% 50%')}" alt="${esc(w.title)}">` : '<div class="wc-img-ph"></div>'}
+      <div class="proj-tag">// ${esc((w.tags||[])[0]||'PROJECT')}</div>
+      <div class="proj-name">${esc(w.title||'')}</div>
+      <div class="proj-desc">${esc(w.desc||'')}</div>
+      <div class="proj-meta">${(w.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>`;
     return w.link
-      ? `<a class="proj-card-live" href="${w.link}" target="_blank" rel="noopener">${inner}</a>`
+      ? `<a class="proj-card-live" href="${esc(w.link)}" target="_blank" rel="noopener">${inner}</a>`
       : `<div class="proj-card-live">${inner}</div>`;
   }).join('');
 
@@ -3058,19 +3064,22 @@ ${gallery.length ? `
 
 
 function buildCategoryHTML(cat){
+  // HTML转义函数
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/`/g,'&#x60;');
+  
   const cards=cat.items.map(item=>`
-    <a class="gallery-card" href="/gallery/${cat.slug}/${item.slug||slugify(item.title)}.html">
-      ${item.img?`<img class="gc-img" src="${item.img}" style="object-position:${item.imgPos||'50% 50%'}" alt="">`:`<div class="gc-img-ph"></div>`}
+    <a class="gallery-card" href="/gallery/${esc(cat.slug)}/${esc(item.slug||slugify(item.title))}.html">
+      ${item.img?`<img class="gc-img" src="${esc(item.img)}" style="object-position:${esc(item.imgPos||'50% 50%')}" alt="">`:`<div class="gc-img-ph"></div>`}
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
-        <div class="gc-title">${item.title||''}</div>
-        ${item.desc?`<div class="gc-desc">${item.desc}</div>`:''}
+        <div class="gc-title">${esc(item.title||'')}</div>
+        ${item.desc?`<div class="gc-desc">${esc(item.desc)}</div>`:''}
       </div>
     </a>`).join('');
   return`<!DOCTYPE html>
 <html lang="zh"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>${cat.name} · 同人画廊 · _DEV.LOG</title>
+<title>${esc(cat.name)} · 同人画廊 · _DEV.LOG</title>
 <style>
 ${BASE_CSS}
 .page-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;}
@@ -3091,8 +3100,8 @@ ${BASE_CSS}
 ${NAV_HTML()}
 <div class="page-wrap">
   <a class="back-btn" href="/gallery/">← 返回画廊</a>
-  <div class="page-title">// GALLERY · ${cat.name.toUpperCase()}</div>
-  <h1 class="page-heading">${cat.name}</h1>
+  <div class="page-title">// GALLERY · ${esc(cat.name.toUpperCase())}</div>
+  <h1 class="page-heading">${esc(cat.name)}</h1>
   <div class="page-count">${cat.items.length} 件作品</div>
   <div class="gallery-grid">${cards||'<div style="font-family:Share Tech Mono,monospace;color:var(--muted);font-size:13px;letter-spacing:2px;">// 暂无作品</div>'}</div>
 </div>
@@ -3101,8 +3110,11 @@ ${('<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',funct
 }
 
 function buildItemDetailHTML(cat,item){
+  // HTML转义函数
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/`/g,'&#x60;');
+  
   const contentHtml=item.content
-    ? item.content.split('\n').filter(l=>l.trim()).map(l=>'<p>'+l+'</p>').join('')
+    ? item.content.split('\n').filter(l=>l.trim()).map(l=>'<p>'+esc(l)+'</p>').join('')
     : '';
   const imgSrc=(item.imgFull||item.img)||'';
   const WM='Xcale';
@@ -3150,7 +3162,7 @@ function buildItemDetailHTML(cat,item){
   return '<!DOCTYPE html>\n'+
     '<html lang="zh"><head>\n'+
     '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">\n'+
-    '<title>'+item.title+' \xb7 '+cat.name+' \xb7 _DEV.LOG</title>\n'+
+    '<title>'+esc(item.title)+' \xb7 '+esc(cat.name)+' \xb7 _DEV.LOG</title>\n'+
     '<style>\n'+BASE_CSS+'\n'+
     '.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:\'Share Tech Mono\',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;margin-bottom:40px;transition:color .2s;}\n'+
     '.back-btn:hover{color:var(--cyan);}\n'+
@@ -3162,11 +3174,11 @@ function buildItemDetailHTML(cat,item){
     '</style></head><body>\n'+
     NAV_HTML()+'\n'+
     '<div class="page-wrap">\n'+
-    '  <a class="back-btn" href="/gallery/'+cat.slug+'/">\u2190 \u8fd4\u56de'+cat.name+'</a>\n'+
-    '  <span class="gd-cat">// '+cat.name.toUpperCase()+'</span>\n'+
-    '  <h1 class="gd-title">'+(item.title||'')+'</h1>\n'+
+    '  <a class="back-btn" href="/gallery/'+esc(cat.slug)+'/">\u2190 \u8fd4\u56de'+esc(cat.name)+'</a>\n'+
+    '  <span class="gd-cat">// '+esc(cat.name.toUpperCase())+'</span>\n'+
+    '  <h1 class="gd-title">'+esc(item.title||'')+'</h1>\n'+
     '  '+canvasBlock+'\n'+
-    '  <div class="gd-body">'+(contentHtml||(item.desc?'<p>'+item.desc+'</p>':''))+'</div>\n'+
+    '  <div class="gd-body">'+(contentHtml||(item.desc?'<p>'+esc(item.desc)+'</p>':''))+'</div>\n'+
     '</div>\n'+
     scriptBlock+'\n'+
     '</body></html>';
