@@ -2501,14 +2501,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 function cleanContent(html){
   if(!html)return '';
   // Collapse 2+ consecutive empty paragraphs into a single one
-  html=html.replace(/(<p[^>]*>\s*(<br\s*/?>|&nbsp;)?\s*<\/p>\s*){2,}/gi,'<p><br></p>');
+  html=html.replace(/(<p[^>]*>\s*(<br\s*\/>|&nbsp;)?\s*<\/p>\s*){2,}/gi,'<p><br></p>');
   // Remove empty paragraphs immediately after block elements (h1-h6, table, pre, figure, blockquote, hr, div)
-  html=html.replace(/(<\/(h[1-6]|table|pre|figure|blockquote|div)>)\s*(<p[^>]*>\s*(<br\s*/?>|&nbsp;)?\s*<\/p>\s*)+/gi,'$1');
+  html=html.replace(/(<\/(h[1-6]|table|pre|figure|blockquote|div)>)\s*(<p[^>]*>\s*(<br\s*\/>|&nbsp;)?\s*<\/p>\s*)+/gi,'$1');
   // Remove empty paragraphs immediately before block elements
-  html=html.replace(/(<p[^>]*>\s*(<br\s*/?>|&nbsp;)?\s*<\/p>\s*)+(<(h[1-6]|table|pre|figure|blockquote|div))/gi,'<$4');
+  html=html.replace(/(<p[^>]*>\s*(<br\s*\/>|&nbsp;)?\s*<\/p>\s*)+(<(h[1-6]|table|pre|figure|blockquote|div))/gi,'<$4');
   // Remove empty paragraphs at very start and end
-  html=html.replace(/^(\s*<p[^>]*>\s*(<br\s*/?>|&nbsp;)?\s*<\/p>\s*)+/i,'');
-  html=html.replace(/(\s*<p[^>]*>\s*(<br\s*/?>|&nbsp;)?\s*<\/p>\s*)+$/i,'');
+  html=html.replace(/^(\s*<p[^>]*>\s*(<br\s*\/>|&nbsp;)?\s*<\/p>\s*)+/i,'');
+  html=html.replace(/(\s*<p[^>]*>\s*(<br\s*\/>|&nbsp;)?\s*<\/p>\s*)+$/i,'');
   return html;
 }
 
