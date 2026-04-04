@@ -2135,7 +2135,7 @@ function pushLog(msg,type='info'){
 async function ghPut(path,content,msg){
   const apiBase=`https://api.github.com/repos/${GH.user}/${GH.repo}/contents/${path}`;
   const headers={'Authorization':`token ${GH.token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
-  const encoded=btoa(unescape(encodeURIComponent(content)));
+  const encoded=(()=>{const bytes=new TextEncoder().encode(content);let b='';bytes.forEach(b2=>b+=String.fromCharCode(b2));return btoa(b);})();
   let sha=null;
   const getRes=await fetch(apiBase,{headers});
   if(getRes.ok){const d=await getRes.json();sha=d.sha;}
