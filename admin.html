@@ -511,6 +511,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <button class="et-btn" onclick="wexec('justifyCenter')" title="居中">⬤C</button>
         <button class="et-btn" onclick="wexec('justifyRight')" title="右对齐">⬤R</button>
         <div class="et-sep"></div>
+        <select class="et-select" onchange="applyFont(this.value,'works-editor-content');this.selectedIndex=0;" title="字体">
+          <option value="">字体</option>
+          <option value="__default__">默认（清除）</option>
+          <option value="'Noto Sans SC',sans-serif">正文体</option>
+          <option value="'Share Tech Mono',monospace">等宽体</option>
+        </select>
         <div style="position:relative;display:inline-flex;align-items:center;" id="works-fs-wrap">
           <input type="number" class="et-select" id="works-fontsize" placeholder="字号" title="字号（px）" style="width:58px;padding-right:18px;" min="8" max="96" step="1" value="15"
             oninput="previewFontSize(this.value,'works-editor-content')"
@@ -609,6 +615,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <button class="et-btn" onclick="exec('justifyCenter')" title="居中">⬤C</button>
         <button class="et-btn" onclick="exec('justifyRight')" title="右对齐">⬤R</button>
         <div class="et-sep"></div>
+        <select class="et-select" onchange="applyFont(this.value,'editor-content');this.selectedIndex=0;" title="字体">
+          <option value="">字体</option>
+          <option value="__default__">默认（清除）</option>
+          <option value="'Noto Sans SC',sans-serif">正文体</option>
+          <option value="'Share Tech Mono',monospace">等宽体</option>
+        </select>
         <div style="position:relative;display:inline-flex;align-items:center;" id="blog-fs-wrap">
           <input type="number" class="et-select" id="editor-fontsize" placeholder="字号" title="字号（px）" style="width:58px;padding-right:18px;" min="8" max="96" step="1" value="15"
             oninput="previewFontSize(this.value,'editor-content')"
@@ -1348,10 +1360,24 @@ function _applyAlign(el,align){
 
 /* 对齐：有选中文字时只对选中段落生效，无选中时对光标所在块生效 */
 function _applyAlignToSelection(ed, align){
+  // 优先用缓存选区（点击按钮时编辑器已失焦，实时选区为空）
+  const savedRange = _fsPreviewRange;
   const sel = window.getSelection();
-  if(!sel||!sel.rangeCount) return;
-  const range = sel.getRangeAt(0);
-  const selectedText = sel.toString();
+  let range, selectedText;
+  if(savedRange && !savedRange.collapsed){
+    range = savedRange;
+    selectedText = range.toString();
+    // 恢复选区以便视觉反馈
+    sel.removeAllRanges();
+    sel.addRange(range);
+    ed.focus();
+  } else if(sel && sel.rangeCount){
+    range = sel.getRangeAt(0);
+    selectedText = sel.toString();
+  } else {
+    ed.focus();
+    return;
+  }
 
   if(selectedText.length > 0){
     // 找选区跨越的所有段落级块元素，对每个分别设置 text-align
@@ -1535,6 +1561,38 @@ function commitLineHeight(val, edId){
     ed.style.lineHeight = String(lh);
   }
   _lhSavedRange = null;
+}
+
+/* ── 字体切换 ── */
+function applyFont(val, edId){
+  if(!val) return;
+  const ed = document.getElementById(edId);
+  // 恢复缓存选区
+  const savedRange = _fsPreviewRange;
+  const sel = window.getSelection();
+  if(savedRange && !savedRange.collapsed){
+    sel.removeAllRanges();
+    sel.addRange(savedRange);
+    ed.focus();
+  } else {
+    ed.focus();
+  }
+  if(val === '__default__'){
+    // 清除字体：移除选区内所有 font-family inline style
+    document.execCommand('removeFormat', false, null);
+  } else {
+    document.execCommand('fontName', false, val);
+    // execCommand fontName 会插入 <font face="...">，再转换成 span style
+    // 遍历选区内的 font 元素，改成 span style
+    setTimeout(()=>{
+      ed.querySelectorAll('font[face]').forEach(f=>{
+        const span = document.createElement('span');
+        span.style.fontFamily = f.getAttribute('face');
+        while(f.firstChild) span.appendChild(f.firstChild);
+        f.parentNode.replaceChild(span, f);
+      });
+    }, 0);
+  }
 }
 
 /* ── 段落编号 ── */
