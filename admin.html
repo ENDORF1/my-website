@@ -2800,7 +2800,7 @@ async function patchHomeHTML(){
   const bytes = Uint8Array.from(atob(b64), c=>c.charCodeAt(0));
   let html = new TextDecoder('utf-8').decode(bytes);
 
-  // 关键修复：清理 index.html 中编辑模式的残留属性，防止乱码
+  // 清理 index.html 中编辑模式的残留属性
   html = html
     .replace(/contenteditable="true"/g, '')
     .replace(/spellcheck="false"/g, '')
@@ -2808,6 +2808,40 @@ async function patchHomeHTML(){
     .replace(/\s+class="is-dragging"/g, '')
     .replace(/\s+class="drag-over-\w+"/g, '')
     .replace(/\s+style="[^"]*cursor[^"]*"/g, '');
+
+  // 清理所有弹窗脏状态，防止把上传失败/密码错误等运行时状态推送到 GitHub
+  // cp-overlay：恢复干净的 display:none 状态
+  html = html.replace(
+    /(<div id="cover-picker-overlay")[^>]*>/,
+    '$1>'
+  );
+  html = html.replace(
+    /(<div id="cpw-overlay")[^>]*>/,
+    '$1>'
+  );
+  html = html.replace(
+    /(<div id="pw-overlay")[^>]*>/,
+    '$1 class="">'
+  );
+  html = html.replace(
+    /(<div id="gh-overlay")[^>]*>/,
+    '$1 class="">'
+  );
+  // cp-img-wrap：确保有正确的 style（display:none + position:relative）
+  html = html.replace(
+    /(<div id="cp-img-wrap")[^>]*(onclick="cpSetFocus[^"]*">)/,
+    '$1 style="display:none;position:relative;margin-bottom:16px;cursor:crosshair;" $2'
+  );
+  // cp-status：清空内容和脏颜色
+  html = html.replace(
+    /(<div id="cp-status")[^>]*>[^<]*(<\/div>)/,
+    function(m,p1,p2){ return p1+' style="font-family:var(--font-mono);font-size:11px;letter-spacing:2px;min-height:20px;margin-bottom:12px;">'+p2; }
+  );
+  // cp-ok/cpw-ok：清空文字
+  html = html.replace(/(<span[^>]+id="cpw-ok"[^>]*>)[^<]*(<\/span>)/, '$1$2');
+  html = html.replace(/(<span[^>]+id="pw-ok"[^>]*>)[^<]*(<\/span>)/, '$1$2');
+  html = html.replace(/(<span[^>]+id="pw-err"[^>]*>)[^<]*(<\/span>)/, '$1$2');
+  html = html.replace(/(<span[^>]+id="cpw-err"[^>]*>)[^<]*(<\/span>)/, '$1$2');
 
   // HTML转义函数
   const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/`/g,'&#x60;');
