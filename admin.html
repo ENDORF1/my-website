@@ -3216,17 +3216,20 @@ ${BASE_CSS}
 .post-body pre code{display:block;padding:16px 20px;font-family:'Fira Code',monospace;font-size:${codeSize};line-height:1.7;color:#a8c8e8;counter-reset:line;min-width:max-content;}
 .post-body pre code .line{display:block;position:relative;padding-left:40px;}
 .post-body pre code .line::before{content:counter(line);counter-increment:line;position:absolute;left:0;width:30px;text-align:right;color:var(--muted);user-select:none;font-size:11px;}
-.back-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:${safeWidth};max-width:100%;margin:0 auto 32px;padding:12px 18px;border:1px solid rgba(0,245,255,.28);background:rgba(0,245,255,.05);box-shadow:0 0 0 1px rgba(0,245,255,.06) inset;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--cyan);text-decoration:none;letter-spacing:2px;transition:all .2s;}
-.back-btn:hover,.back-btn:focus-visible{color:#fff;border-color:rgba(0,245,255,.55);background:rgba(0,245,255,.1);outline:none;}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;margin-bottom:32px;transition:color .2s;}
+.back-btn:hover{color:var(--cyan);}
 .post-header{width:${safeWidth};max-width:100%;margin:0 auto 40px;}
 .post-cover{display:block;width:${safeWidth};max-width:100%;max-height:400px;object-fit:cover;border:1px solid rgba(0,245,255,.15);margin:0 auto 40px;}
 @media (max-width: 768px){
-  .back-btn{width:100%;margin-bottom:24px;padding:11px 14px;font-size:11px;letter-spacing:1px;}
+  .back-btn{margin-bottom:24px;font-size:10px;letter-spacing:1px;}
   .post-header{margin-bottom:28px;}
   .post-body h1{font-size:24px;margin:30px 0 14px;padding-left:12px;}
   .post-body h2{font-size:20px;margin:26px 0 10px;padding-left:10px;}
   .post-body h3{font-size:17px;margin:22px 0 8px;padding-left:8px;}
   .post-body ul,.post-body ol{margin-left:20px;}
+  .post-body pre{margin-left:-5.5vw;margin-right:-5.5vw;border-left:none;border-right:none;}
+  .post-body .table-wrap{margin-left:-5.5vw;margin-right:-5.5vw;}
+  .post-body img,.post-body figure.post-figure{max-width:100%;}
   .post-body table{font-size:13px;min-width:480px;}
   .post-body table td,.post-body table th{padding:8px 10px;}
   .post-body pre code{padding:12px 14px;font-size:12px;}
@@ -3788,17 +3791,17 @@ function buildItemDetailHTML(cat,item){
   const contentHtml=item.content
     ? item.content.split('\n').filter(l=>l.trim()).map(l=>'<p>'+esc(l)+'</p>').join('')
     : '';
-  const imgSrc=(item.imgFull||item.img)||'';
+  const imgThumb=item.img||'';
+  const imgFull=(item.imgFull||item.img)||'';
   const WM='Xcale';
-  const canvasBlock=imgSrc?'<canvas id="gd-c" class="gd-canvas"></canvas>':'';
-  const scriptBlock=imgSrc?(
+  const canvasBlock=imgFull?'<canvas id="gd-c" class="gd-canvas"></canvas>':'';
+  const scriptBlock=imgFull?(
     '<scr'+'ipt>\n'+
     '(function(){\n'+
-    '  var S='+JSON.stringify(imgSrc)+',W='+JSON.stringify(WM)+';\n'+
+    '  var THUMB='+JSON.stringify(imgThumb)+',FULL='+JSON.stringify(imgFull)+',W='+JSON.stringify(WM)+';\n'+
     '  var cv=document.getElementById("gd-c");if(!cv)return;\n'+
-    '  var cx=cv.getContext("2d"),im=new Image();\n'+
-    '  im.crossOrigin="anonymous";\n'+
-    '  function clean(){cx.clearRect(0,0,cv.width,cv.height);cx.drawImage(im,0,0,cv.width,cv.height);}\n'+
+    '  var cx=cv.getContext("2d"),currentImg=null;\n'+
+    '  function clean(){if(currentImg){cx.clearRect(0,0,cv.width,cv.height);cx.drawImage(currentImg,0,0,cv.width,cv.height);}}\n'+
     '  function drawWM(ctx,w,h){\n'+
     '    ctx.save();\n'+
     '    var fs=Math.max(18,Math.min(w,h)*0.045);\n'+
@@ -3810,24 +3813,33 @@ function buildItemDetailHTML(cat,item){
     '      for(var x=-w*1.5;x<w+h*1.5;x+=sx){ctx.strokeText(W,x,y);ctx.fillText(W,x,y);}\n'+
     '    ctx.restore();\n'+
     '  }\n'+
-    '  im.onload=function(){\n'+
-    '    var mw=Math.min(im.naturalWidth,window.innerWidth-80),sc=mw/im.naturalWidth;\n'+
-    '    cv.width=im.naturalWidth*sc;cv.height=im.naturalHeight*sc;\n'+
+    '  function renderImg(img){\n'+
+    '    currentImg=img;\n'+
+    '    var mw=Math.min(img.naturalWidth,window.innerWidth-80),sc=mw/img.naturalWidth;\n'+
+    '    cv.width=img.naturalWidth*sc;cv.height=img.naturalHeight*sc;\n'+
     '    clean();\n'+
     '    var wc=document.createElement("canvas");wc.width=cv.width;wc.height=cv.height;\n'+
-    '    var wx=wc.getContext("2d");wx.drawImage(im,0,0,wc.width,wc.height);drawWM(wx,wc.width,wc.height);\n'+
+    '    var wx=wc.getContext("2d");wx.drawImage(img,0,0,wc.width,wc.height);drawWM(wx,wc.width,wc.height);\n'+
     '    cv.toDataURL=function(){return wc.toDataURL.apply(wc,arguments);};\n'+
     '    cv.toBlob=function(cb,t,q){return wc.toBlob(cb,t,q);};\n'+
-    '    document.addEventListener("contextmenu",function(e){e.preventDefault();});\n'+
-    '    cv.addEventListener("dragstart",function(e){e.preventDefault();});\n'+
-    '    cv.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});\n'+
-    '    document.addEventListener("keydown",function(e){\n'+
-    '      if((e.ctrlKey||e.metaKey)&&(e.key==="s"||e.key==="S"||e.key==="p"||e.key==="P"))e.preventDefault();\n'+
-    '      if(e.key==="PrintScreen")e.preventDefault();\n'+
-    '    });\n'+
-    '  };\n'+
-    '  im.onerror=function(){var fb=document.createElement("img");fb.src=S;fb.className="gd-img";cv.replaceWith(fb);};\n'+
-    '  im.src=S;\n'+
+    '  }\n'+
+    '  // Load thumbnail first for instant display\n'+
+    '  var thumbImg=new Image();thumbImg.crossOrigin="anonymous";\n'+
+    '  thumbImg.onload=function(){renderImg(thumbImg);};\n'+
+    '  thumbImg.src=THUMB;\n'+
+    '  // Then load full resolution in background\n'+
+    '  if(FULL!==THUMB){\n'+
+    '    var fullImg=new Image();fullImg.crossOrigin="anonymous";\n'+
+    '    fullImg.onload=function(){renderImg(fullImg);};\n'+
+    '    fullImg.src=FULL;\n'+
+    '  }\n'+
+    '  document.addEventListener("contextmenu",function(e){e.preventDefault();});\n'+
+    '  cv.addEventListener("dragstart",function(e){e.preventDefault();});\n'+
+    '  cv.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});\n'+
+    '  document.addEventListener("keydown",function(e){\n'+
+    '    if((e.ctrlKey||e.metaKey)&&(e.key==="s"||e.key==="S"||e.key==="p"||e.key==="P"))e.preventDefault();\n'+
+    '    if(e.key==="PrintScreen")e.preventDefault();\n'+
+    '  });\n'+
     '})();\n'+
     '</scr'+'ipt>'
   ):'';
@@ -3928,17 +3940,47 @@ function showToast(type,msg){
    IMAGE UPLOAD TO GITHUB
    图片推送到 images/ 文件夹，返回可访问 URL
 ══════════════════════════════════════ */
-async function uploadImageToGH(file){
-  // Read file as base64
+async function compressImage(file, maxWidth=800, quality=0.85){
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    const reader=new FileReader();
+    reader.onload=e=>{
+      img.onload=()=>{
+        const canvas=document.createElement('canvas');
+        let w=img.width, h=img.height;
+        if(w>maxWidth){ h=Math.round(h*maxWidth/w); w=maxWidth; }
+        canvas.width=w; canvas.height=h;
+        const ctx=canvas.getContext('2d');
+        ctx.drawImage(img,0,0,w,h);
+        canvas.toBlob(blob=>resolve(blob),'image/jpeg',quality);
+      };
+      img.onerror=reject;
+      img.src=e.target.result;
+    };
+    reader.onerror=reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function uploadImageToGH(file, compress=true){
+  let dataToUpload = file;
+  let ext = file.name.split('.').pop().toLowerCase()||'jpg';
+
+  // Compress if requested
+  if(compress){
+    dataToUpload = await compressImage(file, 800, 0.85);
+    ext = 'jpg'; // always use jpg after compression
+  }
+
+  // Read as base64
   const base64 = await new Promise((res,rej)=>{
     const reader=new FileReader();
-    reader.onload=e=>res(e.target.result.split(',')[1]); // strip data:...;base64, prefix
+    reader.onload=e=>res(e.target.result.split(',')[1]);
     reader.onerror=rej;
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(dataToUpload);
   });
 
   // Build a unique filename
-  const ext=file.name.split('.').pop().toLowerCase()||'jpg';
   const fname='images/'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'.'+ext;
   const apiUrl=`https://api.github.com/repos/${GH.user}/${GH.repo}/contents/${fname}`;
   const headers={
@@ -3971,44 +4013,15 @@ async function uploadImageToGH(file){
   return rawUrl;
 }
 
+// Upload original image without compression
+async function uploadImageToGHRaw(file){
+  return uploadImageToGH(file, false);
+}
+
 /* ══════════════════════════════════════
    CHANGE PASSWORD
 ══════════════════════════════════════ */
 function openCpwModal(){
   ['cpw-old','cpw-new','cpw-confirm'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('cpw-err').textContent='';
-  document.getElementById('cpw-modal').classList.add('show');
-  setTimeout(()=>document.getElementById('cpw-old').focus(),80);
-}
-function closeCpwModal(){
-  document.getElementById('cpw-modal').classList.remove('show');
-}
-async function submitCpw(){
-  const oldVal=document.getElementById('cpw-old').value;
-  const newVal=document.getElementById('cpw-new').value;
-  const cfmVal=document.getElementById('cpw-confirm').value;
-  const errEl=document.getElementById('cpw-err');
-  errEl.textContent='';
-  if(!oldVal||!newVal||!cfmVal){errEl.textContent='// 请填写所有字段';return;}
-  if(newVal.length<6){errEl.textContent='// 新密码至少需要 6 位';return;}
-  if(newVal!==cfmVal){errEl.textContent='// 两次输入的密码不一致';return;}
-  const oldHash=await sha256(oldVal);
-  if(oldHash!==PW_HASH){errEl.textContent='// 当前密码错误';return;}
-  // Re-encrypt token with new password before updating key
-  const oldKey = __aesKey;
-  const newKey = await deriveKey(newVal);
-  if (oldKey && localStorage.getItem('gh_token_enc')) {
-    const token = await decryptToken();
-    if (token) { __aesKey = newKey; await encryptToken(token); }
-    else { __aesKey = newKey; }
-  } else {
-    __aesKey = newKey;
-  }
-  PW_HASH=await sha256(newVal);
-  localStorage.setItem('_pw_hash', PW_HASH); // 同步到 index.html 共享的 localStorage key
-  closeCpwModal();
-  showToast('ok','密码已修改并同步 ✓ · 首页和后台均已生效');
-}
-</script>
-</body>
-</html>
+  document.getElementById('cpw-modal').classLis
