@@ -977,9 +977,17 @@ function initImgTooltip(){
     if(!GH.user||!GH.repo||!GH.token){ showToast('err','请先配置 GitHub 才能上传图片'); replaceInput.value=''; return; }
     showUploadStatus('loading','⟳ 替换图片中...');
     try{
-      const url = await uploadImageToGH(file);
+      const mb = file.size / (1024 * 1024);
+      let url;
+      if(file.size <= 500 * 1024){
+        url = await uploadImageToGH(file, false);
+      } else {
+        const quality = mb > 3 ? 0.80 : mb > 1 ? 0.85 : 0.92;
+        url = await uploadImageToGH(file, true, '', 99999, quality);
+      }
       _tooltipImg.src = url;
-      showUploadStatus('ok','✓ 图片已替换');
+      const label = file.size<=500*1024?'原图':'已动态压缩';
+      showUploadStatus('ok',`✓ 图片已替换（${label}）`);
       hideImgTooltip();
     } catch(e){
       showUploadStatus('err','✕ 上传失败：'+e.message);
@@ -1812,16 +1820,25 @@ async function handleInlineImage(input){
   }
   showUploadStatus('loading','⟳ 上传中，请稍候...');
   try{
-    const url=await uploadImageToGH(file);
+    const mb = file.size / (1024 * 1024);
+    let url;
+    if(file.size <= 500 * 1024){
+      // < 500KB 直接原图
+      url = await uploadImageToGH(file, false);
+    } else {
+      // 只压质量，不裁剪尺寸（maxWidth 设为极大值）
+      const quality = mb > 3 ? 0.80 : mb > 1 ? 0.85 : 0.92;
+      url = await uploadImageToGH(file, true, '', 99999, quality);
+    }
     const figHtml = `<figure class="post-figure"><img src="${url}" alt="图片"><figcaption contenteditable="true" spellcheck="false"></figcaption></figure><p><br></p>`;
     const ed = document.getElementById('editor-content');
     ed.focus();
     document.execCommand('insertHTML',false,figHtml);
-    // 将光标移到 figcaption 里
     const caps = ed.querySelectorAll('figure.post-figure figcaption');
     const cap = caps[caps.length-1];
     if(cap){ const r=document.createRange();r.setStart(cap,0);r.collapse(true);const s=window.getSelection();s.removeAllRanges();s.addRange(r);cap.focus(); }
-    showToast('ok','图片已插入 · 请输入注释（可留空）');
+    const label = file.size<=500*1024?'原图':'已动态压缩';
+    showToast('ok',`图片已插入（${label}）· 请输入注释（可留空）`);
   }catch(e){
     showUploadStatus('err','✕ 上传失败：'+e.message);
   }
@@ -4062,13 +4079,13 @@ async function compressImage(file, maxWidth=800, quality=0.85){
   });
 }
 
-async function uploadImageToGH(file, compress=true, suffix=''){
+async function uploadImageToGH(file, compress=true, suffix='', maxWidth=800, quality=0.85){
   let dataToUpload = file;
   let ext = file.name.split('.').pop().toLowerCase()||'jpg';
 
   // Compress if requested
   if(compress){
-    dataToUpload = await compressImage(file, 800, 0.85);
+    dataToUpload = await compressImage(file, maxWidth, quality);
     ext = 'jpg'; // always use jpg after compression
   }
 
