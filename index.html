@@ -1680,7 +1680,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const CODE = 'suzhengxieyi';
   let buf = '';
   document.addEventListener('keydown', e => {
-    if(e.key.length !== 1) return;
+    if(!e.key || e.key.length !== 1) return;
     buf += e.key.toLowerCase();
     if(buf.length > CODE.length) buf = buf.slice(-CODE.length);
     if(buf === CODE) window.location.href = '/suzhengxieyi/';
