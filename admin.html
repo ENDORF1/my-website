@@ -945,25 +945,23 @@ function initImgTooltip(){
   const tooltip = document.getElementById('img-tooltip');
   const replaceInput = document.getElementById('img-replace-input');
 
-  // 点击图片显示浮层
-  ed.addEventListener('click', function(e){
+  // 点击图片显示浮层（用 mousedown 确保在 contenteditable 里可靠触发）
+  ed.addEventListener('mousedown', function(e){
     const img = e.target.closest('img');
     if(!img){ hideImgTooltip(); return; }
     e.preventDefault(); e.stopPropagation();
     _tooltipImg = img;
     const r = img.getBoundingClientRect();
     tooltip.style.display = 'flex';
-    // 定位在图片右上角
     let left = r.right + 8;
     let top = r.top;
-    // 防止超出视口右边
     if(left + 140 > window.innerWidth) left = r.left - 148;
     tooltip.style.left = left + 'px';
     tooltip.style.top = top + 'px';
   });
 
   // 点击其他地方关闭浮层
-  document.addEventListener('click', function(e){
+  document.addEventListener('mousedown', function(e){
     if(!e.target.closest('#img-tooltip') && !e.target.closest('#editor-content img')){
       hideImgTooltip();
     }
@@ -976,15 +974,13 @@ function initImgTooltip(){
     if(!GH.token) GH.token = await decryptToken() || '';
     if(!GH.user||!GH.repo||!GH.token){ showToast('err','请先配置 GitHub 才能上传图片'); replaceInput.value=''; return; }
 
-    // 在图片上叠加上传中遮罩
+    // 在图片位置叠加固定定位遮罩
     const targetImg = _tooltipImg;
+    const rect = targetImg.getBoundingClientRect();
     const overlay = document.createElement('div');
-    overlay.style.cssText = 'position:absolute;inset:0;background:rgba(3,8,16,.75);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;z-index:10;pointer-events:none;';
-    overlay.innerHTML = '<div style="width:20px;height:20px;border:2px solid rgba(255,230,0,.3);border-top-color:var(--yellow);border-radius:50%;animation:spin 0.7s linear infinite;"></div><span style="font-family:var(--font-mono);font-size:10px;color:var(--yellow);letter-spacing:2px;">上传中...</span>';
-    const fig = targetImg.closest('figure.post-figure') || targetImg.parentElement;
-    const prevPosition = fig.style.position;
-    fig.style.position = 'relative';
-    fig.appendChild(overlay);
+    overlay.style.cssText = 'position:fixed;left:'+rect.left+'px;top:'+rect.top+'px;width:'+rect.width+'px;height:'+rect.height+'px;background:rgba(3,8,16,.8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:99999;pointer-events:none;';
+    overlay.innerHTML = '<div style="width:24px;height:24px;border:2px solid rgba(0,245,255,.2);border-top-color:#00f5ff;border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0;"></div><span style="font-family:Share Tech Mono,monospace;font-size:11px;color:#00f5ff;letter-spacing:2px;">上传中...</span>';
+    document.body.appendChild(overlay);
 
     hideImgTooltip();
     showUploadStatus('loading','⟳ 替换图片中...');
@@ -1003,9 +999,7 @@ function initImgTooltip(){
     } catch(e){
       showUploadStatus('err','✕ 上传失败：'+e.message);
     }
-    // 移除遮罩
     overlay.remove();
-    fig.style.position = prevPosition;
     replaceInput.value = '';
   });
 }
@@ -4018,7 +4012,7 @@ function buildItemDetailHTML(cat,item){
     '  <div class="nav-btns">\n'+
     '    <a class="back-btn" href="/">\u2190 \u9996\u9875</a>\n'+
     '    <a class="back-btn" href="/gallery/">\u2190 \u753b\u5ecc</a>\n'+
-    '    <a class="back-btn" href="/gallery/'+esc(cat.slug)+'/>\u2190 \u8fd4\u56de'+esc(cat.name)+'</a>\n'+
+    '    <a class="back-btn" href="/gallery/'+esc(cat.slug)+'/">\u2190 \u8fd4\u56de'+esc(cat.name)+'</a>\n'+
     '  </div>\n'+
     '  <span class="gd-cat">// '+esc(cat.name.toUpperCase())+'</span>\n'+
     '  <h1 class="gd-title">'+esc(item.title||'')+'</h1>\n'+
