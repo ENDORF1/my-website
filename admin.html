@@ -2835,7 +2835,23 @@ async function patchHomeHTML(){
   // cp-status：清空内容和脏颜色
   html = html.replace(
     /(<div id="cp-status")[^>]*>[^<]*(<\/div>)/,
-    function(m,p1,p2){ return p1+' style="font-family:var(--font-mono);font-size:11px;letter-spacing:2px;min-height:20px;margin-bottom:12px;">'+p2; }
+    function(m,p1,p2){ return p1+' style="font-family:\'Share Tech Mono\',monospace;font-size:11px;letter-spacing:2px;min-height:20px;margin-bottom:12px;">'+p2; }
+  );
+  // cp-upload-label：确保有完整的按钮样式
+  html = html.replace(
+    /(<label[^>]*>[\s\S]*?📷 选择图片上传[\s\S]*?<\/label>)/,
+    function(m){
+      return '<label onmouseover="this.style.borderColor=\'var(--cyan)\';this.style.color=\'var(--cyan)\'" onmouseout="this.style.borderColor=\'rgba(0,245,255,.3)\';this.style.color=\'var(--muted)\'" style="display:block;border:1px dashed rgba(0,245,255,.3);color:var(--muted);font-family:\'Share Tech Mono\',monospace;font-size:11px;letter-spacing:2px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:14px;">\n      📷 选择图片上传\n      <input type="file" accept="image/*" style="display:none" onchange="cpHandleUpload(this)" value="">\n    </label>';
+    }
+  );
+  // cp-confirm/cancel 按钮：确保有完整的按钮样式
+  html = html.replace(
+    /(<button[^>]*onclick="cpConfirm\(\)"[^>]*>)确认(<\/button>)/,
+    '<button onclick="cpConfirm()" onmouseover="this.style.background=\'var(--cyan)\';this.style.color=\'var(--bg)\'" onmouseout="this.style.background=\'transparent\';this.style.color=\'var(--cyan)\'" style="flex:1;padding:10px;background:transparent;border:1px solid var(--cyan);color:var(--cyan);font-family:\'Share Tech Mono\',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s;">确认</button>'
+  );
+  html = html.replace(
+    /(<button[^>]*onclick="cpCancel\(\)"[^>]*>)取消(<\/button>)/,
+    '<button onclick="cpCancel()" onmouseover="this.style.borderColor=\'var(--magenta)\';this.style.color=\'var(--magenta)\'" onmouseout="this.style.borderColor=\'var(--muted)\';this.style.color=\'var(--muted)\'" style="flex:1;padding:10px;background:transparent;border:1px solid var(--muted);color:var(--muted);font-family:\'Share Tech Mono\',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s;">取消</button>'
   );
   // cp-ok/cpw-ok：清空文字
   html = html.replace(/(<span[^>]+id="cpw-ok"[^>]*>)[^<]*(<\/span>)/, '$1$2');
@@ -3121,6 +3137,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 .nav-links a:hover{color:var(--cyan);}
 .nav-links a:hover::after{width:100%;}
 .page-wrap{position:relative;z-index:1;padding:88px 10vw 80px;}
+@media (max-width: 768px){
+nav{padding:14px 16px;align-items:flex-start;gap:12px;}
+.nav-logo{font-size:15px;letter-spacing:3px;}
+.nav-links{gap:12px;flex-wrap:wrap;justify-content:flex-end;}
+.nav-links a{font-size:11px;letter-spacing:1px;}
+.page-wrap{padding:84px 5.5vw 56px;}
+}
 `;
 
 function cleanContent(html){
@@ -3150,10 +3173,11 @@ function buildPostHTML(p){
   const fontSize   = L.fontsize || '15px';
   const codeSize   = L.codeSize || '13px';
   const pgap       = L.pgap     || '16px';
-  
+  const safeWidth = `min(100%, ${bodyWidth})`;
+
   // HTML转义函数
   const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/`/g,'&#x60;');
-  
+
   return`<!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -3166,7 +3190,7 @@ ${BASE_CSS}
 .post-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;line-height:1.2;margin-bottom:16px;}
 .post-meta{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;display:flex;gap:20px;flex-wrap:wrap;}
 /* post-cover merged below */
-.post-body{max-width:${bodyWidth};margin:0 auto;font-size:${fontSize};}
+.post-body{width:${safeWidth};max-width:100%;margin:0 auto;font-size:${fontSize};overflow-wrap:anywhere;}
 .post-body h1{font-size:28px;font-weight:700;color:#fff;margin:40px 0 16px;padding-left:16px;border-left:4px solid var(--cyan);}
 .post-body h2{font-size:22px;font-weight:700;color:#fff;margin:32px 0 12px;padding-left:12px;border-left:3px solid var(--magenta);}
 .post-body h3{font-size:18px;font-weight:700;color:#fff;margin:24px 0 10px;padding-left:10px;border-left:2px solid var(--yellow);}
@@ -3182,19 +3206,34 @@ ${BASE_CSS}
 .post-body figure.post-figure{margin:20px 0;text-align:center;}
 .post-body figure.post-figure img{margin:0 auto;}
 .post-body figure.post-figure figcaption{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:8px;padding:0 8px;}
-.post-body table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;}
+.post-body .table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0;}
+.post-body table{width:100%;min-width:560px;border-collapse:collapse;margin:20px 0;font-size:14px;}
 .post-body table td,.post-body table th{border:1px solid rgba(0,245,255,.25);padding:10px 14px;color:var(--text);line-height:1.6;}
 .post-body table th{background:rgba(0,245,255,.06);color:#fff;font-weight:600;}
 .post-body table tr:hover td{background:rgba(0,245,255,.03);}
-.post-body pre{background:#0a0e1a;border:1px solid rgba(0,245,255,.15);margin:20px 0;overflow:hidden;position:relative;}
+.post-body pre{background:#0a0e1a;border:1px solid rgba(0,245,255,.15);margin:20px 0;overflow-x:auto;overflow-y:hidden;position:relative;}
 .post-body pre .code-lang{position:absolute;top:0;right:0;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;padding:6px 12px;background:rgba(0,245,255,.05);border-bottom:1px solid rgba(0,245,255,.1);border-left:1px solid rgba(0,245,255,.1);}
-.post-body pre code{display:block;padding:16px 20px;font-family:'Fira Code',monospace;font-size:${codeSize};line-height:1.7;color:#a8c8e8;overflow-x:auto;counter-reset:line;}
+.post-body pre code{display:block;padding:16px 20px;font-family:'Fira Code',monospace;font-size:${codeSize};line-height:1.7;color:#a8c8e8;counter-reset:line;min-width:max-content;}
 .post-body pre code .line{display:block;position:relative;padding-left:40px;}
 .post-body pre code .line::before{content:counter(line);counter-increment:line;position:absolute;left:0;width:30px;text-align:right;color:var(--muted);user-select:none;font-size:11px;}
-.back-btn{display:block;max-width:${bodyWidth};margin:0 auto 40px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;transition:color .2s;}
-.back-btn:hover{color:var(--cyan);}
-.post-header{max-width:${bodyWidth};margin:0 auto 48px;}
-.post-cover{display:block;width:100%;max-width:${bodyWidth};max-height:400px;object-fit:cover;border:1px solid rgba(0,245,255,.15);margin:0 auto 48px;}
+.back-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:${safeWidth};max-width:100%;margin:0 auto 32px;padding:12px 18px;border:1px solid rgba(0,245,255,.28);background:rgba(0,245,255,.05);box-shadow:0 0 0 1px rgba(0,245,255,.06) inset;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--cyan);text-decoration:none;letter-spacing:2px;transition:all .2s;}
+.back-btn:hover,.back-btn:focus-visible{color:#fff;border-color:rgba(0,245,255,.55);background:rgba(0,245,255,.1);outline:none;}
+.post-header{width:${safeWidth};max-width:100%;margin:0 auto 40px;}
+.post-cover{display:block;width:${safeWidth};max-width:100%;max-height:400px;object-fit:cover;border:1px solid rgba(0,245,255,.15);margin:0 auto 40px;}
+@media (max-width: 768px){
+  .back-btn{width:100%;margin-bottom:24px;padding:11px 14px;font-size:11px;letter-spacing:1px;}
+  .post-header{margin-bottom:28px;}
+  .post-body h1{font-size:24px;margin:30px 0 14px;padding-left:12px;}
+  .post-body h2{font-size:20px;margin:26px 0 10px;padding-left:10px;}
+  .post-body h3{font-size:17px;margin:22px 0 8px;padding-left:8px;}
+  .post-body ul,.post-body ol{margin-left:20px;}
+  .post-body table{font-size:13px;min-width:480px;}
+  .post-body table td,.post-body table th{padding:8px 10px;}
+  .post-body pre code{padding:12px 14px;font-size:12px;}
+  .post-body pre code .line{padding-left:30px;}
+  .post-body pre code .line::before{width:22px;font-size:10px;}
+  .post-cover{max-height:280px;}
+}
 </style>
 </head>
 <body>
@@ -3209,7 +3248,7 @@ ${NAV_HTML()}
       ${(p.tags||[]).map(t=>`<span>${esc(t)}</span>`).join('')}
     </div>
   </div>
-  ${p.cover?`<img class="post-cover" src="${esc(p.cover)}" alt="封面">`:''}
+  ${p.cover?`<img class="post-cover" src="${esc(p.cover)}" alt="封面" decoding="async" fetchpriority="high">`:''}
   <div class="post-body">${cleanContent(p.content||'')}</div>
 </div>
 ${('<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',function(e){e.preventDefault();});\n  document.addEventListener(\'dragstart\',function(e){if(e.target.tagName===\'IMG\')e.preventDefault();});\n  document.addEventListener(\'keydown\',function(e){\n    if((e.ctrlKey||e.metaKey)&&(e.key===\'s\'||e.key===\'S\'||e.key===\'p\'||e.key===\'P\'))e.preventDefault();\n    if(e.key===\'PrintScreen\')e.preventDefault();\n  });\n})();\n</'+'script>')}
@@ -3223,7 +3262,7 @@ function buildBlogIndexHTML(){
   const published=posts.filter(p=>!p.draft);
   const cards=published.map(p=>`
     <a class="blog-card" href="/blog/${esc(p.slug)}.html">
-      ${p.cover?`<img class="bc-cover" src="${esc(p.cover)}" alt="">`:`<div class="bc-cover-ph"></div>`}
+      ${p.cover?`<img class="bc-cover" src="${esc(p.cover)}" alt="" loading="lazy" decoding="async">`:`<div class="bc-cover-ph"></div>`}
       <div class="bc-body">
         <span class="bc-cat"># ${esc(p.cat||'未分类')}</span>
         <div class="bc-title">${esc(p.title)}</div>
@@ -3269,34 +3308,53 @@ function buildWorkDetailHTML(w){
   const fontSize   = L.fontsize || '15px';
   const codeSize   = L.codeSize || '13px';
   const pgap       = L.pgap     || '16px';
-  
+
   // HTML转义函数
   const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-  
+  const safeWidth = `min(100%, ${bodyWidth})`;
+  const coverThumb = w.img || '';
+  const coverFull = w.imgFull || w.img || '';
+
   return '<!DOCTYPE html>\n'
     +'<html lang="zh"><head>\n'
     +'<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">\n'
     +'<title>'+esc(w.title)+' · 游戏开发 · _DEV.LOG</title>\n'
     +'<style>\n'+BASE_CSS+'\n'
-    +'.back-btn{display:block;max-width:'+bodyWidth+';margin:0 auto 40px;font-family:\'Share Tech Mono\',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;transition:color .2s;}\n'
-    +'.back-btn:hover{color:var(--cyan);}\n'
-    +'.wd-header{max-width:'+bodyWidth+';margin:0 auto 48px;}\n'
+    +'.back-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:'+safeWidth+';max-width:100%;margin:0 auto 32px;padding:12px 18px;border:1px solid rgba(0,245,255,.28);background:rgba(0,245,255,.05);box-shadow:0 0 0 1px rgba(0,245,255,.06) inset;font-family:\'Share Tech Mono\',monospace;font-size:12px;color:var(--cyan);text-decoration:none;letter-spacing:2px;transition:all .2s;}\n'
+    +'.back-btn:hover,.back-btn:focus-visible{color:#fff;border-color:rgba(0,245,255,.55);background:rgba(0,245,255,.1);outline:none;}\n'
+    +'.wd-header{width:'+safeWidth+';max-width:100%;margin:0 auto 40px;}\n'
     +'.wd-tag{font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;display:block;}\n'
     +'.wd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:16px;}\n'
     +'.wd-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;}\n'
     +'.wd-tag-item{font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--cyan);border:1px solid rgba(0,245,255,.3);padding:3px 8px;letter-spacing:1px;}\n'
-    +'.wd-cover{max-width:'+bodyWidth+';max-height:500px;object-fit:cover;border:1px solid rgba(0,245,255,.15);display:block;margin:0 auto '+pgap+';width:100%;}\n'
-    +'.wd-body{max-width:'+bodyWidth+';margin:0 auto;font-size:'+fontSize+';}\n'
+    +'.wd-cover{width:'+safeWidth+';max-width:100%;max-height:500px;object-fit:cover;border:1px solid rgba(0,245,255,.15);display:block;margin:0 auto '+pgap+';}\n'
+    +'.wd-body{width:'+safeWidth+';max-width:100%;margin:0 auto;font-size:'+fontSize+';overflow-wrap:anywhere;}\n'
     +'.wd-body h2{font-size:22px;font-weight:700;color:#fff;margin:32px 0 12px;padding-left:12px;border-left:3px solid var(--magenta);}\n'
     +'.wd-body h3{font-size:18px;font-weight:700;color:#fff;margin:24px 0 10px;padding-left:10px;border-left:2px solid var(--cyan);}\n'
     +'.wd-body p{margin:0 0 '+pgap+';line-height:'+lineHeight+';color:var(--text);}\n'
     +'.wd-body ul{margin:8px 0 '+pgap+' 24px;}\n'
     +'.wd-body li{margin-bottom:8px;line-height:'+lineHeight+';color:var(--text);}\n'
     +'.wd-body img{max-width:100%;border:1px solid rgba(0,245,255,.15);margin:'+pgap+' auto;display:block;}\n'
-    +'.wd-body pre{background:#060d18;border:1px solid rgba(0,245,255,.15);padding:16px 20px;font-family:\'Fira Code\',monospace;font-size:'+codeSize+';color:#a8c8e8;overflow-x:auto;margin:'+pgap+' 0;white-space:pre-wrap;}\n'
-    +'.wd-body pre code{display:block;}\n'
+    +'.wd-body .table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:'+pgap+' 0;}\n'
+    +'.wd-body table{width:100%;min-width:560px;border-collapse:collapse;margin:'+pgap+' 0;font-size:14px;}\n'
+    +'.wd-body table td,.wd-body table th{border:1px solid rgba(0,245,255,.25);padding:10px 14px;color:var(--text);line-height:1.6;}\n'
+    +'.wd-body table th{background:rgba(0,245,255,.06);color:#fff;font-weight:600;}\n'
+    +'.wd-body pre{background:#060d18;border:1px solid rgba(0,245,255,.15);padding:16px 20px;font-family:\'Fira Code\',monospace;font-size:'+codeSize+';color:#a8c8e8;overflow-x:auto;overflow-y:hidden;margin:'+pgap+' 0;white-space:pre;}\n'
+    +'.wd-body pre code{display:block;min-width:max-content;}\n'
     +'.video-embed{position:relative;width:100%;padding-bottom:56.25%;margin:24px 0;background:#000;}\n'
     +'.video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}\n'
+    +'@media (max-width: 768px){\n'
+    +'  .back-btn{width:100%;margin-bottom:24px;padding:11px 14px;font-size:11px;letter-spacing:1px;}\n'
+    +'  .wd-header{margin-bottom:28px;}\n'
+    +'  .wd-tags{margin-bottom:24px;}\n'
+    +'  .wd-cover{max-height:320px;}\n'
+    +'  .wd-body h2{font-size:20px;margin:26px 0 10px;padding-left:10px;}\n'
+    +'  .wd-body h3{font-size:17px;margin:22px 0 8px;padding-left:8px;}\n'
+    +'  .wd-body ul{margin-left:20px;}\n'
+    +'  .wd-body table{font-size:13px;min-width:480px;}\n'
+    +'  .wd-body table td,.wd-body table th{padding:8px 10px;}\n'
+    +'  .wd-body pre{padding:12px 14px;font-size:12px;}\n'
+    +'}\n'
     +'</style></head><body>\n'
     +NAV_HTML()+'\n'
     +'<div class="page-wrap">\n'
@@ -3306,11 +3364,11 @@ function buildWorkDetailHTML(w){
     +'    <h1 class="wd-title">'+esc(w.title||'')+'</h1>\n'
     +'    <div class="wd-tags">'+(w.tags||[]).map(t=>'<span class="wd-tag-item">'+esc(t)+'</span>').join('')+'</div>\n'
     +'  </div>\n'
-    +(w.img?'  <img class="wd-cover" src="'+esc(w.imgFull||w.img)+'" style="object-position:'+esc(w.imgPos||'50% 50%')+'" alt="">\n':'')
+    +(coverThumb?'  <img class="wd-cover" src="'+esc(coverThumb)+'" data-full-src="'+esc(coverFull)+'" style="object-position:'+esc(w.imgPos||'50% 50%')+'" alt="" decoding="async" fetchpriority="high">\n':'')
     +'  <div class="wd-body">'+cleanContent(w.content||('<p>'+esc(w.desc||'')+'</p>'))+'</div>\n'
     +(w.link?'  <div style="margin-top:40px;"><a href="'+esc(w.link)+'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:1px solid var(--cyan);color:var(--cyan);font-family:\'Share Tech Mono\',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:all .3s;">查看项目 →</a></div>\n':'')
     +'</div>\n'
-    +'<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',function(e){e.preventDefault();});\n  document.addEventListener(\'dragstart\',function(e){if(e.target.tagName===\'IMG\')e.preventDefault();});\n  document.addEventListener(\'keydown\',function(e){\n    if((e.ctrlKey||e.metaKey)&&(e.key===\'s\'||e.key===\'S\'||e.key===\'p\'||e.key===\'P\'))e.preventDefault();\n    if(e.key===\'PrintScreen\')e.preventDefault();\n  });\n})();\n</'+'script>'
+    +'<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',function(e){e.preventDefault();});\n  document.addEventListener(\'dragstart\',function(e){if(e.target.tagName===\'IMG\')e.preventDefault();});\n  document.addEventListener(\'keydown\',function(e){\n    if((e.ctrlKey||e.metaKey)&&(e.key===\'s\'||e.key===\'S\'||e.key===\'p\'||e.key===\'P\'))e.preventDefault();\n    if(e.key===\'PrintScreen\')e.preventDefault();\n  });\n  var cover=document.querySelector(\'.wd-cover[data-full-src]\');\n  if(cover){\n    var full=cover.getAttribute(\'data-full-src\');\n    var thumb=cover.getAttribute(\'src\');\n    if(full&&full!==thumb){\n      var swap=function(){\n        var img=new Image();\n        img.decoding=\'async\';\n        img.onload=function(){cover.src=full;};\n        img.src=full;\n      };\n      if(\'requestIdleCallback\' in window) requestIdleCallback(swap,{timeout:1500});\n      else setTimeout(swap,300);\n    }\n  }\n})();\n</'+'script>'
     +'\n</body></html>';
 }
 
@@ -3321,7 +3379,7 @@ function buildWorksHTML(){
   const cards=works.map(w=>{
     const slug=w.slug||slugify(w.title);
     const inner=`
-      ${w.img?`<img class="wc-img" src="${esc(w.img)}" style="object-position:${esc(w.imgPos||'50% 50%')}" alt="">`:`<div class="wc-img-ph"></div>`}
+      ${w.img?`<img class="wc-img" src="${esc(w.img)}" style="object-position:${esc(w.imgPos||'50% 50%')}" alt="" loading="lazy" decoding="async">`:`<div class="wc-img-ph"></div>`}
       <div class="wc-body">
         <div class="wc-title">${esc(w.title||'')}</div>
         <div class="wc-desc">${esc(w.desc||'')}</div>
@@ -3369,7 +3427,7 @@ function buildGalleryHTML(){
     const firstImg=cat.items.find(i=>i.img);
     return `
     <a class="gallery-card" href="/gallery/${esc(cat.slug)}/">
-      ${firstImg?`<img class="gc-img" src="${esc(firstImg.img)}" style="object-position:${esc(firstImg.imgPos||'50% 50%')}" alt="">`:`<div class="gc-img-ph" style="background:radial-gradient(circle at 50% 50%,rgba(255,0,110,.15),transparent)"></div>`}
+      ${firstImg?`<img class="gc-img" src="${esc(firstImg.img)}" style="object-position:${esc(firstImg.imgPos||'50% 50%')}" alt="" loading="lazy" decoding="async">`:`<div class="gc-img-ph" style="background:radial-gradient(circle at 50% 50%,rgba(255,0,110,.15),transparent)"></div>`}
       <div class="gc-body">
         <div class="gc-type">// ${cat.items.length} 件作品</div>
         <div class="gc-title">${esc(cat.name)}</div>
@@ -3498,7 +3556,7 @@ function buildHomeHTML(){
   const galleryCards = galleryCategories.slice(0,4).map(cat=>{
     const firstImg=cat.items.find(i=>i.img);
     return `<a class="creation-card-live" href="/gallery/${esc(cat.slug)}/">
-      ${firstImg ? `<img class="cc-img" src="${esc(firstImg.img)}" style="object-position:${esc(firstImg.imgPos||'50% 50%')}" alt="${esc(cat.name)}">` : '<div class="cc-img-ph"></div>'}
+      ${firstImg ? `<img class="cc-img" src="${esc(firstImg.img)}" style="object-position:${esc(firstImg.imgPos||'50% 50%')}" alt="${esc(cat.name)}" loading="lazy" decoding="async">` : '<div class="cc-img-ph"></div>'}
       <div class="cc-body">
         <div class="cc-type">// ${cat.items.length} 件作品</div>
         <div class="cc-name">${esc(cat.name)}</div>
@@ -3509,7 +3567,7 @@ function buildHomeHTML(){
   // Works cards (up to 3)
   const worksCards = works.slice(0,3).map(w=>{
     const inner = `
-      ${w.img ? `<img class="wc-img" src="${esc(w.img)}" style="object-position:${esc(w.imgPos||'50% 50%')}" alt="${esc(w.title)}">` : '<div class="wc-img-ph"></div>'}
+      ${w.img ? `<img class="wc-img" src="${esc(w.img)}" style="object-position:${esc(w.imgPos||'50% 50%')}" alt="${esc(w.title)}" loading="lazy" decoding="async">` : '<div class="wc-img-ph"></div>'}
       <div class="proj-tag">// ${esc((w.tags||[])[0]||'PROJECT')}</div>
       <div class="proj-name">${esc(w.title||'')}</div>
       <div class="proj-desc">${esc(w.desc||'')}</div>
@@ -3594,6 +3652,24 @@ footer{position:relative;z-index:1;padding:40px 10vw;border-top:1px solid rgba(0
 .footer-links{display:flex;gap:24px;}
 .footer-links a{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;transition:color .2s;}
 .footer-links a:hover{color:var(--cyan);}
+@media (max-width: 768px){
+  #hero{min-height:auto;padding:120px 5.5vw 72px;}
+  .hero-sub{max-width:none;font-size:12px;line-height:1.7;}
+  .hero-btns{margin-top:28px;flex-wrap:wrap;}
+  .btn-primary,.btn-sec{width:100%;justify-content:center;text-align:center;}
+  .hero-deco,.hero-deco-center{display:none;}
+  .home-section{padding:72px 5.5vw;}
+  .sec-header{align-items:flex-start;gap:12px;margin-bottom:32px;flex-wrap:wrap;}
+  .sec-title{font-size:28px;}
+  .projects-grid{grid-template-columns:1fr;}
+  .post-item{flex-wrap:wrap;gap:8px 12px;padding:16px;}
+  .post-date,.post-cat{min-width:0;}
+  .post-title{width:100%;}
+  .post-arrow{margin-left:auto;}
+  .creations-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
+  footer{padding:32px 5.5vw;flex-direction:column;align-items:flex-start;gap:16px;}
+  .footer-links{flex-wrap:wrap;gap:12px;}
+}
 </style>
 </head>
 <body>
