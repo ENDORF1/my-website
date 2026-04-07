@@ -748,6 +748,24 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   </div>
 </div>
 
+<!-- 封面图裁切预览弹窗 -->
+<div id="crop-preview-modal" style="position:fixed;inset:0;z-index:999999;background:rgba(3,8,16,.95);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;">
+  <div style="background:var(--dim);border:1px solid var(--border);padding:32px 36px;width:480px;max-width:94vw;position:relative;">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));"></div>
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:16px;">// 封面图预览</div>
+    <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">裁切预览（3:4 竖向）</div>
+    <div style="width:100%;aspect-ratio:3/4;overflow:hidden;border:1px solid var(--border);margin-bottom:8px;background:#000;">
+      <img id="crop-preview-img" src="" style="width:100%;height:100%;object-fit:cover;object-position:50% 50%;">
+    </div>
+    <div id="crop-file-info" style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:20px;"></div>
+    <div style="display:flex;gap:10px;">
+      <button onclick="cropPreviewConfirm('crop')" style="flex:1;padding:10px;background:transparent;border:1px solid var(--cyan);color:var(--cyan);font-family:var(--font-mono);font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(0,245,255,.1)'" onmouseout="this.style.background='transparent'">✓ 用裁切版</button>
+      <button onclick="cropPreviewConfirm('compress')" style="flex:1;padding:10px;background:transparent;border:1px solid rgba(0,245,255,.3);color:var(--muted);font-family:var(--font-mono);font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s;" onmouseover="this.style.color='var(--cyan)';this.style.borderColor='var(--cyan)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='rgba(0,245,255,.3)'">⇄ 用压缩版</button>
+    </div>
+    <button onclick="cropPreviewCancel()" style="width:100%;padding:8px;background:transparent;border:none;color:var(--muted);font-family:var(--font-mono);font-size:11px;letter-spacing:2px;cursor:pointer;margin-top:8px;transition:color .2s;" onmouseover="this.style.color='var(--magenta)'" onmouseout="this.style.color='var(--muted)'">取消</button>
+  </div>
+</div>
+
 <!-- gh config modal -->
 <div id="gh-modal">
   <div id="gh-box">
@@ -2601,6 +2619,9 @@ function weInsertVideo(){
   document.execCommand('insertHTML',false,html);
 }
 
+let _cropFile = null;
+let _cropMode = null; // 'catitem' or other
+
 async function handleCardImg(input){
   const file=input.files[0];if(!file)return;
   if(!GH.token) GH.token = await decryptToken() || '';
@@ -2608,15 +2629,49 @@ async function handleCardImg(input){
     showToast('err','请先配置 GitHub 才能上传图片');
     input.value=''; return;
   }
-  const mode=document.getElementById('card-modal').dataset.mode;
-  showCardUploadStatus('loading','⟳ 上传中（缩略图+原图）...');
+  // 读取预览并显示弹窗
+  _cropFile = file;
+  _cropMode = document.getElementById('card-modal').dataset.mode;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('crop-preview-img').src = e.target.result;
+    const kb = (file.size/1024).toFixed(0);
+    const mb = (file.size/1024/1024).toFixed(2);
+    const sizeStr = file.size>=1024*1024 ? mb+' MB' : kb+' KB';
+    document.getElementById('crop-file-info').textContent =
+      '文件大小：'+sizeStr+'　尺寸：读取中...';
+    const img = new Image();
+    img.onload = () => {
+      document.getElementById('crop-file-info').textContent =
+        '文件大小：'+sizeStr+'　原始尺寸：'+img.width+' × '+img.height+'px';
+    };
+    img.src = e.target.result;
+    document.getElementById('crop-preview-modal').style.display='flex';
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+
+async function cropPreviewConfirm(mode){
+  document.getElementById('crop-preview-modal').style.display='none';
+  if(!_cropFile) return;
+  const file = _cropFile;
+  const cardMode = _cropMode;
+  _cropFile = null; _cropMode = null;
+
+  showCardUploadStatus('loading','⟳ 上传缩略图中（1/2）...');
   try{
-    // 顺序上传避免同一 File 对象被两个 FileReader 并行读取导致其中一个失败
-    showCardUploadStatus('loading','⟳ 上传缩略图中（1/2）...');
-    const thumbUrl = await uploadImageToGH(file);
+    let thumbUrl;
+    if(mode==='crop'){
+      // 裁切：按 3:4 裁切后压缩
+      thumbUrl = await uploadCroppedThumb(file);
+    } else {
+      // 压缩：不裁切，只压质量
+      thumbUrl = await uploadImageToGH(file, true, '', 99999, 0.85);
+    }
     showCardUploadStatus('loading','⟳ 上传原图中（2/2）...');
     const fullUrl = await uploadImageToGHRaw(file);
-    if(mode==='catitem'){
+    if(cardMode==='catitem'){
       catItemImgData=thumbUrl;
       catItemImgFullData=fullUrl;
       catItemImgPos='50% 50%';
@@ -2636,7 +2691,69 @@ async function handleCardImg(input){
   }catch(e){
     showCardUploadStatus('err','✕ 上传失败：'+e.message);
   }
-  input.value='';
+}
+
+function cropPreviewCancel(){
+  document.getElementById('crop-preview-modal').style.display='none';
+  _cropFile=null; _cropMode=null;
+}
+
+async function uploadCroppedThumb(file){
+  // 按 3:4 从中心裁切后压缩上传
+  return new Promise((resolve, reject)=>{
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = e => {
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const targetRatio = 3/4;
+        let sw, sh, sx, sy;
+        if(img.width/img.height > targetRatio){
+          // 图比目标宽，按高度裁
+          sh = img.height; sw = Math.round(sh*targetRatio);
+          sx = Math.round((img.width-sw)/2); sy = 0;
+        } else {
+          // 图比目标高，按宽度裁
+          sw = img.width; sh = Math.round(sw/targetRatio);
+          sx = 0; sy = Math.round((img.height-sh)/2);
+        }
+        const maxLong = 800;
+        let dw = sw, dh = sh;
+        if(dw>=dh && dw>maxLong){ dh=Math.round(dh*maxLong/dw); dw=maxLong; }
+        else if(dh>dw && dh>maxLong){ dw=Math.round(dw*maxLong/dh); dh=maxLong; }
+        canvas.width=dw; canvas.height=dh;
+        canvas.getContext('2d').drawImage(img,sx,sy,sw,sh,0,0,dw,dh);
+        canvas.toBlob(blob=>resolve(blob),'image/jpeg',0.85);
+      };
+      img.onerror=reject;
+      img.src=e.target.result;
+    };
+    reader.onerror=reject;
+    reader.readAsDataURL(file);
+  }).then(blob=>{
+    // 复用 uploadImageToGH 的上传逻辑，传入 blob
+    return uploadBlobToGH(blob, 'jpg');
+  });
+}
+
+async function uploadBlobToGH(blob, ext){
+  const base64 = await new Promise((res,rej)=>{
+    const reader=new FileReader();
+    reader.onload=e=>res(e.target.result.split(',')[1]);
+    reader.onerror=rej;
+    reader.readAsDataURL(blob);
+  });
+  const fname='images/'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'.'+ext;
+  const apiUrl=`https://api.github.com/repos/${GH.user}/${GH.repo}/contents/${fname}`;
+  const headers={'Authorization':`token ${GH.token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
+  const res=await fetch(apiUrl,{method:'PUT',headers,body:JSON.stringify({message:'upload image: '+fname,content:base64})});
+  if(!res.ok){
+    const d=await res.json().catch(()=>({}));
+    if(res.status===401) throw new Error('GitHub Token 无效');
+    if(res.status===403) throw new Error('Token 权限不足');
+    throw new Error(d.message||'HTTP '+res.status);
+  }
+  return `https://cdn.jsdelivr.net/gh/${GH.user}/${GH.repo}@main/${fname}`;
 }
 
 function saveCard(){
@@ -3407,6 +3524,10 @@ function buildBlogIndexHTML(){
 ${BASE_CSS}
 .page-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;}
 .page-heading{font-size:42px;font-weight:700;color:#fff;margin-bottom:48px;}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:2px;padding:8px 18px;border:1px solid rgba(0,245,255,.35);background:rgba(0,245,255,.05);transition:all .2s;}
+.back-btn:hover{color:#fff;border-color:var(--cyan);background:rgba(0,245,255,.12);}
+.nav-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px;}
+@media(max-width:768px){.nav-btns{margin-bottom:24px;}.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}}
 .blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;}
 .blog-card{background:#0a1628;border:1px solid rgba(0,245,255,.1);text-decoration:none;display:block;transition:border-color .3s,transform .3s;position:relative;overflow:hidden;}
 .blog-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));transform:scaleX(0);transform-origin:left;transition:transform .4s;}
@@ -3421,6 +3542,9 @@ ${BASE_CSS}
 </style></head><body>
 ${NAV_HTML()}
 <div class="page-wrap">
+  <div class="nav-btns">
+    <a class="back-btn" href="/">← 首页</a>
+  </div>
   <div class="page-title">// BLOG</div>
   <h1 class="page-heading">技术博客</h1>
   <div class="blog-grid">${cards||'<div style="font-family:Share Tech Mono,monospace;color:var(--muted);font-size:13px;letter-spacing:2px;">// 暂无已发布文章</div>'}</div>
@@ -3533,6 +3657,10 @@ function buildWorksHTML(){
 ${BASE_CSS}
 .page-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;}
 .page-heading{font-size:42px;font-weight:700;color:#fff;margin-bottom:48px;}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:2px;padding:8px 18px;border:1px solid rgba(0,245,255,.35);background:rgba(0,245,255,.05);transition:all .2s;}
+.back-btn:hover{color:#fff;border-color:var(--cyan);background:rgba(0,245,255,.12);}
+.nav-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px;}
+@media(max-width:768px){.nav-btns{margin-bottom:24px;}.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}}
 .works-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;}
 .work-card{background:#0a1628;border:1px solid rgba(0,245,255,.1);transition:border-color .3s,transform .3s;display:block;text-decoration:none;cursor:pointer;}
 .work-card:hover{border-color:rgba(0,245,255,.4);transform:translateY(-4px);}
@@ -3548,6 +3676,9 @@ ${BASE_CSS}
 </style></head><body>
 ${NAV_HTML()}
 <div class="page-wrap">
+  <div class="nav-btns">
+    <a class="back-btn" href="/">← 首页</a>
+  </div>
   <div class="page-title">// WORKS</div>
   <h1 class="page-heading">游戏开发</h1>
   <div class="works-grid">${cards||'<div style="font-family:Share Tech Mono,monospace;color:var(--muted);font-size:13px;letter-spacing:2px;">// 暂无项目</div>'}</div>
@@ -4118,7 +4249,10 @@ async function compressImage(file, maxWidth=800, quality=0.85){
       img.onload=()=>{
         const canvas=document.createElement('canvas');
         let w=img.width, h=img.height;
-        if(w>maxWidth){ h=Math.round(h*maxWidth/w); w=maxWidth; }
+        // 限制最长边而非只限宽，避免横向超宽图压缩后高度过小变糊
+        const maxLong=maxWidth;
+        if(w>=h && w>maxLong){ h=Math.round(h*maxLong/w); w=maxLong; }
+        else if(h>w && h>maxLong){ w=Math.round(w*maxLong/h); h=maxLong; }
         canvas.width=w; canvas.height=h;
         const ctx=canvas.getContext('2d');
         ctx.drawImage(img,0,0,w,h);
