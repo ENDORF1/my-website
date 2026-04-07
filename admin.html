@@ -2772,11 +2772,12 @@ async function cropPreviewConfirm(mode){
     if(cardMode==='catitem'){
       catItemImgData=thumbUrl;
       catItemImgFullData=fullUrl;
-      catItemImgPos='50% 50%';
+      // 裁切模式用焦点位置，压缩模式保持中心
+      catItemImgPos = mode==='crop' ? (_cropFocusX*100).toFixed(1)+'% '+(_cropFocusY*100).toFixed(1)+'%' : '50% 50%';
     } else {
       cardImgData=thumbUrl;
       cardImgFullData=fullUrl;
-      cardImgPos='50% 50%';
+      cardImgPos = mode==='crop' ? (_cropFocusX*100).toFixed(1)+'% '+(_cropFocusY*100).toFixed(1)+'%' : '50% 50%';
     }
     const prev=document.getElementById('card-img-preview');
     prev.src=thumbUrl; prev.style.display='block';
