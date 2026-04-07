@@ -2648,14 +2648,11 @@ let _cropImgW = 0;
 let _cropImgH = 0;
 
 function cropUpdateOverlay(fx, fy){
-  // 计算裁切框在原图上的位置（3:4比例）
-  const wrap = document.getElementById('crop-src-wrap');
   const img = document.getElementById('crop-src-img');
-  if(!img.naturalWidth) return;
+  if(!img.naturalWidth || !img.offsetWidth) return;
   const dispW = img.offsetWidth;
   const dispH = img.offsetHeight;
   const scale = dispW / _cropImgW;
-  // 裁切框尺寸（原图像素）
   const targetRatio = 3/4;
   let cw, ch;
   if(_cropImgW/_cropImgH > targetRatio){
@@ -2663,28 +2660,23 @@ function cropUpdateOverlay(fx, fy){
   } else {
     cw = _cropImgW; ch = cw / targetRatio;
   }
-  // 焦点在原图中的像素坐标
   let cx = fx * _cropImgW;
   let cy = fy * _cropImgH;
-  // 裁切框左上角（以焦点为中心，限制在图片内）
   let sx = cx - cw/2;
   let sy = cy - ch/2;
   sx = Math.max(0, Math.min(sx, _cropImgW - cw));
   sy = Math.max(0, Math.min(sy, _cropImgH - ch));
-  // 转换为显示坐标
   const dx = sx*scale, dy = sy*scale, dw = cw*scale, dh = ch*scale;
-  // 更新遮罩
-  document.getElementById('crop-overlay-top').style.height    = dy+'px';
-  document.getElementById('crop-overlay-bottom').style.height = (dispH-dy-dh)+'px';
-  document.getElementById('crop-overlay-left').style.cssText  += ';top:'+dy+'px;height:'+dh+'px;width:'+dx+'px;';
-  document.getElementById('crop-overlay-right').style.cssText += ';top:'+dy+'px;height:'+dh+'px;right:0;width:'+(dispW-dx-dw)+'px;';
-  document.getElementById('crop-box-border').style.cssText    = 'position:absolute;border:1px solid var(--cyan);box-shadow:0 0 0 1px rgba(0,245,255,.3);pointer-events:none;left:'+dx+'px;top:'+dy+'px;width:'+dw+'px;height:'+dh+'px;';
-  document.getElementById('crop-dot').style.cssText           = 'position:absolute;width:12px;height:12px;border-radius:50%;background:var(--cyan);border:2px solid #fff;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 6px rgba(0,245,255,.8);left:'+(fx*dispW)+'px;top:'+(fy*dispH)+'px;';
-  // 更新右侧裁切预览的 object-position
+
+  // 用单个裁切框边框表示选区，四个遮罩覆盖选区外
+  document.getElementById('crop-overlay-top').style.cssText    = 'position:absolute;left:0;right:0;top:0;height:'+dy+'px;background:rgba(0,0,0,.55);pointer-events:none;';
+  document.getElementById('crop-overlay-bottom').style.cssText = 'position:absolute;left:0;right:0;bottom:0;height:'+(dispH-dy-dh)+'px;background:rgba(0,0,0,.55);pointer-events:none;';
+  document.getElementById('crop-overlay-left').style.cssText   = 'position:absolute;left:0;top:'+dy+'px;height:'+dh+'px;width:'+dx+'px;background:rgba(0,0,0,.55);pointer-events:none;';
+  document.getElementById('crop-overlay-right').style.cssText  = 'position:absolute;right:0;top:'+dy+'px;height:'+dh+'px;width:'+(dispW-dx-dw)+'px;background:rgba(0,0,0,.55);pointer-events:none;';
+  document.getElementById('crop-box-border').style.cssText     = 'position:absolute;border:1px solid var(--cyan);box-shadow:0 0 0 1px rgba(0,245,255,.3);pointer-events:none;left:'+dx+'px;top:'+dy+'px;width:'+dw+'px;height:'+dh+'px;';
+  document.getElementById('crop-dot').style.cssText            = 'position:absolute;width:12px;height:12px;border-radius:50%;background:var(--cyan);border:2px solid #fff;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 6px rgba(0,245,255,.8);left:'+(fx*dispW)+'px;top:'+(fy*dispH)+'px;';
   document.getElementById('crop-preview-img').style.objectPosition = (fx*100)+'% '+(fy*100)+'%';
-  // 保存焦点
   _cropFocusX = fx; _cropFocusY = fy;
-  // 保存裁切参数供上传使用
   _cropSX = sx; _cropSY = sy; _cropSW = cw; _cropSH = ch;
 }
 
