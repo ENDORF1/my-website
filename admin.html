@@ -749,20 +749,41 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 </div>
 
 <!-- 封面图裁切预览弹窗 -->
-<div id="crop-preview-modal" style="position:fixed;inset:0;z-index:999999;background:rgba(3,8,16,.95);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;">
-  <div style="background:var(--dim);border:1px solid var(--border);padding:32px 36px;width:480px;max-width:94vw;position:relative;">
+<div id="crop-preview-modal" style="position:fixed;inset:0;z-index:999999;background:rgba(3,8,16,.95);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;overflow-y:auto;padding:20px 0;">
+  <div style="background:var(--dim);border:1px solid var(--border);padding:28px 32px;width:680px;max-width:95vw;position:relative;">
     <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));"></div>
-    <div style="font-family:var(--font-mono);font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:16px;">// 封面图预览</div>
-    <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">裁切预览（3:4 竖向）</div>
-    <div style="width:100%;aspect-ratio:3/4;overflow:hidden;border:1px solid var(--border);margin-bottom:8px;background:#000;">
-      <img id="crop-preview-img" src="" style="width:100%;height:100%;object-fit:cover;object-position:50% 50%;">
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:4px;">// 封面图裁切</div>
+    <div id="crop-file-info" style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:16px;"></div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:start;margin-bottom:16px;">
+      <!-- 左：原图 + 焦点选择 -->
+      <div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;">点击选择焦点</div>
+        <div id="crop-src-wrap" style="position:relative;cursor:crosshair;border:1px solid var(--border);overflow:hidden;">
+          <img id="crop-src-img" src="" style="width:100%;display:block;user-select:none;">
+          <!-- 裁切框遮罩 -->
+          <div id="crop-overlay-top"    style="position:absolute;left:0;right:0;top:0;background:rgba(0,0,0,.55);pointer-events:none;"></div>
+          <div id="crop-overlay-bottom" style="position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);pointer-events:none;"></div>
+          <div id="crop-overlay-left"   style="position:absolute;top:0;bottom:0;left:0;background:rgba(0,0,0,.55);pointer-events:none;"></div>
+          <div id="crop-overlay-right"  style="position:absolute;top:0;bottom:0;right:0;background:rgba(0,0,0,.55);pointer-events:none;"></div>
+          <div id="crop-box-border"     style="position:absolute;border:1px solid var(--cyan);box-shadow:0 0 0 1px rgba(0,245,255,.3);pointer-events:none;"></div>
+          <div id="crop-dot"            style="position:absolute;width:12px;height:12px;border-radius:50%;background:var(--cyan);border:2px solid #fff;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 6px rgba(0,245,255,.8);"></div>
+        </div>
+      </div>
+      <!-- 中间箭头 -->
+      <div style="font-family:var(--font-mono);font-size:18px;color:var(--muted);padding-top:40px;">→</div>
+      <!-- 右：裁切结果预览 -->
+      <div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;">裁切预览（3:4）</div>
+        <div style="aspect-ratio:3/4;overflow:hidden;border:1px solid var(--border);background:#000;">
+          <img id="crop-preview-img" src="" style="width:100%;height:100%;object-fit:cover;object-position:50% 50%;">
+        </div>
+      </div>
     </div>
-    <div id="crop-file-info" style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:20px;"></div>
-    <div style="display:flex;gap:10px;">
+    <div style="display:flex;gap:10px;margin-bottom:8px;">
       <button onclick="cropPreviewConfirm('crop')" style="flex:1;padding:10px;background:transparent;border:1px solid var(--cyan);color:var(--cyan);font-family:var(--font-mono);font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(0,245,255,.1)'" onmouseout="this.style.background='transparent'">✓ 用裁切版</button>
-      <button onclick="cropPreviewConfirm('compress')" style="flex:1;padding:10px;background:transparent;border:1px solid rgba(0,245,255,.3);color:var(--muted);font-family:var(--font-mono);font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s;" onmouseover="this.style.color='var(--cyan)';this.style.borderColor='var(--cyan)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='rgba(0,245,255,.3)'">⇄ 用压缩版</button>
+      <button onclick="cropPreviewConfirm('compress')" style="flex:1;padding:10px;background:transparent;border:1px solid rgba(0,245,255,.3);color:var(--muted);font-family:var(--font-mono);font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s;" onmouseover="this.style.color='var(--cyan)';this.style.borderColor='var(--cyan)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='rgba(0,245,255,.3)'">⇄ 用压缩版（不裁切）</button>
     </div>
-    <button onclick="cropPreviewCancel()" style="width:100%;padding:8px;background:transparent;border:none;color:var(--muted);font-family:var(--font-mono);font-size:11px;letter-spacing:2px;cursor:pointer;margin-top:8px;transition:color .2s;" onmouseover="this.style.color='var(--magenta)'" onmouseout="this.style.color='var(--muted)'">取消</button>
+    <button onclick="cropPreviewCancel()" style="width:100%;padding:8px;background:transparent;border:none;color:var(--muted);font-family:var(--font-mono);font-size:11px;letter-spacing:2px;cursor:pointer;transition:color .2s;" onmouseover="this.style.color='var(--magenta)'" onmouseout="this.style.color='var(--muted)'">取消</button>
   </div>
 </div>
 
@@ -2620,7 +2641,54 @@ function weInsertVideo(){
 }
 
 let _cropFile = null;
-let _cropMode = null; // 'catitem' or other
+let _cropMode = null;
+let _cropFocusX = 0.5; // 0~1 相对原图宽度
+let _cropFocusY = 0.5; // 0~1 相对原图高度
+let _cropImgW = 0;
+let _cropImgH = 0;
+
+function cropUpdateOverlay(fx, fy){
+  // 计算裁切框在原图上的位置（3:4比例）
+  const wrap = document.getElementById('crop-src-wrap');
+  const img = document.getElementById('crop-src-img');
+  if(!img.naturalWidth) return;
+  const dispW = img.offsetWidth;
+  const dispH = img.offsetHeight;
+  const scale = dispW / _cropImgW;
+  // 裁切框尺寸（原图像素）
+  const targetRatio = 3/4;
+  let cw, ch;
+  if(_cropImgW/_cropImgH > targetRatio){
+    ch = _cropImgH; cw = ch * targetRatio;
+  } else {
+    cw = _cropImgW; ch = cw / targetRatio;
+  }
+  // 焦点在原图中的像素坐标
+  let cx = fx * _cropImgW;
+  let cy = fy * _cropImgH;
+  // 裁切框左上角（以焦点为中心，限制在图片内）
+  let sx = cx - cw/2;
+  let sy = cy - ch/2;
+  sx = Math.max(0, Math.min(sx, _cropImgW - cw));
+  sy = Math.max(0, Math.min(sy, _cropImgH - ch));
+  // 转换为显示坐标
+  const dx = sx*scale, dy = sy*scale, dw = cw*scale, dh = ch*scale;
+  // 更新遮罩
+  document.getElementById('crop-overlay-top').style.height    = dy+'px';
+  document.getElementById('crop-overlay-bottom').style.height = (dispH-dy-dh)+'px';
+  document.getElementById('crop-overlay-left').style.cssText  += ';top:'+dy+'px;height:'+dh+'px;width:'+dx+'px;';
+  document.getElementById('crop-overlay-right').style.cssText += ';top:'+dy+'px;height:'+dh+'px;right:0;width:'+(dispW-dx-dw)+'px;';
+  document.getElementById('crop-box-border').style.cssText    = 'position:absolute;border:1px solid var(--cyan);box-shadow:0 0 0 1px rgba(0,245,255,.3);pointer-events:none;left:'+dx+'px;top:'+dy+'px;width:'+dw+'px;height:'+dh+'px;';
+  document.getElementById('crop-dot').style.cssText           = 'position:absolute;width:12px;height:12px;border-radius:50%;background:var(--cyan);border:2px solid #fff;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 6px rgba(0,245,255,.8);left:'+(fx*dispW)+'px;top:'+(fy*dispH)+'px;';
+  // 更新右侧裁切预览的 object-position
+  document.getElementById('crop-preview-img').style.objectPosition = (fx*100)+'% '+(fy*100)+'%';
+  // 保存焦点
+  _cropFocusX = fx; _cropFocusY = fy;
+  // 保存裁切参数供上传使用
+  _cropSX = sx; _cropSY = sy; _cropSW = cw; _cropSH = ch;
+}
+
+let _cropSX=0, _cropSY=0, _cropSW=0, _cropSH=0;
 
 async function handleCardImg(input){
   const file=input.files[0];if(!file)return;
@@ -2634,18 +2702,51 @@ async function handleCardImg(input){
   _cropMode = document.getElementById('card-modal').dataset.mode;
   const reader = new FileReader();
   reader.onload = e => {
-    document.getElementById('crop-preview-img').src = e.target.result;
+    const srcImg = document.getElementById('crop-src-img');
+    const prevImg = document.getElementById('crop-preview-img');
+    srcImg.src = e.target.result;
+    prevImg.src = e.target.result;
+    _cropFocusX = 0.5; _cropFocusY = 0.5;
     const kb = (file.size/1024).toFixed(0);
     const mb = (file.size/1024/1024).toFixed(2);
     const sizeStr = file.size>=1024*1024 ? mb+' MB' : kb+' KB';
-    document.getElementById('crop-file-info').textContent =
-      '文件大小：'+sizeStr+'　尺寸：读取中...';
-    const img = new Image();
-    img.onload = () => {
+    document.getElementById('crop-file-info').textContent = '文件大小：'+sizeStr+'　读取尺寸中...';
+    srcImg.onload = () => {
+      _cropImgW = srcImg.naturalWidth;
+      _cropImgH = srcImg.naturalHeight;
       document.getElementById('crop-file-info').textContent =
-        '文件大小：'+sizeStr+'　原始尺寸：'+img.width+' × '+img.height+'px';
+        '文件大小：'+sizeStr+'　原始尺寸：'+_cropImgW+' × '+_cropImgH+'px';
+      cropUpdateOverlay(0.5, 0.5);
     };
-    img.src = e.target.result;
+    // 焦点点击/拖动事件
+    const wrap = document.getElementById('crop-src-wrap');
+    wrap.onclick = null;
+    wrap.onmousedown = function(ev){
+      function setFocus(ev2){
+        const r = wrap.getBoundingClientRect();
+        const fx = Math.max(0,Math.min(1,(ev2.clientX-r.left)/r.width));
+        const fy = Math.max(0,Math.min(1,(ev2.clientY-r.top)/r.height));
+        cropUpdateOverlay(fx, fy);
+      }
+      setFocus(ev);
+      function onMove(ev2){ setFocus(ev2); }
+      function onUp(){ document.removeEventListener('mousemove',onMove); document.removeEventListener('mouseup',onUp); }
+      document.addEventListener('mousemove',onMove);
+      document.addEventListener('mouseup',onUp);
+    };
+    // 触摸支持
+    wrap.ontouchstart = function(ev){
+      ev.preventDefault();
+      function setFocusT(ev2){
+        const r = wrap.getBoundingClientRect();
+        const t = ev2.touches[0];
+        const fx = Math.max(0,Math.min(1,(t.clientX-r.left)/r.width));
+        const fy = Math.max(0,Math.min(1,(t.clientY-r.top)/r.height));
+        cropUpdateOverlay(fx, fy);
+      }
+      setFocusT(ev);
+      wrap.ontouchmove = function(ev2){ ev2.preventDefault(); setFocusT(ev2); };
+    };
     document.getElementById('crop-preview-modal').style.display='flex';
   };
   reader.readAsDataURL(file);
@@ -2699,24 +2800,15 @@ function cropPreviewCancel(){
 }
 
 async function uploadCroppedThumb(file){
-  // 按 3:4 从中心裁切后压缩上传
+  // 使用用户选择的焦点裁切
   return new Promise((resolve, reject)=>{
     const img = new Image();
     const reader = new FileReader();
     reader.onload = e => {
       img.onload = () => {
         const canvas = document.createElement('canvas');
-        const targetRatio = 3/4;
-        let sw, sh, sx, sy;
-        if(img.width/img.height > targetRatio){
-          // 图比目标宽，按高度裁
-          sh = img.height; sw = Math.round(sh*targetRatio);
-          sx = Math.round((img.width-sw)/2); sy = 0;
-        } else {
-          // 图比目标高，按宽度裁
-          sw = img.width; sh = Math.round(sw/targetRatio);
-          sx = 0; sy = Math.round((img.height-sh)/2);
-        }
+        // 使用焦点计算出的裁切参数
+        const sx = _cropSX, sy = _cropSY, sw = _cropSW, sh = _cropSH;
         const maxLong = 800;
         let dw = sw, dh = sh;
         if(dw>=dh && dw>maxLong){ dh=Math.round(dh*maxLong/dw); dw=maxLong; }
@@ -2730,10 +2822,7 @@ async function uploadCroppedThumb(file){
     };
     reader.onerror=reject;
     reader.readAsDataURL(file);
-  }).then(blob=>{
-    // 复用 uploadImageToGH 的上传逻辑，传入 blob
-    return uploadBlobToGH(blob, 'jpg');
-  });
+  }).then(blob=>uploadBlobToGH(blob,'jpg'));
 }
 
 async function uploadBlobToGH(blob, ext){
