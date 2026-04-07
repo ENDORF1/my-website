@@ -3866,7 +3866,9 @@ function buildGalleryDetailHTML(g){
     '  var cx=cv.getContext("2d");\n'+
     '  function renderImg(img){\n'+
     '    var dpr=window.devicePixelRatio||1;\n'+
-    '    var mw=Math.min(img.naturalWidth,window.innerWidth-80),sc=mw/img.naturalWidth;\n'+
+    '    var maxW=window.innerWidth-80;\n'+
+    '    var maxH=window.innerHeight*0.8;\n'+
+    '    var sc=Math.min(1,maxW/img.naturalWidth,maxH/img.naturalHeight);\n'+
     '    var cssW=img.naturalWidth*sc,cssH=img.naturalHeight*sc;\n'+
     '    cv.width=cssW*dpr;cv.height=cssH*dpr;\n'+
     '    cv.style.width=cssW+"px";cv.style.height=cssH+"px";\n'+
@@ -3917,7 +3919,7 @@ function buildGalleryDetailHTML(g){
     '.gd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:24px;}\n'+
     '.gd-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;}\n'+
     '.gd-tag{font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--cyan);border:1px solid rgba(0,245,255,.3);padding:3px 8px;letter-spacing:1px;}\n'+
-    '.gd-canvas{max-width:100%;max-height:80vh;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);user-select:none;-webkit-user-drag:none;}\n'+
+    '.gd-canvas{max-width:100%;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);user-select:none;-webkit-user-drag:none;}\n'+
     '.gd-body{max-width:720px;margin:0 auto;}\n'+
     '.gd-body p{margin:0 0 16px;line-height:1.9;color:var(--text);}\n'+
     '</style></head><body>\n'+
@@ -4218,7 +4220,9 @@ function buildItemDetailHTML(cat,item){
     '  function renderImg(img){\n'+
     '    currentImg=img;\n'+
     '    var dpr=window.devicePixelRatio||1;\n'+
-    '    var mw=Math.min(img.naturalWidth,window.innerWidth-80),sc=mw/img.naturalWidth;\n'+
+    '    var maxW=window.innerWidth-80;\n'+
+    '    var maxH=window.innerHeight*0.8;\n'+
+    '    var sc=Math.min(1,maxW/img.naturalWidth,maxH/img.naturalHeight);\n'+
     '    var cssW=img.naturalWidth*sc,cssH=img.naturalHeight*sc;\n'+
     '    cv.width=cssW*dpr;cv.height=cssH*dpr;\n'+
     '    cv.style.width=cssW+"px";cv.style.height=cssH+"px";\n'+
@@ -4262,7 +4266,7 @@ function buildItemDetailHTML(cat,item){
     '@media(max-width:768px){.nav-btns{margin-bottom:24px;}.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}}\n'+
     '.gd-cat{font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;display:block;}\n'+
     '.gd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:24px;}\n'+
-    '.gd-canvas{max-width:100%;max-height:80vh;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);user-select:none;-webkit-user-drag:none;}\n'+
+    '.gd-canvas{max-width:100%;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);user-select:none;-webkit-user-drag:none;}\n'+
     '.gd-body{max-width:720px;}\n'+
     '.gd-body p{margin:0 0 16px;line-height:1.9;color:var(--text);}\n'+
     '</style></head><body>\n'+
