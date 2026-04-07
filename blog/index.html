@@ -31,6 +31,10 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
 
 .page-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;}
 .page-heading{font-size:42px;font-weight:700;color:#fff;margin-bottom:48px;}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:2px;padding:8px 18px;border:1px solid rgba(0,245,255,.35);background:rgba(0,245,255,.05);transition:all .2s;}
+.back-btn:hover{color:#fff;border-color:var(--cyan);background:rgba(0,245,255,.12);}
+.nav-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px;}
+@media(max-width:768px){.nav-btns{margin-bottom:24px;}.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}}
 .blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;}
 .blog-card{background:#0a1628;border:1px solid rgba(0,245,255,.1);text-decoration:none;display:block;transition:border-color .3s,transform .3s;position:relative;overflow:hidden;}
 .blog-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));transform:scaleX(0);transform-origin:left;transition:transform .4s;}
@@ -54,6 +58,9 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
   </div>
 </nav>
 <div class="page-wrap">
+  <div class="nav-btns">
+    <a class="back-btn" href="/">← 首页</a>
+  </div>
   <div class="page-title">// BLOG</div>
   <h1 class="page-heading">技术博客</h1>
   <div class="blog-grid">
@@ -62,7 +69,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       <div class="bc-body">
         <span class="bc-cat"># 玩法拆解</span>
         <div class="bc-title">杀戮尖塔（Slay the Spire）核心玩法循环拆解</div>
-        <div class="bc-meta">2026-04-06 <span>Roguelike，独立游戏，DeckBuilding</span></div>
+        <div class="bc-meta">2026-04-07 <span>Roguelike，独立游戏，DeckBuilding</span></div>
       </div>
     </a></div>
 </div>
