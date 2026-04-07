@@ -1590,9 +1590,8 @@ function loadDynamicWorks(){
     .filter(w => w.title)
     .slice(0, 6);
 
-  // 如果已有静态内容（admin 推送写入的），直接保留，不从 localStorage 覆盖
-  const existingCards = [...grid.querySelectorAll('.proj-card')];
-  if(existingCards.length > 0) return;
+  // 如果已有静态内容（admin 推送写入的，包括暂无项目提示），直接保留，不从 localStorage 覆盖
+  if(grid.children.length > 1) return;
 
   const addBtn = grid.querySelector('.add-card-btn');
   if(works.length === 0){
