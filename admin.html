@@ -4224,7 +4224,8 @@ function buildItemDetailHTML(cat,item){
     '    cv.style.width=cssW+"px";cv.style.height=cssH+"px";\n'+
     '    cx.setTransform(dpr,0,0,dpr,0,0);\n'+
     '    _cssW=cssW;_cssH=cssH;\n'+
-    '    clean();\n'+
+    '    cx.clearRect(0,0,cssW,cssH);\n'+
+    '    cx.drawImage(img,0,0,cssW,cssH);\n'+
     '    var wc=document.createElement("canvas");wc.width=cv.width;wc.height=cv.height;\n'+
     '    var wx=wc.getContext("2d");wx.setTransform(dpr,0,0,dpr,0,0);wx.drawImage(img,0,0,cssW,cssH);drawWM(wx,cssW,cssH);\n'+
     '    cv.toDataURL=function(){return wc.toDataURL.apply(wc,arguments);};\n'+
