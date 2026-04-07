@@ -62,7 +62,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
 </div>
 <script>
 (function(){
-  var THUMB="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775517679825-p6tnk.jpg",FULL="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775517682330-jlurb-full.gif",W="Xcale";
+  var THUMB="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775521612595-stv9c.jpg",FULL="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775521615101-3f60l-full.gif",W="Xcale";
   var cv=document.getElementById("gd-c");if(!cv)return;
   var cx=cv.getContext("2d"),currentImg=null;
   function clean(){if(currentImg){cx.clearRect(0,0,cv.width,cv.height);cx.drawImage(currentImg,0,0,cv.width,cv.height);}}
@@ -79,11 +79,15 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
   }
   function renderImg(img){
     currentImg=img;
+    var dpr=window.devicePixelRatio||1;
     var mw=Math.min(img.naturalWidth,window.innerWidth-80),sc=mw/img.naturalWidth;
-    cv.width=img.naturalWidth*sc;cv.height=img.naturalHeight*sc;
+    var cssW=img.naturalWidth*sc,cssH=img.naturalHeight*sc;
+    cv.width=cssW*dpr;cv.height=cssH*dpr;
+    cv.style.width=cssW+"px";cv.style.height=cssH+"px";
+    cx.scale(dpr,dpr);
     clean();
     var wc=document.createElement("canvas");wc.width=cv.width;wc.height=cv.height;
-    var wx=wc.getContext("2d");wx.drawImage(img,0,0,wc.width,wc.height);drawWM(wx,wc.width,wc.height);
+    var wx=wc.getContext("2d");wx.scale(dpr,dpr);wx.drawImage(img,0,0,cssW,cssH);drawWM(wx,cssW,cssH);
     cv.toDataURL=function(){return wc.toDataURL.apply(wc,arguments);};
     cv.toBlob=function(cb,t,q){return wc.toBlob(cb,t,q);};
   }
