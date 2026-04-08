@@ -392,8 +392,8 @@ body.modal-open body::before{z-index:1 !important;}
 <body class="">
 
 <!-- ── CURSORS ── -->
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor" id="cursor" style="opacity:0"></div>
+<div class="cursor-ring" id="cursorRing" style="opacity:0"></div>
 
 <!-- ══════════════════════════════
      PASSWORD MODAL (login)
@@ -748,8 +748,12 @@ async function submitChangePw() {
    CURSOR
 ══════════════════════════════════════ */
 const $cur=document.getElementById('cursor'),$ring=document.getElementById('cursorRing');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;$cur.style.left=mx+'px';$cur.style.top=my+'px';});
+let mx=0,my=0,rx=0,ry=0,_cursorVisible=false;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  $cur.style.left=mx+'px';$cur.style.top=my+'px';
+  if(!_cursorVisible){_cursorVisible=true;$cur.style.opacity='1';$ring.style.opacity='.5';}
+});
 (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;$ring.style.left=rx+'px';$ring.style.top=ry+'px';requestAnimationFrame(loop);})();
 function cursorHover(el){
   el.addEventListener('mouseenter',()=>{$cur.style.transform='translate(-50%,-50%) scale(2)';$cur.style.background='var(--magenta)';$ring.style.width='60px';$ring.style.height='60px';});
@@ -1228,7 +1232,7 @@ async function pushToGithub() {
     // 清除游标内联坐标与 gh-log 显示状态，避免序列化进 HTML
     const $c2=document.getElementById('cursor');const $r2=document.getElementById('cursorRing');
     const _cs2=$c2?$c2.getAttribute('style'):'';const _rs2=$r2?$r2.getAttribute('style'):'';
-    if($c2)$c2.removeAttribute('style');if($r2)$r2.removeAttribute('style');
+    if($c2)$c2.setAttribute('style','opacity:0');if($r2)$r2.setAttribute('style','opacity:0');
     const ghLogEl=document.getElementById('gh-log');const _ghCls=ghLogEl?ghLogEl.className:'';
     if(ghLogEl)ghLogEl.className='';
     // 重置所有弹窗瞬态状态（用 class 控制）
@@ -1324,8 +1328,29 @@ async function pushToGithub() {
    IMAGE UPLOAD TO GITHUB (index)
 ══════════════════════════════════════ */
 async function uploadImageToGH(file){
+  // 压缩到最长边800px，quality 0.85
+  const compressed = await new Promise((resolve,reject)=>{
+    const img=new Image();
+    const reader=new FileReader();
+    reader.onload=e=>{
+      img.onload=()=>{
+        const canvas=document.createElement('canvas');
+        let w=img.width,h=img.height;
+        const maxLong=400;
+        if(w>=h&&w>maxLong){h=Math.round(h*maxLong/w);w=maxLong;}
+        else if(h>w&&h>maxLong){w=Math.round(w*maxLong/h);h=maxLong;}
+        canvas.width=w;canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        canvas.toBlob(blob=>resolve(blob),'image/jpeg',0.85);
+      };
+      img.onerror=reject;
+      img.src=e.target.result;
+    };
+    reader.onerror=reject;
+    reader.readAsDataURL(file);
+  });
   const reader = new FileReader();
-  const base64 = await new Promise((res,rej)=>{ reader.onload=e=>res(e.target.result.split(',')[1]); reader.onerror=rej; reader.readAsDataURL(file); });
+  const base64 = await new Promise((res,rej)=>{ reader.onload=e=>res(e.target.result.split(',')[1]); reader.onerror=rej; reader.readAsDataURL(compressed); });
   const ext = file.name.split('.').pop().toLowerCase()||'jpg';
   const fname = 'images/'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'.'+ext;
   const user = localStorage.getItem('gh_user');
