@@ -4129,6 +4129,34 @@ ${gallery.length ? `
     <a href="#">TWITTER</a>
   </div>
 </footer>
+<script>
+// 预加载数据：按优先级排列
+window.__PRELOAD_URLS__=${JSON.stringify([
+  // 1. 画廊缩略图（所有分类所有作品）
+  ...galleryCategories.flatMap(cat=>cat.items.filter(i=>i.img).map(i=>i.img)),
+  // 2. 画廊原图
+  ...galleryCategories.flatMap(cat=>cat.items.filter(i=>i.imgFull&&i.imgFull!==i.img).map(i=>i.imgFull)),
+  // 3. 博客封面图
+  ...posts.filter(p=>!p.draft&&p.coverImg).map(p=>p.coverImg),
+].filter(Boolean))};
+(function(){
+  var urls=window.__PRELOAD_URLS__;
+  if(!urls||!urls.length)return;
+  var idx=0;
+  function loadNext(){
+    if(idx>=urls.length)return;
+    var img=new Image();
+    img.onload=img.onerror=function(){
+      idx++;
+      if('requestIdleCallback' in window) requestIdleCallback(loadNext,{timeout:3000});
+      else setTimeout(loadNext,300);
+    };
+    img.src=urls[idx];
+  }
+  if('requestIdleCallback' in window) requestIdleCallback(loadNext,{timeout:2000});
+  else setTimeout(loadNext,1000);
+})();
+</script>
 </body></html>`;
 }
 
