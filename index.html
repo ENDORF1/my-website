@@ -1336,7 +1336,7 @@ async function uploadImageToGH(file){
       img.onload=()=>{
         const canvas=document.createElement('canvas');
         let w=img.width,h=img.height;
-        const maxLong=400;
+        const maxLong=800;
         if(w>=h&&w>maxLong){h=Math.round(h*maxLong/w);w=maxLong;}
         else if(h>w&&h>maxLong){w=Math.round(w*maxLong/h);h=maxLong;}
         canvas.width=w;canvas.height=h;
